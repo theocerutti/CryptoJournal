@@ -1,0 +1,39 @@
+version: '3.5'
+
+services:
+  postgres:
+    container_name: crypto-journal-db
+    image: postgres:12.2
+    env_file:
+      - src/.env
+    environment:
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - '5432:5432'
+    networks:
+      - net
+    restart: unless-stopped
+
+  backend:
+    container_name: crypto-journal-backend
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - postgres
+    ports:
+      - '4000:4000'
+    env_file:
+      - src/.env
+    networks:
+      - net
+
+networks:
+  net:
+
+volumes:
+  postgres:
