@@ -1,0 +1,33 @@
+Objectifs:
+
+Ajouter des "trades" avec comme caractéristiques:
+* date d'achat
+* date de vente
+* prix d'achat
+* prix de vente
+* note d'achat
+* note de vente
+* name
+* fees
+* montant investis
+* holdings
+* plateforme sur lequel l'actif est
+* primaryTag du trade (crypto, actions, etc)
+* secondaryTag du trade (BTC, ETH, etc)
+* lien du prix sur le site
+* dropdown pour avoir le regex du site pour le prix
+
+Les tags permet de catégoriser les trades.
+Tous ces trades sont éditables.
+
+Il y aura une page avec toutes les catégories:
+
+Crypto, Immobilier, Actions/ETF, ...
+Ces "cards" afficheront le montant investis + le montant gain/loss
+
+On clique sur la card pour afficher une liste de trades (catégorisé) par secondaryTag (dropdown)
+Tous les dropdown affiche le montant investit + le montant gain/loss
+
+
+* page de graphs / stats
+* page profil

@@ -15,11 +15,6 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true, nullable: false })
-  @Length(4, 16)
-  @IsNotEmpty()
-  username: string;
-
   @IsNotEmpty()
   @Exclude()
   @Length(4, 16)

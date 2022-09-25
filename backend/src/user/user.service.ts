@@ -43,14 +43,14 @@ export class UserService {
     }
   }
 
-  async getByUsername(username: string): Promise<User> {
+  async getByEmail(email: string): Promise<User> {
     try {
       return await this.UserRepo.findOneOrFail({
-        where: { username: username },
+        where: { email: email },
       });
     } catch (error) {
       throw new HttpException(
-        `Could not find user by username ${error.message}`,
+        `Could not find user by email ${error.message}`,
         HttpStatus.NOT_FOUND
       );
     }
@@ -59,7 +59,6 @@ export class UserService {
   async create(userDTO: UserDTO): Promise<User> {
     const user: User = new User();
 
-    user.username = userDTO.username;
     user.email = userDTO.email;
     user.password = userDTO.password;
 
@@ -76,9 +75,6 @@ export class UserService {
   async update(userID: number, userDTO: UserUpdateDTO): Promise<User> {
     const user: User = await this.getById(userID);
 
-    if (userDTO.username) {
-      user.username = userDTO.username;
-    }
     if (userDTO.email) {
       user.email = userDTO.email;
     }

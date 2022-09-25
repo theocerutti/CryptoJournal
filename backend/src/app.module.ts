@@ -7,8 +7,7 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { CurrentUserInterceptor } from './auth/current-user.interceptor';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import ormConfig from './ormconfig';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -16,14 +15,20 @@ import ormConfig from './ormconfig';
       envFilePath: `src/${
         process.env.NODE_ENV === 'production' ? '.env.prod' : '.env'
       }`,
-      load: [ormConfig],
       isGlobal: true,
     }),
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        ...configService.get('database'),
-      }),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.POSTGRES_HOST,
+      port: parseInt(process.env.POSTGRES_PORT),
+      username: process.env.POSTGRES_USER,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DATABASE,
+      synchronize: false,
+      entities: ['dist/**/*.entity{ .ts,.js}'],
+      migrations: ['dist/migrations/*{.ts,.js}'],
+      migrationsTableName: 'migrations_typeorm',
+      migrationsRun: true,
     }),
     UserModule,
     AuthModule,

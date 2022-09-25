@@ -1,5 +1,5 @@
 export type JwtPayloadAccessToken = {
-  username: string;
+  email: string;
   userId: number;
 };
 

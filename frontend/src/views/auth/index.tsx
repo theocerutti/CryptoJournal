@@ -1,6 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
   Checkbox,
@@ -12,21 +14,44 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Spinner,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
-import FixedPlugin from '../../../components/fixedPlugin/FixedPlugin';
+import FixedPlugin from '../../components/fixedPlugin/FixedPlugin';
+import { api } from '../../api';
+import { useMutation } from '@tanstack/react-query';
 
-function SignIn() {
+function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
   const textColor = useColorModeValue('navy.700', 'white');
   const textColorSecondary = 'gray.400';
   const textColorDetails = useColorModeValue('navy.700', 'secondaryGray.600');
   const textColorBrand = useColorModeValue('brand.500', 'white');
   const brandStars = useColorModeValue('brand.500', 'brand.400');
   const [show, setShow] = React.useState(false);
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
   const handleClick = () => setShow(!show);
+
+  const mutation = useMutation((auth) => {
+    if (type === 'sign-in') {
+      return api.post('/auth/login', auth);
+    } else {
+      return api.post('/auth/register', auth);
+    }
+  });
+
+  const handleAuth = () => {
+    console.log(password, email);
+    // @ts-ignore
+    mutation.mutate({
+      email: email,
+      password: password,
+    });
+  };
+
   return (
     <Flex justify='center' align='center'>
       <Flex
@@ -44,7 +69,7 @@ function SignIn() {
       >
         <Box me='auto'>
           <Heading color={textColor} fontSize='36px' mb='10px'>
-            Sign In
+            {type === 'sign-in' ? 'Sign In' : 'Sign Up'}
           </Heading>
           <Text
             mb='36px'
@@ -53,9 +78,16 @@ function SignIn() {
             fontWeight='400'
             fontSize='md'
           >
-            Enter your email and password to sign in!
+            Enter your email and password to{' '}
+            {type === 'sign-in' ? 'sign in' : 'sign up'} !
           </Text>
         </Box>
+        {mutation.isError && (
+          <Alert status='error' mb={'20px'}>
+            <AlertIcon />
+            Can't {type === 'sign-in' ? 'sign in' : 'sign up'} with provided
+          </Alert>
+        )}
         <Flex
           zIndex='2'
           direction='column'
@@ -84,10 +116,11 @@ function SignIn() {
               fontSize='sm'
               ms={{ base: '0px', md: '0px' }}
               type='email'
-              placeholder='mail@simmmple.com'
+              placeholder='mail@mail.com'
               mb='24px'
               fontWeight='500'
               size='lg'
+              onChange={(e) => setEmail(e.target.value)}
             />
             <FormLabel
               ms='4px'
@@ -105,6 +138,7 @@ function SignIn() {
                 placeholder='Min. 8 characters'
                 mb='24px'
                 size='lg'
+                onChange={(e) => setPassword(e.target.value)}
                 type={show ? 'text' : 'password'}
                 variant='auth'
               />
@@ -117,35 +151,38 @@ function SignIn() {
                 />
               </InputRightElement>
             </InputGroup>
-            <Flex justifyContent='space-between' align='center' mb='24px'>
-              <FormControl display='flex' alignItems='center'>
-                <Checkbox
-                  id='remember-login'
-                  colorScheme='brandScheme'
-                  me='10px'
-                />
-                <FormLabel
-                  htmlFor='remember-login'
-                  mb='0'
-                  fontWeight='normal'
-                  color={textColor}
-                  fontSize='sm'
-                >
-                  Keep me logged in
-                </FormLabel>
-              </FormControl>
-              <NavLink to='/auth/forgot-password'>
-                <Text
-                  color={textColorBrand}
-                  fontSize='sm'
-                  w='124px'
-                  fontWeight='500'
-                >
-                  Forgot password?
-                </Text>
-              </NavLink>
-            </Flex>
+            {type === 'sign-in' ? (
+              <Flex justifyContent='space-between' align='center' mb='24px'>
+                <FormControl display='flex' alignItems='center'>
+                  <Checkbox
+                    id='remember-login'
+                    colorScheme='brandScheme'
+                    me='10px'
+                  />
+                  <FormLabel
+                    htmlFor='remember-login'
+                    mb='0'
+                    fontWeight='normal'
+                    color={textColor}
+                    fontSize='sm'
+                  >
+                    Keep me logged in
+                  </FormLabel>
+                </FormControl>
+                <NavLink to='/auth/forgot-password'>
+                  <Text
+                    color={textColorBrand}
+                    fontSize='sm'
+                    w='124px'
+                    fontWeight='500'
+                  >
+                    Forgot password?
+                  </Text>
+                </NavLink>
+              </Flex>
+            ) : null}
             <Button
+              onClick={handleAuth}
               fontSize='sm'
               variant='brand'
               fontWeight='500'
@@ -153,7 +190,7 @@ function SignIn() {
               h='50'
               mb='24px'
             >
-              Sign In
+              {type === 'sign-in' ? 'Sign In' : 'Sign Up'}
             </Button>
           </FormControl>
           <Flex
@@ -164,18 +201,23 @@ function SignIn() {
             mt='0px'
           >
             <Text color={textColorDetails} fontWeight='400' fontSize='14px'>
-              Not registered yet?
-              <NavLink to='/auth/sign-up'>
+              {type === 'sign-in'
+                ? 'Not registered yet?'
+                : 'Already have an account?'}
+              <NavLink
+                to={`/auth/${type === 'sign-in' ? 'sign-up' : 'sign-in'}`}
+              >
                 <Text
                   color={textColorBrand}
                   as='span'
                   ms='5px'
                   fontWeight='500'
                 >
-                  Create an Account
+                  {type === 'sign-in' ? 'Create an Account' : 'Sign In'}
                 </Text>
               </NavLink>
             </Text>
+            {mutation.isLoading && <Spinner />}
           </Flex>
           <FixedPlugin />
         </Flex>
@@ -184,4 +226,4 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default Auth;

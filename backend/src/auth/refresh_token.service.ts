@@ -46,7 +46,7 @@ export class RefreshTokenService {
 
   public async generateAccessToken(user: User): Promise<string> {
     const payload: JwtPayloadAccessToken = {
-      username: user.username,
+      email: user.email,
       userId: user.id,
     };
     return this.jwtService.signAsync(payload);
@@ -129,6 +129,6 @@ export class RefreshTokenService {
     const tokenId = payload.refreshTokenId;
     if (!tokenId)
       throw new UnprocessableEntityException('Refresh token malformed');
-    return this.RefreshTokensRepo.findOneBy({ id: tokenId });
+    return this.RefreshTokensRepo.findOne(tokenId);
   }
 }

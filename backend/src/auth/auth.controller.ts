@@ -35,7 +35,7 @@ export class AuthController {
     @Res({ passthrough: true }) res
   ): Promise<AuthenticationPayload> {
     this.logger.log('Login user: ', body);
-    const info = await this.authService.login(body.username, body.password);
+    const info = await this.authService.login(body.email, body.password);
     res.setHeader(TOKEN_AUTH_RES_HEADER, info.token);
     const refreshToken = await this.refreshTokenService.generateRefreshToken(
       info.user,
@@ -56,7 +56,7 @@ export class AuthController {
   ): Promise<AuthenticationPayload> {
     this.logger.log('Register user: ', body);
     const user = await this.authService.register(body);
-    const info = await this.authService.login(user.username, body.password);
+    const info = await this.authService.login(user.email, body.password);
     res.setHeader(TOKEN_AUTH_RES_HEADER, info.token);
     const refresh_token = await this.refreshTokenService.generateRefreshToken(
       user,
