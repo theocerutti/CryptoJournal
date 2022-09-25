@@ -20,7 +20,6 @@ import { RiEyeCloseLine } from 'react-icons/ri';
 import FixedPlugin from '../../../components/fixedPlugin/FixedPlugin';
 
 function SignIn() {
-  // Chakra color mode
   const textColor = useColorModeValue('navy.700', 'white');
   const textColorSecondary = 'gray.400';
   const textColorDetails = useColorModeValue('navy.700', 'secondaryGray.600');
