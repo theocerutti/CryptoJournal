@@ -11,12 +11,8 @@ import {
   DrawerContent,
   DrawerCloseButton,
 } from '@chakra-ui/react';
-import Content from 'components/sidebar/components/Content';
-import {
-  renderThumb,
-  renderTrack,
-  renderView,
-} from 'components/scrollbar/Scrollbar';
+import Content from 'components/sidebar/SidebarContent';
+import { renderThumb, renderTrack, renderView } from 'components/Scrollbar';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { IoMenuOutline } from 'react-icons/io5';
 

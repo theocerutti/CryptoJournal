@@ -1,6 +1,4 @@
 import React from 'react';
-
-// Chakra imports
 import {
   Icon,
   Flex,
@@ -12,7 +10,6 @@ import {
   useDisclosure,
   useColorModeValue,
 } from '@chakra-ui/react';
-// Assets
 import {
   MdOutlineMoreHoriz,
   MdOutlinePerson,

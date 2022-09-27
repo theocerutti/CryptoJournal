@@ -1,12 +1,12 @@
 import { Icon } from '@chakra-ui/react';
 import { MdHome } from 'react-icons/md';
-import MainDashboard from 'views/admin/default';
+import MainDashboard from 'views/dashboard/default';
 
 const routes = [
   {
     name: 'Main Dashboard',
-    layout: '/admin',
-    path: '/default',
+    layout: '/dashboard',
+    path: '/',
     icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
     component: MainDashboard,
   },

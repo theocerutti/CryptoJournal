@@ -1,6 +1,4 @@
 import React from 'react';
-
-// Chakra imports
 import {
   Menu,
   MenuButton,
@@ -12,13 +10,13 @@ import {
   Icon,
   Text,
 } from '@chakra-ui/react';
-// Assets
 import {
   MdOutlinePerson,
   MdOutlineCardTravel,
   MdOutlineLightbulb,
   MdOutlineSettings,
 } from 'react-icons/md';
+
 export default function Banner(props: {
   icon: JSX.Element | string;
   [x: string]: any;

@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
-import FixedPlugin from '../../components/fixedPlugin/FixedPlugin';
+import ColorToggle from '../../components/ColorToggle';
 import { api } from '../../api';
 import { useMutation } from '@tanstack/react-query';
 import {
@@ -55,7 +55,7 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
       const { access_token, refresh_token } = data.data.payload;
       setTokenFromStorage(access_token);
       setRefreshTokenFromStorage(refresh_token);
-      history.push('/admin/default');
+      history.push('/dashboard/');
     },
   });
 
@@ -211,7 +211,7 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
               </NavLink>
             </Text>
           </Flex>
-          <FixedPlugin />
+          <ColorToggle />
         </Flex>
       </Flex>
     </Flex>
