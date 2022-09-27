@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { User } from '../model/user.entity';
-import * as bcrypt from 'bcrypt';
 import { CreateUserDTO } from './auth.dto';
 import { RefreshTokenService } from './refresh_token.service';
 

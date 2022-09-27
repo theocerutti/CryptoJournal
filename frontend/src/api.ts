@@ -1,4 +1,10 @@
 import Axios from 'axios';
+import {
+  getRefreshTokenFromStorage,
+  getTokenFromStorage,
+  setTokenFromStorage,
+} from './utils/authStorage';
+import { useHistory } from 'react-router-dom';
 
 const SERVER_URL = process.env.REACT_APP_API_URL;
 
@@ -15,9 +21,10 @@ const extractErrMessage = (err: {
 const api = Axios.create({
   transformRequest: [
     (data, headers) => {
-      //if (store.getters.isLogged) {
-      //  headers['Authorization'] = `Bearer ${store.state.auth.accessToken}`;
-      //}
+      const accessToken = getTokenFromStorage();
+      if (accessToken) {
+        headers['Authorization'] = `Bearer ${accessToken}`;
+      }
       return data;
     },
     // @ts-ignore
@@ -46,22 +53,22 @@ api.interceptors.response.use(
       isJwtExpirationError(err) &&
       originalRequest.url === '/api/auth/refresh'
     ) {
-      // router.push("/login");
+      // history.push('/auth/sign-in');
       return Promise.reject(err);
     } else if (isJwtExpirationError(err) && !originalRequest._retry) {
       originalRequest._retry = true;
-      const refreshToken: any = null; // store.state.auth.refreshToken;
+      const refreshToken = getRefreshTokenFromStorage();
       return api
         .post('/api/auth/refresh', { refresh_token: refreshToken })
         .then((res) => {
           const newToken = res.data;
-          // store.commit("SET_ACCESS_TOKEN", newToken);
+          setTokenFromStorage(newToken);
           api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
           return api(originalRequest);
         });
     }
     // if (err.response && err.response.status !== 403) // don't notify error of forbidden errors
-    // store._vm.$notify({text: extractErrMessage(err), type: "error"});
+    //  store._vm.$notify({text: extractErrMessage(err), type: "error"});
     return Promise.reject(err);
   }
 );

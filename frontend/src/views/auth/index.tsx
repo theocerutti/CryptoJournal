@@ -1,11 +1,10 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import {
   Alert,
   AlertIcon,
   Box,
   Button,
-  Checkbox,
   Flex,
   FormControl,
   FormLabel,
@@ -23,8 +22,13 @@ import { RiEyeCloseLine } from 'react-icons/ri';
 import FixedPlugin from '../../components/fixedPlugin/FixedPlugin';
 import { api } from '../../api';
 import { useMutation } from '@tanstack/react-query';
+import {
+  setRefreshTokenFromStorage,
+  setTokenFromStorage,
+} from '../../utils/authStorage';
 
 function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
+  const history = useHistory();
   const textColor = useColorModeValue('navy.700', 'white');
   const textColorSecondary = 'gray.400';
   const textColorDetails = useColorModeValue('navy.700', 'secondaryGray.600');
@@ -35,16 +39,27 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
   const [password, setPassword] = React.useState('');
   const handleClick = () => setShow(!show);
 
-  const mutation = useMutation((auth) => {
+  const authenticateMutation = (mutationArgs: any) => {
     if (type === 'sign-in') {
-      return api.post('/auth/login', auth);
+      return api.post('/auth/login', mutationArgs);
     } else {
-      return api.post('/auth/register', auth);
+      return api.post('/auth/register', mutationArgs);
     }
+  };
+
+  const mutation = useMutation(authenticateMutation, {
+    onError: (error) => {
+      console.log('error login/register', error);
+    },
+    onSuccess: (data) => {
+      const { access_token, refresh_token } = data.data.payload;
+      setTokenFromStorage(access_token);
+      setRefreshTokenFromStorage(refresh_token);
+      history.push('/admin/default');
+    },
   });
 
   const handleAuth = () => {
-    console.log(password, email);
     // @ts-ignore
     mutation.mutate({
       email: email,
@@ -112,6 +127,7 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
             </FormLabel>
             <Input
               isRequired={true}
+              value={email}
               variant='auth'
               fontSize='sm'
               ms={{ base: '0px', md: '0px' }}
@@ -134,6 +150,7 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
             <InputGroup size='md'>
               <Input
                 isRequired={true}
+                value={password}
                 fontSize='sm'
                 placeholder='Min. 8 characters'
                 mb='24px'
@@ -151,36 +168,6 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
                 />
               </InputRightElement>
             </InputGroup>
-            {type === 'sign-in' ? (
-              <Flex justifyContent='space-between' align='center' mb='24px'>
-                <FormControl display='flex' alignItems='center'>
-                  <Checkbox
-                    id='remember-login'
-                    colorScheme='brandScheme'
-                    me='10px'
-                  />
-                  <FormLabel
-                    htmlFor='remember-login'
-                    mb='0'
-                    fontWeight='normal'
-                    color={textColor}
-                    fontSize='sm'
-                  >
-                    Keep me logged in
-                  </FormLabel>
-                </FormControl>
-                <NavLink to='/auth/forgot-password'>
-                  <Text
-                    color={textColorBrand}
-                    fontSize='sm'
-                    w='124px'
-                    fontWeight='500'
-                  >
-                    Forgot password?
-                  </Text>
-                </NavLink>
-              </Flex>
-            ) : null}
             <Button
               onClick={handleAuth}
               fontSize='sm'
@@ -190,7 +177,13 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
               h='50'
               mb='24px'
             >
-              {type === 'sign-in' ? 'Sign In' : 'Sign Up'}
+              {mutation.isLoading ? (
+                <Spinner />
+              ) : type === 'sign-in' ? (
+                'Sign In'
+              ) : (
+                'Sign Up'
+              )}
             </Button>
           </FormControl>
           <Flex
@@ -217,7 +210,6 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
                 </Text>
               </NavLink>
             </Text>
-            {mutation.isLoading && <Spinner />}
           </Flex>
           <FixedPlugin />
         </Flex>
