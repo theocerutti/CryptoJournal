@@ -2,6 +2,7 @@ import {
   BeforeInsert,
   Column,
   Entity,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -9,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { IsNotEmpty, Length } from 'class-validator';
 import { RefreshToken } from './refresh_token.entity';
+import { Investment } from './investment.entity';
 
 @Entity()
 export class User {
@@ -29,6 +31,11 @@ export class User {
     onDelete: 'CASCADE',
   })
   refresh_token: RefreshToken;
+
+  @OneToMany(() => Investment, (investment) => investment.user, {
+    onDelete: 'CASCADE',
+  })
+  investments: Investment[];
 
   @BeforeInsert()
   async hashPassword() {

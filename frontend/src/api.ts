@@ -4,7 +4,6 @@ import {
   getTokenFromStorage,
   setTokenFromStorage,
 } from './utils/authStorage';
-import { useHistory } from 'react-router-dom';
 
 const SERVER_URL = process.env.REACT_APP_API_URL;
 

@@ -2,6 +2,7 @@
 
 # code editor
 .idea
+*.iml
 .vs
 .vscode
 

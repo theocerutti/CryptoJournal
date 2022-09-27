@@ -74,12 +74,10 @@ export class UserService {
 
   async update(userID: number, userDTO: UserUpdateDTO): Promise<User> {
     const user: User = await this.getById(userID);
+    const updated = Object.assign(user, userDTO);
 
-    if (userDTO.email) {
-      user.email = userDTO.email;
-    }
     try {
-      return await this.UserRepo.save(user);
+      return await this.UserRepo.save(updated);
     } catch (error) {
       throw new HttpException(
         `Could not update user : ${error.message}`,

@@ -7,7 +7,6 @@ import {
   Param,
   ParseIntPipe,
   Put,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { User } from '../model/user.entity';
 import { UserUpdateDTO } from './user.dto';
@@ -45,19 +44,6 @@ export class UserController {
   public async deleteMe(@CurrentUser() user: User): Promise<User> {
     this.logger.log('Delete user with userId=', user.id);
     return await this.userService.delete(user.id);
-  }
-
-  @Get(':userId')
-  public async getUser(
-    @CurrentUser() currentUser: User,
-    @Param('userId', ParseIntPipe) userId: number
-  ): Promise<User> {
-    this.logger.log('Get user by id=', userId);
-    if (currentUser.id === userId) {
-      return await this.userService.getById(userId);
-    } else {
-      throw new UnauthorizedException();
-    }
   }
 
   @Delete(':userId')
