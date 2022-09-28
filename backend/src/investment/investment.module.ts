@@ -11,4 +11,4 @@ import { InvestmentService } from './investment.service';
   providers: [InvestmentService],
   exports: [InvestmentService],
 })
-export class UserModule {}
+export class InvestmentModule {}

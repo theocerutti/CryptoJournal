@@ -20,12 +20,12 @@ import {
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import ColorToggle from '../../components/ColorToggle';
-import { api } from '../../api';
 import { useMutation } from '@tanstack/react-query';
 import {
   setRefreshTokenFromStorage,
   setTokenFromStorage,
 } from '../../utils/authStorage';
+import { loginMutation, registerMutation } from '../../queries/auth';
 
 function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
   const history = useHistory();
@@ -41,9 +41,9 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
 
   const authenticateMutation = (mutationArgs: any) => {
     if (type === 'sign-in') {
-      return api.post('/auth/login', mutationArgs);
+      return loginMutation(mutationArgs);
     } else {
-      return api.post('/auth/register', mutationArgs);
+      return registerMutation(mutationArgs);
     }
   };
 

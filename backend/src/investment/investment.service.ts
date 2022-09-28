@@ -12,7 +12,7 @@ export class InvestmentService {
   ) {}
 
   async getAll(userId: number): Promise<Investment[]> {
-    return this.InvestmentRepo.find({ where: { userId } });
+    return this.InvestmentRepo.find({ where: { user: { id: userId } } });
   }
 
   async get(userId: number, investmentId: number): Promise<Investment> {

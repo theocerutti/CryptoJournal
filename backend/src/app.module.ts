@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { CurrentUserInterceptor } from './auth/current-user.interceptor';
 import { ConfigModule } from '@nestjs/config';
+import { InvestmentModule } from './investment/investment.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ConfigModule } from '@nestjs/config';
       migrationsTableName: 'migrations_typeorm',
       migrationsRun: true,
     }),
+    InvestmentModule,
     UserModule,
     AuthModule,
   ],

@@ -58,7 +58,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       const refreshToken = getRefreshTokenFromStorage();
       return api
-        .post('/api/auth/refresh', { refresh_token: refreshToken })
+        .post('/auth/refresh', { refresh_token: refreshToken })
         .then((res) => {
           const newToken = res.data;
           setTokenFromStorage(newToken);

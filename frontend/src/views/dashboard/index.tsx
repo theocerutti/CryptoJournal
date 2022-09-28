@@ -18,23 +18,26 @@ import {
   MdBarChart,
   MdFileCopy,
 } from 'react-icons/md';
-import CheckTable from 'views/dashboard/default/components/CheckTable';
-import ComplexTable from 'views/dashboard/default/components/ComplexTable';
-import DailyTraffic from 'views/dashboard/default/components/DailyTraffic';
-import PieCard from 'views/dashboard/default/components/PieCard';
-import Tasks from 'views/dashboard/default/components/Tasks';
-import TotalSpent from 'views/dashboard/default/components/TotalSpent';
-import WeeklyRevenue from 'views/dashboard/default/components/WeeklyRevenue';
+import CheckTable from 'views/dashboard/components/CheckTable';
+import ComplexTable from 'views/dashboard/components/ComplexTable';
+import DailyTraffic from 'views/dashboard/components/DailyTraffic';
+import PieCard from 'views/dashboard/components/PieCard';
+import Tasks from 'views/dashboard/components/Tasks';
+import TotalSpent from 'views/dashboard/components/TotalSpent';
+import WeeklyRevenue from 'views/dashboard/components/WeeklyRevenue';
 import {
   columnsDataCheck,
   columnsDataComplex,
-} from 'views/dashboard/default/variables/columnsData';
-import tableDataCheck from 'views/dashboard/default/variables/tableDataCheck.json';
-import tableDataComplex from 'views/dashboard/default/variables/tableDataComplex.json';
+} from 'views/dashboard/variables/columnsData';
+import tableDataCheck from 'views/dashboard/variables/tableDataCheck.json';
+import tableDataComplex from 'views/dashboard/variables/tableDataComplex.json';
+import Investments from '../../components/investments/Investments';
+import Card from 'components/card/Card';
 
-export default function UserReports() {
+export default function Dashboard() {
   const brandColor = useColorModeValue('brand.500', 'white');
   const boxBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.100');
+
   return (
     <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
       <SimpleGrid
@@ -119,6 +122,12 @@ export default function UserReports() {
           name='Total Projects'
           value='2935'
         />
+      </SimpleGrid>
+
+      <SimpleGrid gap='20px' mb='20px'>
+        <Card>
+          <Investments />
+        </Card>
       </SimpleGrid>
 
       <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px' mb='20px'>

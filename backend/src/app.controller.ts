@@ -2,7 +2,7 @@ import { Controller, Logger, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { SkipAuth } from './auth/skip-auth.decorators';
 
-@Controller('api')
+@Controller('app')
 export class AppController {
   private readonly logger = new Logger(AppController.name);
 

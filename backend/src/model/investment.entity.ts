@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -22,6 +23,7 @@ export class Investment {
   @ManyToOne(() => User, (user) => user.investments, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn()
   user: User;
 
   @Column({ type: 'timestamp', nullable: false })

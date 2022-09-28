@@ -9,6 +9,7 @@ const Card = {
     borderRadius: '20px',
     minWidth: '0px',
     wordWrap: 'break-word',
+    borderColor: mode('#ffffff', 'navy.800')(props),
     bg: mode('#ffffff', 'navy.800')(props),
     backgroundClip: 'border-box',
   }),

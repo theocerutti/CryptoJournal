@@ -1,6 +1,6 @@
 import { Icon } from '@chakra-ui/react';
 import { MdHome } from 'react-icons/md';
-import MainDashboard from 'views/dashboard/default';
+import MainDashboard from 'views/dashboard';
 
 const routes = [
   {

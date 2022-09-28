@@ -22,7 +22,7 @@ export class InvestmentController {
 
   @Get()
   public async getAll(@CurrentUser() user: User): Promise<Investment[]> {
-    this.logger.log('GetAll with userId=', user.id);
+    this.logger.log(`GetAll with userId=${user.id}`);
     return this.investmentService.getAll(user.id);
   }
 
@@ -31,7 +31,7 @@ export class InvestmentController {
     @CurrentUser() user: User,
     @Param('investmentId', ParseIntPipe) investmentId: number
   ): Promise<Investment> {
-    this.logger.log('Get investmentId=', investmentId);
+    this.logger.log(`Get investmentId=${investmentId}`);
     return this.investmentService.get(user.id, investmentId);
   }
 
@@ -40,7 +40,7 @@ export class InvestmentController {
     @CurrentUser() user: User,
     @Body() investmentDTO: InvestmentDto
   ): Promise<Investment> {
-    this.logger.log('Update', investmentDTO);
+    this.logger.log(`Update ${investmentDTO}`);
     return await this.investmentService.update(user.id, investmentDTO);
   }
 
@@ -49,7 +49,7 @@ export class InvestmentController {
     @CurrentUser() user: User,
     @Param('investmentId', ParseIntPipe) investmentId: number
   ): Promise<Investment> {
-    this.logger.log('Delete investmentId=', investmentId);
+    this.logger.log(`Delete investmentId=${investmentId}`);
     return await this.investmentService.delete(user.id, investmentId);
   }
 }
