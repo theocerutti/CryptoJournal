@@ -1,32 +1,19 @@
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-} from '@chakra-ui/react';
-import React from 'react';
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, } from "@chakra-ui/react";
+import React from "react";
+import InvestmentForm from "./InvestmentForm";
 
 const AddInvestmentModal = (props: any) => {
   return (
     <Modal isOpen={props.isOpen} onClose={props.onClose}>
-      <ModalOverlay />
+      <ModalOverlay/>
       <ModalContent>
-        <ModalHeader>Modal Title</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>earaeraeraera</ModalBody>
+        <ModalHeader>Add investment</ModalHeader>
 
-        <ModalFooter>
-          <Button colorScheme='blue' mr={3} onClick={props.onClose}>
-            Close
-          </Button>
-          <Button colorScheme='blue' mr={3} onClick={props.onAdd}>
-            Add
-          </Button>
-        </ModalFooter>
+        <ModalCloseButton/>
+
+        <ModalBody>
+          <InvestmentForm {...props} />
+        </ModalBody>
       </ModalContent>
     </Modal>
   );
