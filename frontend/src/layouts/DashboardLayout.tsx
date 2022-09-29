@@ -8,14 +8,15 @@ import routes from 'routes';
 export default function Dashboard() {
   const getActiveRoute = (routes: RoutesType[]): string => {
     let activeRoute = 'Default Active Route';
-    console.log(window.location.href);
+
     for (let i = 0; i < routes.length; i++) {
-      if (
-        window.location.href.indexOf(routes[i].layout + routes[i].path) !==
-          -1 ||
-        (window.location.href.indexOf(routes[i].layout) !== -1 &&
-          routes[i].path === '/')
-      ) {
+      const routeFullPath =
+        routes[i].layout + (routes[i].path === '/' ? '' : routes[i].path);
+      const pathname =
+        window.location.pathname.at(-1) === '/'
+          ? window.location.pathname.slice(0, -1)
+          : window.location.pathname;
+      if (pathname === routeFullPath) {
         return routes[i].name;
       }
     }
@@ -27,6 +28,7 @@ export default function Dashboard() {
       if (route.layout === '/dashboard') {
         return (
           <Route
+            exact
             path={route.layout + route.path}
             component={route.component}
             key={key}

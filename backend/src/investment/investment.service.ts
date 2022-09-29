@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { InvestmentRepository } from './investment.repository';
 import { Investment } from '../model/investment.entity';
 import { InvestmentDto } from './investment.dto';
+import { User } from '../model/user.entity';
 
 @Injectable()
 export class InvestmentService {
@@ -20,6 +21,15 @@ export class InvestmentService {
       relations: ['user'],
       where: { user: { id: userId }, id: investmentId },
     });
+  }
+
+  async create(user: User, investmentDto: InvestmentDto): Promise<Investment> {
+    delete investmentDto.id;
+
+    const investment = new Investment();
+    Object.assign(investment, investmentDto);
+    investment.user = user;
+    return await this.InvestmentRepo.save(investment);
   }
 
   async update(

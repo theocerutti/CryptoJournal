@@ -6,6 +6,7 @@ import {
   Logger,
   Param,
   ParseIntPipe,
+  Post,
   Put,
 } from '@nestjs/common';
 import { CurrentUser } from '../auth/current-user.decorator';
@@ -33,6 +34,15 @@ export class InvestmentController {
   ): Promise<Investment> {
     this.logger.log(`Get investmentId=${investmentId}`);
     return this.investmentService.get(user.id, investmentId);
+  }
+
+  @Post()
+  public async create(
+    @CurrentUser() user: User,
+    @Body() investmentDTO: InvestmentDto
+  ): Promise<Investment> {
+    this.logger.log(`Create ${investmentDTO}`);
+    return await this.investmentService.create(user, investmentDTO);
   }
 
   @Put()

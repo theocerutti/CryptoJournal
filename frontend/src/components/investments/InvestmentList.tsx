@@ -1,14 +1,21 @@
 import React from 'react';
 import Investment from './Investment';
 import { useQuery } from '@tanstack/react-query';
-import { getInvestmentsQuery } from '../../queries/investments';
+import {
+  getInvestmentsQuery,
+  investmentQueryKey,
+} from '../../queries/investments';
 import { Alert, Flex, Spinner } from '@chakra-ui/react';
 import NoInvestments from './NoInvestments';
+import { defaultQueryConfig } from 'queries/config';
 
-const InvestmentList = (props: any) => {
+const InvestmentList = () => {
   const { data, isError, isLoading, isSuccess } = useQuery(
-    ['investments'],
-    getInvestmentsQuery
+    [investmentQueryKey],
+    getInvestmentsQuery,
+    {
+      ...defaultQueryConfig,
+    }
   );
 
   if (isError) return <Alert status='error'>Can't fetch investments</Alert>;

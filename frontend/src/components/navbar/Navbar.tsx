@@ -80,7 +80,7 @@ export default function Navbar({ brandText }: { brandText: string }) {
         <Box mb={{ sm: '8px', md: '0px' }}>
           <Breadcrumb>
             <BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
-              <BreadcrumbLink href='#' color={secondaryText}>
+              <BreadcrumbLink href='/dashboard' color={secondaryText}>
                 Pages
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -91,7 +91,7 @@ export default function Navbar({ brandText }: { brandText: string }) {
               </BreadcrumbLink>
             </BreadcrumbItem>
           </Breadcrumb>
-          {/* Here we create navbar brand, based on route name */}
+
           <Link
             color={mainText}
             href='#'

@@ -15,91 +15,73 @@ export function SidebarLinks(props: { routes: RoutesType[] }) {
   const { routes } = props;
 
   const activeRoute = (routeName: string) => {
-    return location.pathname.includes(routeName);
+    const pathname =
+      location.pathname.at(-1) === '/'
+        ? location.pathname.slice(0, -1)
+        : location.pathname;
+    return pathname === routeName;
   };
 
   const createLinks = (routes: RoutesType[]) => {
     return routes.map((route: RoutesType, index: number): JSX.Element => {
-      if (route.layout === '/dashboard' || route.layout === '/auth') {
-        return (
-          <NavLink key={index} to={route.layout + route.path}>
-            {route.icon ? (
-              <Box>
-                <HStack
-                  spacing={
-                    activeRoute(route.path.toLowerCase()) ? '22px' : '26px'
-                  }
-                  py='5px'
-                  ps='10px'
-                >
-                  <Flex w='100%' alignItems='center' justifyContent='center'>
-                    <Box
-                      color={
-                        activeRoute(route.path.toLowerCase())
-                          ? activeIcon
-                          : textColor
-                      }
-                      me='18px'
-                    >
-                      {route.icon}
-                    </Box>
-                    <Text
-                      me='auto'
-                      color={
-                        activeRoute(route.path.toLowerCase())
-                          ? activeColor
-                          : textColor
-                      }
-                      fontWeight={
-                        activeRoute(route.path.toLowerCase())
-                          ? 'bold'
-                          : 'normal'
-                      }
-                    >
-                      {route.name}
-                    </Text>
-                  </Flex>
+      const fullRoutePath = (
+        route.layout + (route.path === '/' ? '' : route.path)
+      ).toLowerCase();
+
+      return (
+        <NavLink key={index} to={route.layout + route.path}>
+          {route.icon ? (
+            <Box>
+              <HStack
+                spacing={activeRoute(fullRoutePath) ? '22px' : '26px'}
+                py='5px'
+                ps='10px'
+              >
+                <Flex w='100%' alignItems='center' justifyContent='center'>
                   <Box
-                    h='36px'
-                    w='4px'
-                    bg={
-                      activeRoute(route.path.toLowerCase())
-                        ? brandColor
-                        : 'transparent'
-                    }
-                    borderRadius='5px'
-                  />
-                </HStack>
-              </Box>
-            ) : (
-              <Box>
-                <HStack
-                  spacing={
-                    activeRoute(route.path.toLowerCase()) ? '22px' : '26px'
-                  }
-                  py='5px'
-                  ps='10px'
-                >
+                    color={activeRoute(fullRoutePath) ? activeIcon : textColor}
+                    me='18px'
+                  >
+                    {route.icon}
+                  </Box>
                   <Text
                     me='auto'
-                    color={
-                      activeRoute(route.path.toLowerCase())
-                        ? activeColor
-                        : inactiveColor
-                    }
-                    fontWeight={
-                      activeRoute(route.path.toLowerCase()) ? 'bold' : 'normal'
-                    }
+                    color={activeRoute(fullRoutePath) ? activeColor : textColor}
+                    fontWeight={activeRoute(fullRoutePath) ? 'bold' : 'normal'}
                   >
                     {route.name}
                   </Text>
-                  <Box h='36px' w='4px' bg='brand.400' borderRadius='5px' />
-                </HStack>
-              </Box>
-            )}
-          </NavLink>
-        );
-      }
+                </Flex>
+                <Box
+                  h='36px'
+                  w='4px'
+                  bg={activeRoute(fullRoutePath) ? brandColor : 'transparent'}
+                  borderRadius='5px'
+                />
+              </HStack>
+            </Box>
+          ) : (
+            <Box>
+              <HStack
+                spacing={activeRoute(fullRoutePath) ? '22px' : '26px'}
+                py='5px'
+                ps='10px'
+              >
+                <Text
+                  me='auto'
+                  color={
+                    activeRoute(fullRoutePath) ? activeColor : inactiveColor
+                  }
+                  fontWeight={activeRoute(fullRoutePath) ? 'bold' : 'normal'}
+                >
+                  {route.name}
+                </Text>
+                <Box h='36px' w='4px' bg='brand.400' borderRadius='5px' />
+              </HStack>
+            </Box>
+          )}
+        </NavLink>
+      );
     });
   };
 

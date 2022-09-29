@@ -11,7 +11,7 @@ import {
   DrawerContent,
   DrawerCloseButton,
 } from '@chakra-ui/react';
-import Content from 'components/sidebar/SidebarContent';
+import SidebarContent from 'components/sidebar/SidebarContent';
 import { renderThumb, renderTrack, renderView } from 'components/Scrollbar';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { IoMenuOutline } from 'react-icons/io5';
@@ -45,7 +45,7 @@ function Sidebar(props: { routes: RoutesType[]; [x: string]: any }) {
           renderThumbVertical={renderThumb}
           renderView={renderView}
         >
-          <Content routes={routes} />
+          <SidebarContent routes={routes} />
         </Scrollbars>
       </Box>
     </Box>
@@ -94,7 +94,7 @@ export function SidebarResponsive(props: { routes: RoutesType[] }) {
               renderThumbVertical={renderThumb}
               renderView={renderView}
             >
-              <Content routes={routes} />
+              <SidebarContent routes={routes} />
             </Scrollbars>
           </DrawerBody>
         </DrawerContent>
