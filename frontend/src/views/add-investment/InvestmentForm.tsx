@@ -17,7 +17,7 @@ import {
 import * as Yup from 'yup';
 import {
   createInvestmentMutation,
-  investmentQueryKey,
+  INVESTMENT_QUERY_KEY,
 } from '../../queries/investments';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
@@ -53,7 +53,8 @@ const InvestmentForm = () => {
 
   const mutation = useMutation(createInvestmentMutation, {
     onSuccess: () => {
-      queryClient.invalidateQueries([investmentQueryKey]);
+      // queryClient.setQueryData(['INVESTMENT_QUERY_KEY', res.investment.id], res.investment); TODO
+      queryClient.invalidateQueries([INVESTMENT_QUERY_KEY]);
       history.push('/dashboard');
     },
   });
@@ -182,8 +183,13 @@ const InvestmentForm = () => {
           <Button colorScheme='gray' mr={3}>
             Close
           </Button>
-          <Button type='submit' colorScheme='blue' mr={3}>
-            {formik.isSubmitting ? <Spinner /> : 'Add'}
+          <Button
+            isLoading={formik.isSubmitting}
+            type='submit'
+            colorScheme='blue'
+            mr={3}
+          >
+            Add
           </Button>
         </HStack>
       </VStack>

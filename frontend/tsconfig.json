@@ -23,7 +23,6 @@
     "baseUrl": "src",
     "experimentalDecorators": true,
     "paths": {
-      "@assets/*": ["./assets/*"],
       "@shared/*": ["../../backend/src/shared/*"],
     }
   },

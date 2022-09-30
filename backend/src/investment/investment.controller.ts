@@ -13,7 +13,7 @@ import { CurrentUser } from 'auth/current-user.decorator';
 import { User } from 'model/user.entity';
 import { InvestmentService } from './investment.service';
 import { Investment } from 'model/investment.entity';
-import { InvestmentDto } from 'shared/investment';
+import { InvestmentDto, InvestmentGlobalInfoDto } from 'shared/investment';
 
 @Controller('investments')
 export class InvestmentController {
@@ -25,6 +25,14 @@ export class InvestmentController {
   public async getAll(@CurrentUser() user: User): Promise<Investment[]> {
     this.logger.log(`GetAll with userId=${user.id}`);
     return this.investmentService.getAll(user.id);
+  }
+
+  @Get('/global-info')
+  public async getGlobalInfo(
+    @CurrentUser() user: User
+  ): Promise<InvestmentGlobalInfoDto> {
+    this.logger.log(`GetGlobalInfo with userId=${user.id}`);
+    return this.investmentService.getGlobalInfo(user);
   }
 
   @Get(':investmentId')

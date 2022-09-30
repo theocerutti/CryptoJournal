@@ -1,15 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InvestmentRepository } from './investment.repository';
 import { Investment } from '../model/investment.entity';
-import { InvestmentDto } from '../shared/investment';
+import { InvestmentDto, InvestmentGlobalInfoDto } from '../shared/investment';
 import { User } from '../model/user.entity';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class InvestmentService {
   constructor(
     @InjectRepository(InvestmentRepository)
-    private readonly InvestmentRepo: InvestmentRepository
+    private readonly InvestmentRepo: InvestmentRepository,
+    @Inject(forwardRef(() => UserService)) private userService: UserService
   ) {}
 
   async getAll(userId: number): Promise<Investment[]> {
@@ -21,6 +23,13 @@ export class InvestmentService {
       relations: ['user'],
       where: { user: { id: userId }, id: investmentId },
     });
+  }
+
+  async getGlobalInfo(user: User): Promise<InvestmentGlobalInfoDto> {
+    const globalInfo = new InvestmentGlobalInfoDto();
+    globalInfo.totalInvested = await this.InvestmentRepo.getTotalInvested(user);
+    globalInfo.totalFees = await this.InvestmentRepo.getTotalFees(user);
+    return globalInfo;
   }
 
   async create(user: User, investmentDto: InvestmentDto): Promise<Investment> {

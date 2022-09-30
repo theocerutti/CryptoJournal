@@ -1,22 +1,35 @@
 import React from 'react';
 import Investment from './Investment';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
+  deleteInvestmentMutation,
   getInvestmentsQuery,
-  investmentQueryKey,
+  INVESTMENT_QUERY_KEY,
 } from '../../queries/investments';
 import { Alert, Flex, Spinner } from '@chakra-ui/react';
 import NoInvestments from './NoInvestments';
 import { defaultQueryConfig } from 'queries/config';
+import { InvestmentDto } from '@shared/investment';
 
 const InvestmentList = () => {
+  const queryClient = useQueryClient();
   const { data, isError, isLoading, isSuccess } = useQuery(
-    [investmentQueryKey],
+    [INVESTMENT_QUERY_KEY],
     getInvestmentsQuery,
     {
       ...defaultQueryConfig,
     }
   );
+
+  const mutation = useMutation(deleteInvestmentMutation, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([INVESTMENT_QUERY_KEY]);
+    },
+  });
+
+  const handleDelete = (investment: InvestmentDto) => {
+    mutation.mutate(investment);
+  };
 
   if (isError) return <Alert status='error'>Can't fetch investments</Alert>;
 
@@ -33,7 +46,11 @@ const InvestmentList = () => {
     return (
       <div>
         {data.data.map((investment: any) => (
-          <Investment key={investment.id} investment={investment} />
+          <Investment
+            key={investment.id}
+            investment={investment}
+            handleDelete={handleDelete}
+          />
         ))}
       </div>
     );

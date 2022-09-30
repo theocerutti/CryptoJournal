@@ -1,5 +1,11 @@
 import { InvestmentDto } from './investment.dto';
 import { CreateInvestmentDto } from './create-investment.dto';
 import { UpdateInvestmentDto } from './update-investment.dto';
+import { InvestmentGlobalInfoDto } from './investment-global-info.dto';
 
-export { InvestmentDto, CreateInvestmentDto, UpdateInvestmentDto };
+export {
+  InvestmentDto,
+  CreateInvestmentDto,
+  UpdateInvestmentDto,
+  InvestmentGlobalInfoDto,
+};

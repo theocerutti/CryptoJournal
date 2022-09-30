@@ -169,6 +169,7 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
               </InputRightElement>
             </InputGroup>
             <Button
+              isLoading={mutation.isLoading}
               onClick={handleAuth}
               fontSize='sm'
               variant='brand'
@@ -177,13 +178,7 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
               h='50'
               mb='24px'
             >
-              {mutation.isLoading ? (
-                <Spinner />
-              ) : type === 'sign-in' ? (
-                'Sign In'
-              ) : (
-                'Sign Up'
-              )}
+              {type === 'sign-in' ? 'Sign In' : 'Sign Up'}
             </Button>
           </FormControl>
           <Flex
