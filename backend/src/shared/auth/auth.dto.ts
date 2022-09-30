@@ -10,9 +10,9 @@ export class LoginUserDTO {
 
 export class CreateUserDTO {
   @IsNotEmpty()
-  password: string;
-
-  @IsNotEmpty()
   @IsEmail()
   email: string;
+
+  @IsNotEmpty()
+  password: string;
 }

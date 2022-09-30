@@ -27,7 +27,6 @@
     "eslint": "8.22.0",
     "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
-    "joi": "^17.6.1",
     "react": "^17.0.2",
     "react-apexcharts": "^1.4.0",
     "react-calendar": "^3.7.0",

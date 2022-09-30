@@ -1,6 +1,6 @@
-import { User } from '../model/user.entity';
+import { User } from 'model/user.entity';
 import { JwtPayloadAccessToken, JwtPayloadRefreshToken } from './auth.utils';
-import { RefreshToken } from '../model/refresh_token.entity';
+import { RefreshToken } from 'model/refresh_token.entity';
 import {
   forwardRef,
   Inject,
@@ -11,7 +11,7 @@ import { TokenExpiredError } from 'jsonwebtoken';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RefreshTokensRepository } from './refresh_token.repository';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../user/user.service';
+import { UserService } from 'user/user.service';
 import { ExpiredJwtToken } from './auth.errors';
 
 export const EXPIRATION_REFRESH_TOKEN = 60 * 60 * 24 * 30 * 1000; // 30 days;

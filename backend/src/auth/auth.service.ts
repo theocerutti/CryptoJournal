@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { User } from '../model/user.entity';
-import { CreateUserDTO } from './auth.dto';
+import { CreateUserDTO } from 'shared/auth';
 import { RefreshTokenService } from './refresh_token.service';
 
 @Injectable()

@@ -2,17 +2,17 @@ import React from 'react';
 import { useFormik } from 'formik';
 import {
   Button,
+  Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   HStack,
   Input,
   InputGroup,
   InputLeftElement,
+  Spinner,
   Textarea,
   VStack,
-  Flex,
-  Spinner,
-  FormErrorMessage,
 } from '@chakra-ui/react';
 import * as Yup from 'yup';
 import {
@@ -22,10 +22,11 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useHistory } from 'react-router-dom';
+import { CreateInvestmentDto } from '@shared/investment/create-investment.dto';
 
 const validationSchema = Yup.object().shape({
   buyDate: Yup.date().required('Buy date is required'),
-  sellDate: Yup.date().optional(),
+  sellDate: Yup.date().nullable().optional(),
   buyPrice: Yup.number()
     .min(0, 'Buy price cannot be negative')
     .required('Buy price is required'),
@@ -59,8 +60,8 @@ const InvestmentForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      buyDate: '',
-      sellDate: '',
+      buyDate: null,
+      sellDate: null,
       buyPrice: 0,
       sellPrice: 0,
       buyNote: '',
@@ -75,17 +76,16 @@ const InvestmentForm = () => {
       priceLink: 'https://www.binance.com/en/trade/BTC_USDT',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      values.buyDate = dayjs().format(values.buyDate);
-      console.log(values.sellDate, dayjs().format(values.sellDate));
-      if (values.sellDate) values.sellDate = dayjs().format(values.sellDate);
+    onSubmit: (values: CreateInvestmentDto) => {
+      values.buyDate = dayjs(values.buyDate).toDate();
+      if (values.sellDate) values.sellDate = dayjs(values.sellDate).toDate();
       else delete values.sellDate;
       mutation.mutate(values);
     },
   });
 
   const addInput = (
-    valueKey: string,
+    valueKey: keyof CreateInvestmentDto,
     label: string,
     type: string = 'text',
     inputLeftElement: string | null = null
@@ -95,9 +95,10 @@ const InvestmentForm = () => {
     if (type === 'textarea') {
       input = (
         <Textarea
-          id='sellNote'
-          name='sellNote'
-          value={formik.values.sellNote}
+          id={valueKey}
+          name={valueKey}
+          // @ts-ignore
+          value={formik.values[valueKey] || ''}
           onChange={formik.handleChange}
           size='sm'
         />
@@ -111,7 +112,7 @@ const InvestmentForm = () => {
           variant='filled'
           onChange={formik.handleChange}
           // @ts-ignore
-          value={formik.values[valueKey]}
+          value={formik.values[valueKey] || ''}
         />
       );
     }

@@ -8,10 +8,10 @@ import {
   ParseIntPipe,
   Put,
 } from '@nestjs/common';
-import { User } from '../model/user.entity';
-import { UserUpdateDTO } from './user.dto';
+import { User } from 'model/user.entity';
+import { UserUpdateDTO } from 'shared/user';
 import { UserService } from './user.service';
-import { CurrentUser } from '../auth/current-user.decorator';
+import { CurrentUser } from 'auth/current-user.decorator';
 
 @Controller('users')
 export class UserController {

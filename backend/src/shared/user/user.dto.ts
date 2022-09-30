@@ -8,8 +8,3 @@ export class UserDTO {
   @IsNotEmpty()
   password: string;
 }
-
-export class UserUpdateDTO {
-  @IsEmail()
-  email: string;
-}

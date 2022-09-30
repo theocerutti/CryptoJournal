@@ -1,5 +1,5 @@
-import { UserDTO, UserUpdateDTO } from './user.dto';
-import { User } from '../model/user.entity';
+import { UserDTO, UserUpdateDTO } from 'shared/user';
+import { User } from 'model/user.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';

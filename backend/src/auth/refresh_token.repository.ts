@@ -1,5 +1,5 @@
-import { RefreshToken } from '../model/refresh_token.entity';
-import { User } from '../model/user.entity';
+import { RefreshToken } from 'model/refresh_token.entity';
+import { User } from 'model/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(RefreshToken)

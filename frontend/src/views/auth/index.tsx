@@ -26,6 +26,7 @@ import {
   setTokenFromStorage,
 } from '../../utils/authStorage';
 import { loginMutation, registerMutation } from '../../queries/auth';
+import { LoginUserDTO, CreateUserDTO } from '@shared/auth';
 
 function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
   const history = useHistory();
@@ -39,7 +40,7 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
   const [password, setPassword] = React.useState('');
   const handleClick = () => setShow(!show);
 
-  const authenticateMutation = (mutationArgs: any) => {
+  const authenticateMutation = (mutationArgs: LoginUserDTO | CreateUserDTO) => {
     if (type === 'sign-in') {
       return loginMutation(mutationArgs);
     } else {
@@ -60,7 +61,6 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
   });
 
   const handleAuth = () => {
-    // @ts-ignore
     mutation.mutate({
       email: email,
       password: password,

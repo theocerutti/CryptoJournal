@@ -21,8 +21,10 @@
     "strictNullChecks": false,
     "downlevelIteration": true,
     "baseUrl": "src",
+    "experimentalDecorators": true,
     "paths": {
-      "@assets/*": ["./src/assetsassets/*"]
+      "@assets/*": ["./assets/*"],
+      "@shared/*": ["../../backend/src/shared/*"],
     }
   },
   "include": ["./src"]

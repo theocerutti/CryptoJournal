@@ -9,11 +9,11 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CurrentUser } from '../auth/current-user.decorator';
-import { User } from '../model/user.entity';
+import { CurrentUser } from 'auth/current-user.decorator';
+import { User } from 'model/user.entity';
 import { InvestmentService } from './investment.service';
-import { Investment } from '../model/investment.entity';
-import { InvestmentDto } from './investment.dto';
+import { Investment } from 'model/investment.entity';
+import { InvestmentDto } from 'shared/investment';
 
 @Controller('investments')
 export class InvestmentController {

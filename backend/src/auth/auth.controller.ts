@@ -1,8 +1,8 @@
 import { Body, Controller, Logger, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDTO, LoginUserDTO } from './auth.dto';
+import { CreateUserDTO, LoginUserDTO } from 'shared/auth';
 import { SkipAuth } from './skip-auth.decorators';
-import { User } from '../model/user.entity';
+import { User } from 'model/user.entity';
 import { RefreshRequest } from './refresh_token.dto';
 import {
   EXPIRATION_REFRESH_TOKEN,
