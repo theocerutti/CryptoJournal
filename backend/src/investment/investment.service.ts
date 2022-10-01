@@ -20,11 +20,13 @@ export class InvestmentService {
   ) {}
 
   async getAll(userId: number): Promise<Investment[]> {
-    return this.InvestmentRepo.find({ where: { user: { id: userId } } });
+    return this.InvestmentRepo.find({
+      where: { user: { id: userId } },
+    });
   }
 
   async get(userId: number, investmentId: number): Promise<Investment> {
-    return this.InvestmentRepo.findOne({
+    return await this.InvestmentRepo.findOne({
       relations: ['user'],
       where: { user: { id: userId }, id: investmentId },
     });

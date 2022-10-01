@@ -4,15 +4,15 @@ import Card from '../card/Card';
 import { FaEthereum } from 'react-icons/fa';
 import { formatCurrency } from '../../utils/format';
 import { DeleteIcon } from '@chakra-ui/icons';
-import { InvestmentDto } from '@shared/investment';
+import { GetInvestmentDto } from '@shared/investment';
 import { getSign } from '../../utils/math';
 
 const Investment = ({
   investment,
   handleDelete,
 }: {
-  investment: InvestmentDto;
-  handleDelete: (i: InvestmentDto) => void;
+  investment: GetInvestmentDto;
+  handleDelete: (i: GetInvestmentDto) => void;
 }) => {
   const textColor = useColorModeValue('brands.900', 'white');
   const bgItem = useColorModeValue(
@@ -66,8 +66,8 @@ const Investment = ({
             me={{ base: '4px', md: '32px', xl: '10px', '3xl': '32px' }}
           >
             <Text>
-              {getSign(0)}
-              {formatCurrency(0)}
+              {getSign(investment.price)}
+              {formatCurrency(investment.price)}
             </Text>
           </Flex>
           <Flex

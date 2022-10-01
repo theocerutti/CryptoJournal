@@ -9,7 +9,7 @@ import {
 import { Alert, Flex, Spinner } from '@chakra-ui/react';
 import NoInvestments from './NoInvestments';
 import { defaultQueryConfig } from 'queries/config';
-import { InvestmentDto } from '@shared/investment';
+import { InvestmentDto, GetInvestmentDto } from '@shared/investment';
 
 const InvestmentList = () => {
   const queryClient = useQueryClient();
@@ -27,8 +27,10 @@ const InvestmentList = () => {
     },
   });
 
-  const handleDelete = (investment: InvestmentDto) => {
-    mutation.mutate(investment);
+  const handleDelete = (investment: GetInvestmentDto) => {
+    const mutateInvestment = {} as InvestmentDto;
+    Object.assign(mutateInvestment, investment);
+    mutation.mutate(mutateInvestment);
   };
 
   if (isError) return <Alert status='error'>Can't fetch investments</Alert>;

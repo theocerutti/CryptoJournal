@@ -20,6 +20,7 @@ import {
 } from 'shared/investment';
 import { ScrapeDataContainer } from '../schedulers/ScrapeDataContainer';
 import { ScrapeData } from '../shared/investment/scrape';
+import { GetInvestmentDto } from '../shared/investment';
 
 @Controller('investments')
 export class InvestmentController {
@@ -27,10 +28,25 @@ export class InvestmentController {
 
   constructor(private investmentService: InvestmentService) {}
 
+  private static mapInvestmentToGetDto(
+    investment: Investment
+  ): GetInvestmentDto {
+    const dto = new GetInvestmentDto();
+    Object.assign(dto, investment);
+
+    dto.price = ScrapeDataContainer.getInstance().getPrice(
+      investment.priceLink
+    );
+    return dto;
+  }
+
   @Get()
-  public async getAll(@CurrentUser() user: User): Promise<Investment[]> {
+  public async getAll(@CurrentUser() user: User): Promise<GetInvestmentDto[]> {
     this.logger.log(`GetAll with userId=${user.id}`);
-    return this.investmentService.getAll(user.id);
+    const investments = await this.investmentService.getAll(user.id);
+    return investments.map((investment) =>
+      InvestmentController.mapInvestmentToGetDto(investment)
+    );
   }
 
   @Get('/global-info')
@@ -45,9 +61,10 @@ export class InvestmentController {
   public async get(
     @CurrentUser() user: User,
     @Param('investmentId', ParseIntPipe) investmentId: number
-  ): Promise<Investment> {
+  ): Promise<GetInvestmentDto> {
     this.logger.log(`Get investmentId=${investmentId}`);
-    return this.investmentService.get(user.id, investmentId);
+    const investment = await this.investmentService.get(user.id, investmentId);
+    return InvestmentController.mapInvestmentToGetDto(investment);
   }
 
   @Post()

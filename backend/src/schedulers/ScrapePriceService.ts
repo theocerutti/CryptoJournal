@@ -21,7 +21,6 @@ export class ScrapePriceService {
     name: 'scrapePrice',
   })
   async handleCron() {
-    this.logger.log('Scrape Prices');
     const prices: ScrapeData = {};
     const links = await this.investmentService.getDistinctPriceLinks();
 

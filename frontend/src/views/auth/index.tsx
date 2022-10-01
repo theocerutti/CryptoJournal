@@ -13,7 +13,6 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Spinner,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -26,7 +25,7 @@ import {
   setTokenFromStorage,
 } from '../../utils/authStorage';
 import { loginMutation, registerMutation } from '../../queries/auth';
-import { LoginUserDTO, CreateUserDTO } from '@shared/auth';
+import { CreateUserDTO, LoginUserDTO } from '@shared/auth';
 
 function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
   const history = useHistory();
