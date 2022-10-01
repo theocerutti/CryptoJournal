@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
+import { ColumnNumericTransformer } from '../utils/transformer';
 
 @Entity()
 export class Investment {
@@ -15,7 +16,7 @@ export class Investment {
   id: number;
 
   @CreateDateColumn()
-  createdAat: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
@@ -35,12 +36,14 @@ export class Investment {
   @Column({
     type: 'decimal',
     nullable: false,
+    transformer: new ColumnNumericTransformer(),
   })
   buyPrice: number;
 
   @Column({
     type: 'decimal',
     nullable: true,
+    transformer: new ColumnNumericTransformer(),
   })
   sellPrice: number;
 
@@ -56,13 +59,22 @@ export class Investment {
   @Column({
     type: 'decimal',
     nullable: false,
+    transformer: new ColumnNumericTransformer(),
   })
   fees: number;
 
-  @Column({ type: 'decimal', nullable: false })
+  @Column({
+    type: 'decimal',
+    nullable: false,
+    transformer: new ColumnNumericTransformer(),
+  })
   investedAmount: number;
 
-  @Column({ type: 'decimal', nullable: false })
+  @Column({
+    type: 'decimal',
+    nullable: false,
+    transformer: new ColumnNumericTransformer(),
+  })
   holdings: number;
 
   @Column({ nullable: true })

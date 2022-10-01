@@ -31,3 +31,13 @@ Tous les dropdown affiche le montant investit + le montant gain/loss
 
 * page de graphs / stats
 * page profil
+
+tooltips
+
+Filters:
+* by pnl
+* by date (buy/sell)
+* by name
+* by primaryTag
+* by secondaryTag
+* by investedAmount

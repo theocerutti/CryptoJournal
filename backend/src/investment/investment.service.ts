@@ -50,6 +50,7 @@ export class InvestmentService {
         }
       }
       globalInfo.pnl = globalInfo.totalBalance - globalInfo.totalInvested;
+      globalInfo.pnlPercent = (globalInfo.pnl / globalInfo.totalInvested) * 100;
     }
     return globalInfo;
   }

@@ -71,7 +71,7 @@ const GlobalInfo = () => {
           />
         }
         growth={data.data.pnl}
-        growthPercent={true}
+        growthPercent={data.data.pnlPercent}
         name='Your balance'
         value={data.data.totalBalance}
       />

@@ -15,7 +15,7 @@ export default function Default(props: {
   endContent?: JSX.Element;
   name: string;
   growth?: number;
-  growthPercent?: boolean;
+  growthPercent?: number | null;
   value: number;
 }) {
   const { startContent, endContent, name, growth, value, growthPercent } =
@@ -66,7 +66,7 @@ export default function Default(props: {
               >
                 {getSign(growth)}
                 {formatCurrency(Math.abs(growth))}{' '}
-                {growthPercent && `(${((growth / value) * 100).toFixed(2)}%)`}
+                {growthPercent !== null && `(${growthPercent.toFixed(2)}%)`}
               </Text>
             </Flex>
           ) : null}

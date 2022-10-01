@@ -12,4 +12,7 @@ export class InvestmentGlobalInfoDto {
 
   @IsNumber()
   pnl: number;
+
+  @IsNumber()
+  pnlPercent: number;
 }

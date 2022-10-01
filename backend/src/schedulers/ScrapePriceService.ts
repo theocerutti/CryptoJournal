@@ -17,7 +17,7 @@ export class ScrapePriceService {
     private investmentService: InvestmentService
   ) {}
 
-  @Cron(CronExpression.EVERY_10_SECONDS, {
+  @Cron(CronExpression.EVERY_10_MINUTES, {
     name: 'scrapePrice',
   })
   async handleCron() {

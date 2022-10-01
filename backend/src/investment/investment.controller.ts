@@ -37,6 +37,9 @@ export class InvestmentController {
     dto.price = ScrapeDataContainer.getInstance().getPrice(
       investment.priceLink
     );
+    dto.total = dto.price * dto.holdings;
+    dto.pnl = dto.total - dto.investedAmount;
+    dto.pnlPercent = (dto.pnl / dto.investedAmount) * 100;
     return dto;
   }
 

@@ -16,7 +16,7 @@ const Investments = () => {
         w='100%'
       >
         <Text color={textColor} fontSize='xl' fontWeight='600'>
-          Investments
+          Investments History
         </Text>
         <Button
           variant='action'

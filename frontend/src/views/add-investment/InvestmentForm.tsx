@@ -29,18 +29,21 @@ const validationSchema = Yup.object().shape({
   buyPrice: Yup.number()
     .min(0, 'Buy price cannot be negative')
     .required('Buy price is required'),
-  sellPrice: Yup.number().min(0, 'Sell price cannot be negative').optional(),
-  buyNote: Yup.string().optional(),
-  sellNote: Yup.string().optional(),
+  sellPrice: Yup.number()
+    .nullable()
+    .min(0, 'Sell price cannot be negative')
+    .optional(),
+  buyNote: Yup.string().nullable().optional(),
+  sellNote: Yup.string().nullable().optional(),
   name: Yup.string().required('Name is required'),
   fees: Yup.number().min(0, 'Fees cannot be negative').optional(),
   investedAmount: Yup.number()
     .min(0, 'Invested amount cannot be negative')
     .required('Invested amount is required'),
   holdings: Yup.number().min(0).required('Holdings are required'),
-  locationName: Yup.string().optional(),
-  primaryTag: Yup.string().optional(),
-  secondaryTag: Yup.string().optional(),
+  locationName: Yup.string().nullable().optional(),
+  primaryTag: Yup.string().nullable().optional(),
+  secondaryTag: Yup.string().nullable().optional(),
   priceLink: Yup.string()
     .url("This link doesn't seems to be an url")
     .required('Price link is required'),
@@ -63,7 +66,7 @@ const InvestmentForm = () => {
       buyDate: null,
       sellDate: null,
       buyPrice: 0,
-      sellPrice: 0,
+      sellPrice: null,
       buyNote: '',
       sellNote: '',
       name: 'BTC',

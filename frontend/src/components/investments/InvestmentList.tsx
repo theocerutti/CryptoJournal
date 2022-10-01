@@ -1,5 +1,4 @@
 import React from 'react';
-import Investment from './Investment';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   deleteInvestmentMutation,
@@ -9,7 +8,8 @@ import {
 import { Alert, Flex, Spinner } from '@chakra-ui/react';
 import NoInvestments from './NoInvestments';
 import { defaultQueryConfig } from 'queries/config';
-import { InvestmentDto, GetInvestmentDto } from '@shared/investment';
+import { GetInvestmentDto, InvestmentDto } from '@shared/investment';
+import InvestmentTable from './InvestmentTable';
 
 const InvestmentList = () => {
   const queryClient = useQueryClient();
@@ -33,6 +33,10 @@ const InvestmentList = () => {
     mutation.mutate(mutateInvestment);
   };
 
+  const handleEdit = (investment: GetInvestmentDto) => {
+    console.log(investment);
+  };
+
   if (isError) return <Alert status='error'>Can't fetch investments</Alert>;
 
   if (isLoading)
@@ -46,15 +50,11 @@ const InvestmentList = () => {
     if (data.data.length === 0) return <NoInvestments />;
 
     return (
-      <div>
-        {data.data.map((investment: any) => (
-          <Investment
-            key={investment.id}
-            investment={investment}
-            handleDelete={handleDelete}
-          />
-        ))}
-      </div>
+      <InvestmentTable
+        investments={data.data}
+        handleDelete={handleDelete}
+        handleEdit={handleEdit}
+      />
     );
   }
 };

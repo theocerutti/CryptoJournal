@@ -1,9 +1,17 @@
-import { OmitType } from '@nestjs/swagger';
+import { PartialType } from '@nestjs/swagger';
 import { InvestmentDto } from './investment.dto';
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsNumber } from 'class-validator';
 
-export class GetInvestmentDto extends OmitType(InvestmentDto, ['id'] as const) {
+export class GetInvestmentDto extends PartialType(InvestmentDto) {
   @IsNumber()
-  @IsOptional()
   price: number | null;
+
+  @IsNumber()
+  pnl: number | null;
+
+  @IsNumber()
+  pnlPercent: number | null;
+
+  @IsNumber()
+  total: number | null;
 }
