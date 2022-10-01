@@ -23,7 +23,7 @@
     "experimentalDecorators": true,
     "baseUrl": "./src",
     "paths": {
-      "@shared/*": ["../../backend/src/shared/*"],
+      "@shared/*": ["../../backend/src/shared/*"]
     }
   },
   "include": ["./src"]
