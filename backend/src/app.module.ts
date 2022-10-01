@@ -9,9 +9,12 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { CurrentUserInterceptor } from './auth/current-user.interceptor';
 import { ConfigModule } from '@nestjs/config';
 import { InvestmentModule } from './investment/investment.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TasksModule } from './schedulers/TasksModule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       envFilePath: `src/${
         process.env.NODE_ENV === 'production' ? '.env.prod' : '.env'
@@ -31,6 +34,7 @@ import { InvestmentModule } from './investment/investment.module';
       migrationsTableName: 'migrations_typeorm',
       migrationsRun: true,
     }),
+    TasksModule,
     InvestmentModule,
     UserModule,
     AuthModule,

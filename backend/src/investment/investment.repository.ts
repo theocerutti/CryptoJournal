@@ -10,7 +10,14 @@ export class InvestmentRepository extends Repository<Investment> {
       .where('user.id = :id', { id: user.id })
       .select(`SUM(investment.${column})`, 'sum')
       .getRawOne();
-    return sum;
+    return parseFloat(sum);
+  }
+
+  public async getDistinct(column: string): Promise<string[]> {
+    const res = await this.createQueryBuilder('investment')
+      .select(`DISTINCT(investment.${column})`, 'distinct')
+      .getRawMany();
+    return res.map((item) => item.distinct);
   }
 
   public async getTotalInvested(user: User): Promise<number> {

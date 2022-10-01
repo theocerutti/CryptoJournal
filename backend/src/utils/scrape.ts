@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const htmlEntities: Record<string, string> = {
   nbsp: ' ',
   cent: '¢',
@@ -16,20 +18,6 @@ const htmlEntities: Record<string, string> = {
   apos: "'",
 };
 
-export enum ScrapeSite {
-  CoinMarketCap,
-  Investing,
-  JustEtf,
-}
-
-export const scrapeRegex: Record<ScrapeSite, string> = {
-  [ScrapeSite.CoinMarketCap]:
-    '<div(?=[^>]*class="priceValue.*")[^>]*>[^>]*<span(?=[^>]*)[^>]*>(.+?)</span>',
-  [ScrapeSite.Investing]: '<span(?=[^>]*id="last_last")[^>]*>(.+?)</span>',
-  [ScrapeSite.JustEtf]:
-    '<div(?=[^>]*class="val.*")[^>]*>[^>]*<span(?=[^>]*)[^>]*>.+?</span>[^>]*<span(?=[^>]*)[^>]*>(.+?)</span>',
-};
-
 export const scrapePrice = async (
   url: string,
   regexInput: string,
@@ -43,9 +31,9 @@ export const scrapePrice = async (
 
   if (regexInput.length > 1) {
     try {
-      const res = await fetch(url);
+      const res = await axios.get(url);
       if (res) {
-        const html = await res.text();
+        const html = res.data;
         if (html.length && regexInput.length) {
           output = html.match(new RegExp(regexInput, 'i'))[1];
         }

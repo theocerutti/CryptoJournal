@@ -73,7 +73,7 @@ const InvestmentForm = () => {
       locationName: 'Binance',
       primaryTag: 'Crypto',
       secondaryTag: 'Bitcoin',
-      priceLink: 'https://www.binance.com/en/trade/BTC_USDT',
+      priceLink: 'https://coinmarketcap.com/currencies/bitcoin/',
     },
     validationSchema: validationSchema,
     onSubmit: (values: CreateInvestmentDto) => {

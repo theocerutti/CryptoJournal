@@ -20,7 +20,6 @@ import {
   MdAttachMoney,
   MdBarChart,
 } from 'react-icons/md';
-import { formatCurrency } from '../../utils/format';
 
 const GlobalInfo = () => {
   const brandColor = useColorModeValue('brand.500', 'white');
@@ -71,10 +70,10 @@ const GlobalInfo = () => {
             }
           />
         }
-        growth={500}
+        growth={data.data.pnl}
         growthPercent={true}
         name='Your balance'
-        value={1000}
+        value={data.data.totalBalance}
       />
       <MiniStatistics
         startContent={
@@ -86,7 +85,7 @@ const GlobalInfo = () => {
           />
         }
         name='Total Invested'
-        value={formatCurrency(data.data.totalInvested)}
+        value={data.data.totalInvested}
       />
       <MiniStatistics
         startContent={
@@ -100,7 +99,7 @@ const GlobalInfo = () => {
           />
         }
         name='Total Fees'
-        value={formatCurrency(data.data.totalFees)}
+        value={data.data.totalFees}
       />
     </SimpleGrid>
   );

@@ -6,4 +6,10 @@ export class InvestmentGlobalInfoDto {
 
   @IsNumber()
   totalInvested: number;
+
+  @IsNumber()
+  totalBalance: number;
+
+  @IsNumber()
+  pnl: number;
 }

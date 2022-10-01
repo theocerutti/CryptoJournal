@@ -9,6 +9,7 @@ import {
 } from '../shared/investment';
 import { User } from '../model/user.entity';
 import { UserService } from '../user/user.service';
+import { ScrapeDataContainer } from '../schedulers/ScrapeDataContainer';
 
 @Injectable()
 export class InvestmentService {
@@ -31,8 +32,23 @@ export class InvestmentService {
 
   async getGlobalInfo(user: User): Promise<InvestmentGlobalInfoDto> {
     const globalInfo = new InvestmentGlobalInfoDto();
+    const scrapeData = ScrapeDataContainer.getInstance().getData();
     globalInfo.totalInvested = await this.InvestmentRepo.getTotalInvested(user);
     globalInfo.totalFees = await this.InvestmentRepo.getTotalFees(user);
+    globalInfo.pnl = 0;
+    globalInfo.totalBalance = 0;
+
+    if (Object.keys(scrapeData).length > 0) {
+      const investments = await this.getAll(user.id);
+
+      for (const investment of investments) {
+        const price = scrapeData[investment.priceLink];
+        if (price) {
+          globalInfo.totalBalance += price * investment.holdings;
+        }
+      }
+      globalInfo.pnl = globalInfo.totalBalance - globalInfo.totalInvested;
+    }
     return globalInfo;
   }
 
@@ -58,5 +74,9 @@ export class InvestmentService {
   async delete(userId: number, investmentId: number): Promise<Investment> {
     const investment = await this.get(userId, investmentId);
     return await this.InvestmentRepo.remove(investment);
+  }
+
+  async getDistinctPriceLinks(): Promise<string[]> {
+    return await this.InvestmentRepo.getDistinct('priceLink');
   }
 }

@@ -1,4 +1,4 @@
-import { api } from '../api';
+import { api } from '../utils/api';
 import { LoginUserDTO, CreateUserDTO } from '@shared/auth';
 
 export const loginMutation = (mutationArgs: LoginUserDTO) =>

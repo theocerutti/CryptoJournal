@@ -16,7 +16,7 @@ export default function Default(props: {
   name: string;
   growth?: number;
   growthPercent?: boolean;
-  value: string | number;
+  value: number;
 }) {
   const { startContent, endContent, name, growth, value, growthPercent } =
     props;
@@ -54,7 +54,7 @@ export default function Default(props: {
               base: '2xl',
             }}
           >
-            {value}
+            {formatCurrency(value)}
           </StatNumber>
           {growth ? (
             <Flex align='center'>
@@ -66,8 +66,7 @@ export default function Default(props: {
               >
                 {getSign(growth)}
                 {formatCurrency(Math.abs(growth))}{' '}
-                {growthPercent &&
-                  `(${(growth / parseFloat(value as string)) * 100}%)`}
+                {growthPercent && `(${((growth / value) * 100).toFixed(2)}%)`}
               </Text>
             </Flex>
           ) : null}

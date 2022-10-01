@@ -3,8 +3,10 @@ import {
   getRefreshTokenFromStorage,
   getTokenFromStorage,
   setTokenFromStorage,
-} from './utils/authStorage';
+} from './authStorage';
+// import { TOKEN_AUTH_RES_HEADER } from '@shared/auth'; TODO
 
+const TOKEN_AUTH_RES_HEADER = 'Authorization';
 const SERVER_URL = process.env.REACT_APP_API_URL;
 
 const extractErrMessage = (err: {
@@ -22,7 +24,7 @@ const api = Axios.create({
     (data, headers) => {
       const accessToken = getTokenFromStorage();
       if (accessToken) {
-        headers['Authorization'] = `Bearer ${accessToken}`;
+        headers[TOKEN_AUTH_RES_HEADER] = `Bearer ${accessToken}`;
       }
       return data;
     },
@@ -62,7 +64,9 @@ api.interceptors.response.use(
         .then((res) => {
           const newToken = res.data;
           setTokenFromStorage(newToken);
-          api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+          api.defaults.headers.common[
+            TOKEN_AUTH_RES_HEADER
+          ] = `Bearer ${newToken}`;
           return api(originalRequest);
         });
     }

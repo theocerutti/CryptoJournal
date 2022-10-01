@@ -1,4 +1,4 @@
-import { api } from '../api';
+import { api } from '../utils/api';
 import { CreateInvestmentDto } from '@shared/investment';
 import { InvestmentDto } from '@shared/investment';
 

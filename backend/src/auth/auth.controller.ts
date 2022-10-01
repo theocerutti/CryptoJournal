@@ -8,6 +8,7 @@ import {
   EXPIRATION_REFRESH_TOKEN,
   RefreshTokenService,
 } from './refresh_token.service';
+import { TOKEN_AUTH_RES_HEADER } from '../shared/auth';
 
 export interface AuthenticationPayload {
   user: User;
@@ -16,8 +17,6 @@ export interface AuthenticationPayload {
     refresh_token?: string;
   };
 }
-
-const TOKEN_AUTH_RES_HEADER = 'Authorization';
 
 @Controller('auth')
 export class AuthController {

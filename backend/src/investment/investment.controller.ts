@@ -18,6 +18,8 @@ import {
   InvestmentDto,
   InvestmentGlobalInfoDto,
 } from 'shared/investment';
+import { ScrapeDataContainer } from '../schedulers/ScrapeDataContainer';
+import { ScrapeData } from '../shared/investment/scrape';
 
 @Controller('investments')
 export class InvestmentController {
@@ -73,5 +75,10 @@ export class InvestmentController {
   ): Promise<Investment> {
     this.logger.log(`Delete investmentId=${investmentId}`);
     return await this.investmentService.delete(user.id, investmentId);
+  }
+
+  @Get('prices')
+  public async getPrices(): Promise<ScrapeData> {
+    return ScrapeDataContainer.getInstance().getData();
   }
 }
