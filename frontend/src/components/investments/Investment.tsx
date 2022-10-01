@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Flex, Icon, Text, useColorModeValue } from '@chakra-ui/react';
 import Card from '../card/Card';
 import { FaEthereum } from 'react-icons/fa';
 import { formatCurrency } from '../../utils/format';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { InvestmentDto } from '@shared/investment';
+import { scrapePrice, scrapeRegex, ScrapeSite } from '../../utils/scrap';
+import { getSign } from '../../utils/math';
 
 const Investment = ({
   investment,
@@ -18,6 +20,15 @@ const Investment = ({
     { bg: 'white', boxShadow: '0px 40px 58px -20px rgba(112, 144, 176, 0.12)' },
     { bg: 'navy.700', boxShadow: 'unset' }
   );
+
+  const [price, setPrice] = useState(0);
+
+  useEffect(() => {
+    scrapePrice(
+      'https://coinmarketcap.com/currencies/bitcoin/',
+      scrapeRegex[ScrapeSite.CoinMarketCap]
+    ).then((price) => setPrice(investment.investedAmount - price));
+  }, [investment.investedAmount]);
 
   return (
     <Card
@@ -64,7 +75,10 @@ const Investment = ({
             w={{ base: '70%', md: '20%' }}
             me={{ base: '4px', md: '32px', xl: '10px', '3xl': '32px' }}
           >
-            <Text>+500</Text>
+            <Text>
+              {getSign(price)}
+              {formatCurrency(price)}
+            </Text>
           </Flex>
           <Flex
             me={{ base: '4px', md: '32px', xl: '10px', '3xl': '32px' }}

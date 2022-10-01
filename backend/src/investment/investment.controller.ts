@@ -13,7 +13,11 @@ import { CurrentUser } from 'auth/current-user.decorator';
 import { User } from 'model/user.entity';
 import { InvestmentService } from './investment.service';
 import { Investment } from 'model/investment.entity';
-import { InvestmentDto, InvestmentGlobalInfoDto } from 'shared/investment';
+import {
+  CreateInvestmentDto,
+  InvestmentDto,
+  InvestmentGlobalInfoDto,
+} from 'shared/investment';
 
 @Controller('investments')
 export class InvestmentController {
@@ -47,7 +51,7 @@ export class InvestmentController {
   @Post()
   public async create(
     @CurrentUser() user: User,
-    @Body() investmentDTO: InvestmentDto
+    @Body() investmentDTO: CreateInvestmentDto
   ): Promise<Investment> {
     this.logger.log(`Create ${investmentDTO}`);
     return await this.investmentService.create(user, investmentDTO);

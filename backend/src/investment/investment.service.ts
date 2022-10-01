@@ -2,7 +2,11 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InvestmentRepository } from './investment.repository';
 import { Investment } from '../model/investment.entity';
-import { InvestmentDto, InvestmentGlobalInfoDto } from '../shared/investment';
+import {
+  CreateInvestmentDto,
+  InvestmentDto,
+  InvestmentGlobalInfoDto,
+} from '../shared/investment';
 import { User } from '../model/user.entity';
 import { UserService } from '../user/user.service';
 
@@ -32,9 +36,10 @@ export class InvestmentService {
     return globalInfo;
   }
 
-  async create(user: User, investmentDto: InvestmentDto): Promise<Investment> {
-    delete investmentDto.id;
-
+  async create(
+    user: User,
+    investmentDto: CreateInvestmentDto
+  ): Promise<Investment> {
     const investment = new Investment();
     Object.assign(investment, investmentDto);
     investment.user = user;

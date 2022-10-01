@@ -2,7 +2,6 @@ import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class InvestmentDto {
   @IsNumber()
-  @IsOptional()
   id: number;
 
   @IsDateString()
@@ -16,12 +15,15 @@ export class InvestmentDto {
   buyPrice: number;
 
   @IsNumber()
+  @IsOptional()
   sellPrice: number;
 
   @IsString()
+  @IsOptional()
   buyNote: string;
 
   @IsString()
+  @IsOptional()
   sellNote: string;
 
   @IsString()
@@ -37,12 +39,15 @@ export class InvestmentDto {
   holdings: number;
 
   @IsString()
+  @IsOptional()
   locationName: string;
 
   @IsString()
+  @IsOptional()
   primaryTag: string;
 
   @IsString()
+  @IsOptional()
   secondaryTag: string;
 
   @IsString()

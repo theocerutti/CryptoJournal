@@ -32,10 +32,16 @@ export class Investment {
   @Column({ type: 'timestamp', nullable: true })
   sellDate: Date;
 
-  @Column({ type: 'float', nullable: false })
+  @Column({
+    type: 'decimal',
+    nullable: false,
+  })
   buyPrice: number;
 
-  @Column({ type: 'float', nullable: true })
+  @Column({
+    type: 'decimal',
+    nullable: true,
+  })
   sellPrice: number;
 
   @Column({ type: 'text', nullable: true })
@@ -44,27 +50,30 @@ export class Investment {
   @Column({ type: 'text', nullable: true })
   sellNote: string;
 
-  @Column()
+  @Column({ nullable: false })
   name: string;
 
-  @Column({ type: 'float', nullable: false })
+  @Column({
+    type: 'decimal',
+    nullable: false,
+  })
   fees: number;
 
-  @Column()
+  @Column({ type: 'decimal', nullable: false })
   investedAmount: number;
 
-  @Column()
+  @Column({ type: 'decimal', nullable: false })
   holdings: number;
 
-  @Column()
+  @Column({ nullable: true })
   locationName: string;
 
-  @Column()
+  @Column({ nullable: true })
   primaryTag: string;
 
-  @Column()
+  @Column({ nullable: true })
   secondaryTag: string;
 
-  @Column()
+  @Column({ nullable: false })
   priceLink: string;
 }

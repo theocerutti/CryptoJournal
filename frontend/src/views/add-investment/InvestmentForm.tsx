@@ -10,7 +10,6 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Spinner,
   Textarea,
   VStack,
 } from '@chakra-ui/react';
@@ -81,6 +80,7 @@ const InvestmentForm = () => {
       values.buyDate = dayjs(values.buyDate).toDate();
       if (values.sellDate) values.sellDate = dayjs(values.sellDate).toDate();
       else delete values.sellDate;
+      console.log('sent values: ', values);
       mutation.mutate(values);
     },
   });
@@ -113,7 +113,7 @@ const InvestmentForm = () => {
           variant='filled'
           onChange={formik.handleChange}
           // @ts-ignore
-          value={formik.values[valueKey] || ''}
+          value={formik.values[valueKey]}
         />
       );
     }
