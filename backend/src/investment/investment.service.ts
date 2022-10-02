@@ -6,6 +6,7 @@ import {
   CreateInvestmentDto,
   InvestmentDto,
   InvestmentGlobalInfoDto,
+  UpdateInvestmentDto,
 } from '../shared/investment';
 import { User } from '../model/user.entity';
 import { UserService } from '../user/user.service';
@@ -67,7 +68,7 @@ export class InvestmentService {
 
   async update(
     userId: number,
-    investmentDto: InvestmentDto
+    investmentDto: UpdateInvestmentDto
   ): Promise<Investment> {
     const investment = await this.get(userId, investmentDto.id);
     const updated = Object.assign(investment, investmentDto);

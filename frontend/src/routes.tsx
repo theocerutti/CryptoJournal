@@ -33,6 +33,13 @@ const routes = [
     component: AddInvestmentPage,
   },
   {
+    name: 'Edit investment',
+    layout: '/dashboard',
+    path: '/edit-investment',
+    showNavbar: false,
+    component: AddInvestmentPage,
+  },
+  {
     name: 'Charts',
     layout: '/dashboard',
     path: '/charts',

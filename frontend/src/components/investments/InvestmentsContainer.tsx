@@ -10,8 +10,10 @@ import NoInvestments from './NoInvestments';
 import { defaultQueryConfig } from 'queries/config';
 import { GetInvestmentDto } from '@shared/investment';
 import InvestmentTable from './InvestmentTable';
+import { useHistory } from 'react-router-dom';
 
-const InvestmentList = () => {
+const InvestmentsContainer = () => {
+  const history = useHistory();
   const queryClient = useQueryClient();
   const { data, isError, isLoading, isSuccess } = useQuery(
     [INVESTMENT_QUERY_KEY],
@@ -32,7 +34,7 @@ const InvestmentList = () => {
   };
 
   const handleEdit = (investment: GetInvestmentDto) => {
-    console.log(investment);
+    history.push('/dashboard/edit-investment', { investment });
   };
 
   if (isError) return <Alert status='error'>Can't fetch investments</Alert>;
@@ -57,4 +59,4 @@ const InvestmentList = () => {
   }
 };
 
-export default InvestmentList;
+export default InvestmentsContainer;

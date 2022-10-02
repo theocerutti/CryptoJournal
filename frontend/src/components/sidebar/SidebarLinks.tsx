@@ -23,66 +23,76 @@ export function SidebarLinks(props: { routes: RoutesType[] }) {
   };
 
   const createLinks = (routes: RoutesType[]) => {
-    return routes.map((route: RoutesType, index: number): JSX.Element => {
-      const fullRoutePath = (
-        route.layout + (route.path === '/' ? '' : route.path)
-      ).toLowerCase();
+    return routes
+      .filter(
+        (route) => route.showNavbar === undefined || route.showNavbar === true
+      )
+      .map((route: RoutesType, index: number): JSX.Element => {
+        const fullRoutePath = (
+          route.layout + (route.path === '/' ? '' : route.path)
+        ).toLowerCase();
 
-      return (
-        <NavLink key={index} to={route.layout + route.path}>
-          {route.icon ? (
-            <Box>
-              <HStack
-                spacing={activeRoute(fullRoutePath) ? '22px' : '26px'}
-                py='5px'
-                ps='10px'
-              >
-                <Flex w='100%' alignItems='center' justifyContent='center'>
+        return (
+          <NavLink key={index} to={route.layout + route.path}>
+            {route.icon ? (
+              <Box>
+                <HStack
+                  spacing={activeRoute(fullRoutePath) ? '22px' : '26px'}
+                  py='5px'
+                  ps='10px'
+                >
+                  <Flex w='100%' alignItems='center' justifyContent='center'>
+                    <Box
+                      color={
+                        activeRoute(fullRoutePath) ? activeIcon : textColor
+                      }
+                      me='18px'
+                    >
+                      {route.icon}
+                    </Box>
+                    <Text
+                      me='auto'
+                      color={
+                        activeRoute(fullRoutePath) ? activeColor : textColor
+                      }
+                      fontWeight={
+                        activeRoute(fullRoutePath) ? 'bold' : 'normal'
+                      }
+                    >
+                      {route.name}
+                    </Text>
+                  </Flex>
                   <Box
-                    color={activeRoute(fullRoutePath) ? activeIcon : textColor}
-                    me='18px'
-                  >
-                    {route.icon}
-                  </Box>
+                    h='36px'
+                    w='4px'
+                    bg={activeRoute(fullRoutePath) ? brandColor : 'transparent'}
+                    borderRadius='5px'
+                  />
+                </HStack>
+              </Box>
+            ) : (
+              <Box>
+                <HStack
+                  spacing={activeRoute(fullRoutePath) ? '22px' : '26px'}
+                  py='5px'
+                  ps='10px'
+                >
                   <Text
                     me='auto'
-                    color={activeRoute(fullRoutePath) ? activeColor : textColor}
+                    color={
+                      activeRoute(fullRoutePath) ? activeColor : inactiveColor
+                    }
                     fontWeight={activeRoute(fullRoutePath) ? 'bold' : 'normal'}
                   >
                     {route.name}
                   </Text>
-                </Flex>
-                <Box
-                  h='36px'
-                  w='4px'
-                  bg={activeRoute(fullRoutePath) ? brandColor : 'transparent'}
-                  borderRadius='5px'
-                />
-              </HStack>
-            </Box>
-          ) : (
-            <Box>
-              <HStack
-                spacing={activeRoute(fullRoutePath) ? '22px' : '26px'}
-                py='5px'
-                ps='10px'
-              >
-                <Text
-                  me='auto'
-                  color={
-                    activeRoute(fullRoutePath) ? activeColor : inactiveColor
-                  }
-                  fontWeight={activeRoute(fullRoutePath) ? 'bold' : 'normal'}
-                >
-                  {route.name}
-                </Text>
-                <Box h='36px' w='4px' bg='brand.400' borderRadius='5px' />
-              </HStack>
-            </Box>
-          )}
-        </NavLink>
-      );
-    });
+                  <Box h='36px' w='4px' bg='brand.400' borderRadius='5px' />
+                </HStack>
+              </Box>
+            )}
+          </NavLink>
+        );
+      });
   };
 
   return <>{createLinks(routes)}</>;

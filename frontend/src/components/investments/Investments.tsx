@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Flex, Text, useColorModeValue } from '@chakra-ui/react';
-import InvestmentList from './InvestmentList';
+import InvestmentsContainer from './InvestmentsContainer';
 import { useHistory } from 'react-router-dom';
 
 const Investments = () => {
@@ -26,7 +26,7 @@ const Investments = () => {
         </Button>
       </Flex>
 
-      <InvestmentList />
+      <InvestmentsContainer />
     </>
   );
 };

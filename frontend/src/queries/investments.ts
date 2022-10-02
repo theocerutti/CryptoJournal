@@ -2,6 +2,7 @@ import { api } from '../utils/api';
 import {
   CreateInvestmentDto,
   GetInvestmentDto,
+  UpdateInvestmentDto,
   InvestmentGlobalInfoDto,
 } from '@shared/investment';
 import { AxiosResponse } from 'axios';
@@ -19,6 +20,9 @@ export const getInvestmentsGlobalInfoQuery = (): Promise<
 
 export const createInvestmentMutation = (mutationArgs: CreateInvestmentDto) =>
   api.post('/investments', mutationArgs);
+
+export const updateInvestmentMutation = (mutationArgs: UpdateInvestmentDto) =>
+  api.put('/investments', mutationArgs);
 
 export const INVESTMENT_QUERY_KEY = 'investments';
 export const INVESTMENT_GLOBAL_INFO_QUERY_KEY = 'investmentGlobalInfo';

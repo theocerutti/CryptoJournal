@@ -9,8 +9,8 @@ declare global {
     name: string;
     layout: string;
     component: () => JSX.Element;
-    icon: JSX.Element | string;
+    icon?: JSX.Element | string;
+    showNavbar?: boolean;
     path: string;
-    secondary?: boolean;
   }
 }

@@ -17,6 +17,7 @@ import {
   CreateInvestmentDto,
   InvestmentDto,
   InvestmentGlobalInfoDto,
+  UpdateInvestmentDto,
 } from 'shared/investment';
 import { ScrapeDataContainer } from '../schedulers/ScrapeDataContainer';
 import { ScrapeData } from '../shared/investment/scrape';
@@ -82,7 +83,7 @@ export class InvestmentController {
   @Put()
   public async update(
     @CurrentUser() user: User,
-    @Body() investmentDTO: InvestmentDto
+    @Body() investmentDTO: UpdateInvestmentDto
   ): Promise<Investment> {
     this.logger.log(`Update ${investmentDTO}`);
     return await this.investmentService.update(user.id, investmentDTO);

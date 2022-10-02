@@ -17,11 +17,16 @@ import * as Yup from 'yup';
 import {
   createInvestmentMutation,
   INVESTMENT_QUERY_KEY,
+  updateInvestmentMutation,
 } from '../../queries/investments';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { useHistory } from 'react-router-dom';
-import { CreateInvestmentDto } from '@shared/investment/create-investment.dto';
+import { useHistory, useLocation } from 'react-router-dom';
+import {
+  CreateInvestmentDto,
+  GetInvestmentDto,
+  UpdateInvestmentDto,
+} from '@shared/investment';
 
 const validationSchema = Yup.object().shape({
   buyDate: Yup.date().required('Buy date is required'),
@@ -50,10 +55,23 @@ const validationSchema = Yup.object().shape({
 });
 
 const InvestmentForm = () => {
+  const location = useLocation();
   const history = useHistory();
   const queryClient = useQueryClient();
 
-  const mutation = useMutation(createInvestmentMutation, {
+  const isEditing = location.state !== undefined;
+  // @ts-ignore
+  const editInvestment = location.state?.investment as GetInvestmentDto;
+
+  const mutationCreate = useMutation(createInvestmentMutation, {
+    onSuccess: () => {
+      // queryClient.setQueryData(['INVESTMENT_QUERY_KEY', res.investment.id], res.investment); TODO
+      queryClient.invalidateQueries([INVESTMENT_QUERY_KEY]);
+      history.push('/dashboard');
+    },
+  });
+
+  const mutationUpdate = useMutation(updateInvestmentMutation, {
     onSuccess: () => {
       // queryClient.setQueryData(['INVESTMENT_QUERY_KEY', res.investment.id], res.investment); TODO
       queryClient.invalidateQueries([INVESTMENT_QUERY_KEY]);
@@ -63,28 +81,34 @@ const InvestmentForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      buyDate: null,
-      sellDate: null,
-      buyPrice: 0,
-      sellPrice: null,
-      buyNote: '',
-      sellNote: '',
-      name: 'BTC',
-      fees: 0,
-      investedAmount: 0,
-      holdings: 0,
-      locationName: 'Binance',
-      primaryTag: 'Crypto',
-      secondaryTag: 'Bitcoin',
-      priceLink: 'https://coinmarketcap.com/currencies/bitcoin/',
+      buyDate: isEditing ? new Date(editInvestment.buyDate) : null,
+      sellDate: isEditing
+        ? editInvestment.sellDate === null
+          ? null
+          : new Date(editInvestment.sellDate)
+        : null,
+      buyPrice: isEditing ? editInvestment.buyPrice : 0,
+      sellPrice: isEditing ? editInvestment.sellPrice : null,
+      buyNote: isEditing ? editInvestment.buyNote : null,
+      sellNote: isEditing ? editInvestment.sellNote : null,
+      name: isEditing ? editInvestment.name : 'BTC',
+      fees: isEditing ? editInvestment.fees : 0,
+      investedAmount: isEditing ? editInvestment.investedAmount : 0,
+      holdings: isEditing ? editInvestment.holdings : 0,
+      locationName: isEditing ? editInvestment.locationName : 'Binance',
+      primaryTag: isEditing ? editInvestment.primaryTag : 'Crypto',
+      secondaryTag: isEditing ? editInvestment.secondaryTag : 'Bitcoin',
+      priceLink: isEditing
+        ? editInvestment.priceLink
+        : 'https://coinmarketcap.com/currencies/bitcoin/',
     },
     validationSchema: validationSchema,
-    onSubmit: (values: CreateInvestmentDto) => {
+    onSubmit: (values: CreateInvestmentDto | UpdateInvestmentDto) => {
       values.buyDate = dayjs(values.buyDate).toDate();
-      if (values.sellDate) values.sellDate = dayjs(values.sellDate).toDate();
-      else delete values.sellDate;
-      console.log('sent values: ', values);
-      mutation.mutate(values);
+      values.sellDate = dayjs(values.sellDate).toDate();
+
+      if (isEditing) mutationCreate.mutate(values as CreateInvestmentDto);
+      else mutationUpdate.mutate(values as UpdateInvestmentDto);
     },
   });
 
@@ -95,6 +119,7 @@ const InvestmentForm = () => {
     inputLeftElement: string | null = null
   ) => {
     let input: JSX.Element;
+    let value = formik.values[valueKey] === null ? '' : formik.values[valueKey];
 
     if (type === 'textarea') {
       input = (
@@ -102,12 +127,14 @@ const InvestmentForm = () => {
           id={valueKey}
           name={valueKey}
           // @ts-ignore
-          value={formik.values[valueKey] || ''}
+          value={value || ''}
           onChange={formik.handleChange}
           size='sm'
         />
       );
     } else {
+      if (type === 'date') value = dayjs(value).format('YYYY-MM-DD');
+
       input = (
         <Input
           id={valueKey}
@@ -116,7 +143,7 @@ const InvestmentForm = () => {
           variant='filled'
           onChange={formik.handleChange}
           // @ts-ignore
-          value={formik.values[valueKey]}
+          value={value}
         />
       );
     }
@@ -183,7 +210,11 @@ const InvestmentForm = () => {
         </HStack>
 
         <HStack justify='end' w='100%'>
-          <Button colorScheme='gray' mr={3}>
+          <Button
+            onClick={() => history.push('/dashboard')}
+            colorScheme='gray'
+            mr={3}
+          >
             Close
           </Button>
           <Button
@@ -192,7 +223,7 @@ const InvestmentForm = () => {
             colorScheme='blue'
             mr={3}
           >
-            Add
+            {isEditing ? 'Update' : 'Add'}
           </Button>
         </HStack>
       </VStack>
