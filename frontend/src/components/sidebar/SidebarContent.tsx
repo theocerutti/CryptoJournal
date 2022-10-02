@@ -6,7 +6,13 @@ function SidebarContent(props: { routes: RoutesType[] }) {
   const { routes } = props;
 
   return (
-    <Flex direction='column' height='100%' pt='25px' borderRadius='30px'>
+    <Flex
+      id='sidebar-content'
+      direction='column'
+      height='100%'
+      pt='25px'
+      borderRadius='30px'
+    >
       <SidebarBrand />
       <Stack direction='column' mt='8px' mb='auto'>
         <Box ps='20px' pe={{ lg: '16px', '2xl': '16px' }}>

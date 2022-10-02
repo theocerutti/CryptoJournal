@@ -28,6 +28,7 @@ export const renderView = () => {
   const viewStyle = {
     marginBottom: -22,
   } as const;
+
   return (
     <Box
       height='100%'

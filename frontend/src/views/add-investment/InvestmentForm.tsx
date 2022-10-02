@@ -12,6 +12,7 @@ import {
   InputLeftElement,
   Textarea,
   Tooltip,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import * as Yup from 'yup';
@@ -66,6 +67,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const InvestmentForm = () => {
+  const toast = useToast();
   const location = useLocation();
   const history = useHistory();
   const queryClient = useQueryClient();
@@ -75,11 +77,22 @@ const InvestmentForm = () => {
   // @ts-ignore
   const editInvestment = location.state?.investment as GetInvestmentDto;
 
+  const showSuccessToast = () => {
+    toast({
+      title: `Successfully ${isEditing ? 'updated' : 'created'} investment`,
+      status: 'success',
+      duration: 4500,
+      position: 'bottom-right',
+      isClosable: true,
+    });
+  };
+
   const mutationCreate = useMutation(createInvestmentMutation, {
     onSuccess: () => {
       // queryClient.setQueryData(['INVESTMENT_QUERY_KEY', res.investment.id], res.investment); TODO
       queryClient.invalidateQueries([INVESTMENT_QUERY_KEY]);
       history.push('/dashboard');
+      showSuccessToast();
     },
   });
 
@@ -88,6 +101,7 @@ const InvestmentForm = () => {
       // queryClient.setQueryData(['INVESTMENT_QUERY_KEY', res.investment.id], res.investment); TODO
       queryClient.invalidateQueries([INVESTMENT_QUERY_KEY]);
       history.push('/dashboard');
+      showSuccessToast();
     },
   });
 
@@ -119,8 +133,13 @@ const InvestmentForm = () => {
       values.buyDate = dayjs(values.buyDate).toDate();
       values.sellDate = dayjs(values.sellDate).toDate();
 
-      if (isEditing) mutationCreate.mutate(values as CreateInvestmentDto);
-      else mutationUpdate.mutate(values as UpdateInvestmentDto);
+      if (isEditing) {
+        const v = values as UpdateInvestmentDto;
+        v.id = editInvestment.id;
+        mutationUpdate.mutate(v);
+      } else {
+        mutationCreate.mutate(values as CreateInvestmentDto);
+      }
     },
   });
 

@@ -4,7 +4,7 @@ import {
   deleteInvestmentMutation,
   getInvestmentsQuery,
   INVESTMENT_QUERY_KEY,
-} from '../../queries/investments';
+} from '../../../queries/investments';
 import { Alert, Flex, Spinner } from '@chakra-ui/react';
 import NoInvestments from './NoInvestments';
 import { defaultQueryConfig } from 'queries/config';

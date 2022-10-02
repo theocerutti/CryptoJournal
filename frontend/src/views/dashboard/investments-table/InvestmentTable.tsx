@@ -36,8 +36,8 @@ import {
 import Card from 'components/card/Card';
 import { GetInvestmentDto } from '@shared/investment';
 import { MdDelete, MdEdit } from 'react-icons/md';
-import { formatCurrency } from '../../utils/format';
-import { getSign } from '../../utils/math';
+import { formatCurrency } from '../../../utils/format';
+import { getSign } from '../../../utils/math';
 
 const InvestmentTable = ({
   investments,
