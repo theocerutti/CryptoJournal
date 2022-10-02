@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { HTMLInputTypeAttribute, useCallback, useEffect } from 'react';
 import { useFormik } from 'formik';
 import {
   Button,
@@ -28,6 +28,16 @@ import {
   GetInvestmentDto,
   UpdateInvestmentDto,
 } from '@shared/investment';
+
+type InputProps = {
+  valueKey: keyof CreateInvestmentDto;
+  label: string;
+  type?: HTMLInputTypeAttribute;
+  inputLeftElement?: string;
+  disabled?: boolean;
+  tooltip?: string;
+  required?: boolean;
+};
 
 const validationSchema = Yup.object().shape({
   buyDate: Yup.date().required('Buy date is required'),
@@ -83,7 +93,7 @@ const InvestmentForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      buyDate: isEditing ? new Date(editInvestment.buyDate) : null,
+      buyDate: isEditing ? new Date(editInvestment.buyDate) : new Date(),
       sellDate: isEditing
         ? editInvestment.sellDate === null
           ? null
@@ -115,15 +125,15 @@ const InvestmentForm = () => {
   });
 
   const addInput = useCallback(
-    (
-      valueKey: keyof CreateInvestmentDto,
-      label: string,
-      type: string = 'text',
-      inputLeftElement: string | null = null,
-      disable: boolean = false,
-      tooltip: string = null,
-      required: boolean = false
-    ) => {
+    ({
+      valueKey,
+      label,
+      type = 'text',
+      inputLeftElement = null,
+      disabled = false,
+      tooltip = null,
+      required = false,
+    }: InputProps) => {
       let input: JSX.Element;
       let value =
         formik.values[valueKey] === null ? '' : formik.values[valueKey];
@@ -135,13 +145,15 @@ const InvestmentForm = () => {
             name={valueKey}
             // @ts-ignore
             value={value || ''}
-            disabled={disable}
+            disabled={disabled}
             onChange={formik.handleChange}
             size='sm'
           />
         );
       } else {
-        if (type === 'date') value = dayjs(value).format('YYYY-MM-DD');
+        if (type === 'date') {
+          value = dayjs(value).format('YYYY-MM-DD');
+        }
 
         input = (
           <Input
@@ -149,7 +161,7 @@ const InvestmentForm = () => {
             name={valueKey}
             type={type}
             variant='filled'
-            disabled={disable}
+            disabled={disabled}
             onChange={formik.handleChange}
             // @ts-ignore
             value={value}
@@ -201,9 +213,10 @@ const InvestmentForm = () => {
 
   useEffect(() => {
     const { buyPrice, investedAmount } = formik.values;
-    if (buyPrice !== null && investedAmount !== null) {
-      formik.setFieldValue('holdings', investedAmount / buyPrice);
-    }
+    let holdings = 0;
+    if (buyPrice !== null && investedAmount !== null && buyPrice !== 0)
+      holdings = investedAmount / buyPrice;
+    formik.setFieldValue('holdings', holdings);
     // @eslint-disable-next-line
   }, [formik.values.buyPrice, formik.values.investedAmount]);
 
@@ -211,136 +224,110 @@ const InvestmentForm = () => {
     <form onSubmit={formik.handleSubmit}>
       <VStack spacing={4} align='flex-start'>
         <HStack width='100%' spacing='10px'>
-          {addInput(
-            'name',
-            'Name',
-            'text',
-            null,
-            false,
-            'Name of the investment (BTC, ETH, S&P500...)',
-            true
-          )}
-          {addInput(
-            'investedAmount',
-            'Invested Amount',
-            'number',
-            '$',
-            false,
-            null,
-            true
-          )}
-          {addInput(
-            'holdings',
-            'Holdings',
-            'number',
-            null,
-            true,
-            "This field is automatically calculated using 'Invested Amount' and 'Buy Price'",
-            true
-          )}
+          {addInput({
+            valueKey: 'name',
+            label: 'Name',
+            tooltip: 'Name of the investment (BTC, ETH, S&P500...)',
+            required: true,
+          })}
+          {addInput({
+            valueKey: 'investedAmount',
+            label: 'Invested Amount',
+            type: 'number',
+            inputLeftElement: '$',
+            required: true,
+          })}
+          {addInput({
+            valueKey: 'holdings',
+            label: 'Holdings',
+            type: 'number',
+            disabled: true,
+            tooltip:
+              "This field is automatically calculated using 'Invested Amount' and 'Buy Price'",
+            required: true,
+          })}
         </HStack>
         <HStack width='100%' spacing='10px'>
-          {addInput(
-            'buyPrice',
-            'Buy Price',
-            'number',
-            '$',
-            false,
-            'Price of the investment when you bought it',
-            true
-          )}
-          {addInput(
-            'buyDate',
-            'Buy Date',
-            'date',
-            null,
-            false,
-            'Date when you bought the investment',
-            true
-          )}
+          {addInput({
+            valueKey: 'buyPrice',
+            label: 'Buy Price',
+            type: 'number',
+            inputLeftElement: '$',
+            tooltip: 'Price of the investment when you bought it',
+            required: true,
+          })}
+          {addInput({
+            valueKey: 'buyDate',
+            label: 'Buy Date',
+            type: 'date',
+            tooltip: 'Date when you bought the investment',
+            required: true,
+          })}
         </HStack>
         <HStack width='100%' spacing='10px'>
-          {addInput(
-            'sellPrice',
-            'Sell Price',
-            'number',
-            '$',
-            false,
-            'Price of the investment when you sold it',
-            false
-          )}
-          {addInput(
-            'sellDate',
-            'Sell Date',
-            'date',
-            null,
-            false,
-            'Date when you sold the investment',
-            false
-          )}
+          {addInput({
+            valueKey: 'sellPrice',
+            label: 'Sell Price',
+            type: 'number',
+            inputLeftElement: '$',
+            tooltip: 'Price of the investment when you sold it',
+          })}
+          {addInput({
+            valueKey: 'sellDate',
+            label: 'Sell Date',
+            type: 'date',
+            tooltip: 'Date when you sold the investment',
+          })}
         </HStack>
         <Flex width='50%'>
-          {addInput('fees', 'Fees', 'number', '$', false, 'Fees', true)}
+          {addInput({
+            valueKey: 'fees',
+            label: 'Fees',
+            type: 'number',
+            inputLeftElement: '$',
+            tooltip: 'Fees',
+            required: true,
+          })}
         </Flex>
         <HStack width='100%' spacing='10px'>
-          {addInput(
-            'priceLink',
-            'Price Link',
-            'url',
-            null,
-            false,
-            'Link to the price of the investment',
-            true
-          )}
-          {addInput(
-            'locationName',
-            'Location Name',
-            'text',
-            null,
-            false,
-            'Name of the location where you bought the investment',
-            false
-          )}
+          {addInput({
+            valueKey: 'priceLink',
+            label: 'Price Link',
+            type: 'url',
+            tooltip: 'Link to the price of the investment',
+            required: true,
+          })}
+          {addInput({
+            valueKey: 'locationName',
+            label: 'Location Name',
+            tooltip: 'Name of the location where you bought the investment',
+          })}
         </HStack>
         <HStack width='100%' spacing='10px'>
-          {addInput(
-            'primaryTag',
-            'Primary Tag',
-            'text',
-            null,
-            false,
-            'Primary tag of the investment',
-            false
-          )}
-          {addInput(
-            'secondaryTag',
-            'Secondary Tag',
-            'text',
-            null,
-            false,
-            'Secondary tag of the investment',
-            false
-          )}
+          {addInput({
+            valueKey: 'primaryTag',
+            label: 'Primary Tag',
+            tooltip: 'Primary tag of the investment',
+          })}
+          {addInput({
+            valueKey: 'secondaryTag',
+            label: 'Secondary Tag',
+            tooltip: 'Secondary tag of the investment',
+          })}
         </HStack>
         <HStack width='100%' spacing='10px'>
-          {addInput(
-            'buyNote',
-            'Buy Note',
-            'textarea',
-            null,
-            false,
-            'Note about the buy',
-            false
-          )}
-          {addInput(
-            'sellNote',
-            'Sell Note',
-            'textarea',
-            null,
-            false,
-            'Note about the sell',
-            false
-          )}
+          {addInput({
+            valueKey: 'buyNote',
+            label: 'Buy Note',
+            type: 'textarea',
+            tooltip: 'Note about the buy',
+          })}
+          {addInput({
+            valueKey: 'sellNote',
+            label: 'Sell Note',
+            type: 'textarea',
+            tooltip: 'Note about the sell',
+          })}
         </HStack>
 
         <HStack justify='end' w='100%'>
