@@ -1,9 +1,8 @@
 import { api } from '../utils/api';
-import { CreateInvestmentDto } from '@shared/investment';
 import {
-  InvestmentDto,
-  InvestmentGlobalInfoDto,
+  CreateInvestmentDto,
   GetInvestmentDto,
+  InvestmentGlobalInfoDto,
 } from '@shared/investment';
 import { AxiosResponse } from 'axios';
 
@@ -11,8 +10,8 @@ export const getInvestmentsQuery = (): Promise<
   AxiosResponse<GetInvestmentDto[]>
 > => api.get<GetInvestmentDto[]>('/investments');
 
-export const deleteInvestmentMutation = (investment: InvestmentDto) =>
-  api.delete(`/investments/${investment.id}`);
+export const deleteInvestmentMutation = (investmentID: number) =>
+  api.delete(`/investments/${investmentID}`);
 
 export const getInvestmentsGlobalInfoQuery = (): Promise<
   AxiosResponse<InvestmentGlobalInfoDto>

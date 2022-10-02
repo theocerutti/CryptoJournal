@@ -41,3 +41,15 @@ Filters:
 * by primaryTag
 * by secondaryTag
 * by investedAmount
+
+Lorsqu'on choisit le nom:
+on a un dropdown avec les noms déjà utilisés (spécifique au user)
+si on veut ajouter un nouveau nom, on peut le faire aussi (dernier choix)
+
+ajouter un status = sold / order
+
+faire en sorte que le holdings/buy price soit automatique calculés
+holdings = buyprice * investedAmount
+buyPrice = holdings / investedAmount
+investedAmount = holdings / buyPrice
+

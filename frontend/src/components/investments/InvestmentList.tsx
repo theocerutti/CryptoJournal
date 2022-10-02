@@ -8,7 +8,7 @@ import {
 import { Alert, Flex, Spinner } from '@chakra-ui/react';
 import NoInvestments from './NoInvestments';
 import { defaultQueryConfig } from 'queries/config';
-import { GetInvestmentDto, InvestmentDto } from '@shared/investment';
+import { GetInvestmentDto } from '@shared/investment';
 import InvestmentTable from './InvestmentTable';
 
 const InvestmentList = () => {
@@ -27,10 +27,8 @@ const InvestmentList = () => {
     },
   });
 
-  const handleDelete = (investment: GetInvestmentDto) => {
-    const mutateInvestment = {} as InvestmentDto;
-    Object.assign(mutateInvestment, investment);
-    mutation.mutate(mutateInvestment);
+  const handleDelete = (investmentID: number) => {
+    mutation.mutate(investmentID);
   };
 
   const handleEdit = (investment: GetInvestmentDto) => {
