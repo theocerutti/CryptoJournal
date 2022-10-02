@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import {
   Alert,
   AlertIcon,
@@ -28,6 +28,7 @@ import { loginMutation, registerMutation } from '../../queries/auth';
 import { CreateUserDTO, LoginUserDTO } from '@shared/auth';
 
 function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
+  const location = useLocation();
   const history = useHistory();
   const textColor = useColorModeValue('navy.700', 'white');
   const textColorSecondary = 'gray.400';
@@ -48,9 +49,6 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
   };
 
   const mutation = useMutation(authenticateMutation, {
-    onError: (error) => {
-      console.log('error login/register', error);
-    },
     onSuccess: (data) => {
       const { access_token, refresh_token } = data.data.payload;
       setTokenFromStorage(access_token);
@@ -206,6 +204,12 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
                 </Text>
               </NavLink>
             </Text>
+            {location.state && (
+              <Alert mt='10px' status='warning'>
+                {/* @ts-ignore */}
+                {location.state.alertMessage}
+              </Alert>
+            )}
           </Flex>
           <ColorToggle />
         </Flex>

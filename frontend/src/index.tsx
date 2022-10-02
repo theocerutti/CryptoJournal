@@ -6,6 +6,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './App';
+import InjectAxiosInterceptors from './InjectAxiosInterceptors';
 
 const queryClient = new QueryClient();
 
@@ -14,6 +15,7 @@ ReactDOM.render(
     <ChakraProvider theme={theme}>
       <React.StrictMode>
         <BrowserRouter>
+          <InjectAxiosInterceptors />
           <App />
         </BrowserRouter>
       </React.StrictMode>
