@@ -17,8 +17,8 @@ import React from 'react';
 import { IoMdMoon, IoMdSunny } from 'react-icons/io';
 import routes from 'routes';
 import {
-  setRefreshTokenFromStorage,
-  setTokenFromStorage,
+  deleteRefreshTokenFromStorage,
+  deleteTokenFromStorage,
 } from '../../utils/authStorage';
 import { useHistory } from 'react-router-dom';
 
@@ -35,8 +35,8 @@ export default function NavbarLinks() {
   );
 
   const handleLogout = () => {
-    setTokenFromStorage(null);
-    setRefreshTokenFromStorage(null);
+    deleteRefreshTokenFromStorage();
+    deleteTokenFromStorage();
     history.push('/auth/sign-in');
   };
 

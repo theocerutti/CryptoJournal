@@ -126,6 +126,7 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
             </FormLabel>
             <Input
               isRequired={true}
+              id='email'
               value={email}
               variant='auth'
               fontSize='sm'
@@ -150,6 +151,7 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
               <Input
                 isRequired={true}
                 value={password}
+                id='password'
                 fontSize='sm'
                 placeholder='Min. 8 characters'
                 mb='24px'
