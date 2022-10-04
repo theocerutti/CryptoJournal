@@ -10,14 +10,11 @@ export const inputStyles = {
         },
       },
       variants: {
-        filled: (props: StyleFunctionProps) => {
-          console.log(props);
-          return {
-            field: {
-              color: mode('grey.700', 'secondaryGrey.400')(props),
-            },
-          };
-        },
+        filled: (props: StyleFunctionProps) => ({
+          field: {
+            color: mode('grey.700', 'secondaryGrey.400')(props),
+          },
+        }),
         main: (props: StyleFunctionProps) => ({
           field: {
             bg: mode('transparent', 'navy.800')(props),
