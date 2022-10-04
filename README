@@ -48,8 +48,4 @@ si on veut ajouter un nouveau nom, on peut le faire aussi (dernier choix)
 
 ajouter un status = sold / order
 
-faire en sorte que le holdings/buy price soit automatique calculés
-holdings = buyprice * investedAmount
-buyPrice = holdings / investedAmount
-investedAmount = holdings / buyPrice
-
+Dans l'interface pour rajouter des investments il faudrait aussi pouvoir rajouter des "free" gain (par exemple si on a gagné des cryptos en faisant des airdrops, coinbase...)

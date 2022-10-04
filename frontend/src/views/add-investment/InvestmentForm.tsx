@@ -72,7 +72,7 @@ const InvestmentForm = () => {
   const history = useHistory();
   const queryClient = useQueryClient();
 
-  const isEditing = location.state !== null;
+  const isEditing = !!location.state;
 
   // @ts-ignore
   const editInvestment = location.state?.investment as GetInvestmentDto;
