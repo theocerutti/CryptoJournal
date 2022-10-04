@@ -20,8 +20,8 @@ export default function Default(props: {
 }) {
   const { startContent, endContent, name, growth, value, growthPercent } =
     props;
-  const textColor = useColorModeValue('secondaryGray.900', 'white');
-  const textColorSecondary = 'secondaryGray.600';
+  const textColor = useColorModeValue('secondaryGrey.900', 'white');
+  const textColorSecondary = 'secondaryGrey.600';
 
   const getGrowthColor = () => {
     if (growth === 0) return textColorSecondary;

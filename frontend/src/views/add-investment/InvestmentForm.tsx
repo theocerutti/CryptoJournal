@@ -196,7 +196,7 @@ const InvestmentForm = () => {
           <InputGroup>
             <InputLeftElement
               pointerEvents='none'
-              color='gray.300'
+              color='grey.300'
               fontSize='1.2em'
               children='$'
             />
@@ -353,7 +353,7 @@ const InvestmentForm = () => {
         <HStack justify='end' w='100%'>
           <Button
             onClick={() => history.push('/dashboard')}
-            colorScheme='gray'
+            colorScheme='grey'
             mr={3}
           >
             Close

@@ -101,17 +101,17 @@ export default function TotalSpent(props: { [x: string]: any }) {
 
   // Chakra Color Mode
 
-  const textColor = useColorModeValue('secondaryGray.900', 'white');
-  const textColorSecondary = useColorModeValue('secondaryGray.600', 'white');
-  const boxBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.100');
+  const textColor = useColorModeValue('secondaryGrey.900', 'white');
+  const textColorSecondary = useColorModeValue('secondaryGrey.600', 'white');
+  const boxBg = useColorModeValue('secondaryGrey.300', 'whiteAlpha.100');
   const iconColor = useColorModeValue('brand.500', 'white');
-  const bgButton = useColorModeValue('secondaryGray.300', 'whiteAlpha.100');
+  const bgButton = useColorModeValue('secondaryGrey.300', 'whiteAlpha.100');
   const bgHover = useColorModeValue(
-    { bg: 'secondaryGray.400' },
+    { bg: 'secondaryGrey.400' },
     { bg: 'whiteAlpha.50' }
   );
   const bgFocus = useColorModeValue(
-    { bg: 'secondaryGray.300' },
+    { bg: 'secondaryGrey.300' },
     { bg: 'whiteAlpha.100' }
   );
   return (
@@ -170,7 +170,7 @@ export default function TotalSpent(props: { [x: string]: any }) {
           </Text>
           <Flex align='center' mb='20px'>
             <Text
-              color='secondaryGray.600'
+              color='secondaryGrey.600'
               fontSize='sm'
               fontWeight='500'
               mt='4px'

@@ -11,7 +11,7 @@ import NavbarLinks from 'components/navbar/NavbarLinks';
 
 export default function Navbar({ brandText }: { brandText: string }) {
   let mainText = useColorModeValue('navy.700', 'white');
-  let secondaryText = useColorModeValue('gray.700', 'white');
+  let secondaryText = useColorModeValue('grey.700', 'white');
   let navbarPosition = 'fixed' as const;
   let navbarFilter = 'none';
   let navbarBackdrop = 'blur(20px)';

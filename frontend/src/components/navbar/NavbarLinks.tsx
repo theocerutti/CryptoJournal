@@ -25,9 +25,9 @@ import { useHistory } from 'react-router-dom';
 export default function NavbarLinks() {
   const history = useHistory();
   const { colorMode, toggleColorMode } = useColorMode();
-  const navbarIcon = useColorModeValue('gray.400', 'white');
+  const navbarIcon = useColorModeValue('grey.400', 'white');
   let menuBg = useColorModeValue('white', 'navy.800');
-  const textColor = useColorModeValue('secondaryGray.900', 'white');
+  const textColor = useColorModeValue('secondaryGrey.900', 'white');
   const borderColor = useColorModeValue('#E6ECFA', 'rgba(135, 140, 189, 0.3)');
   const shadow = useColorModeValue(
     '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',

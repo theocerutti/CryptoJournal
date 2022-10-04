@@ -15,21 +15,21 @@ export const textareaStyles = {
           field: {
             bg: mode('transparent', 'navy.800')(props),
             border: '1px solid !important',
-            color: mode('secondaryGray.900', 'white')(props),
-            borderColor: mode('secondaryGray.100', 'whiteAlpha.100')(props),
+            color: mode('secondaryGrey.900', 'white')(props),
+            borderColor: mode('secondaryGrey.100', 'whiteAlpha.100')(props),
             borderRadius: '16px',
             fontSize: 'sm',
             p: '20px',
-            _placeholder: { color: 'secondaryGray.400' },
+            _placeholder: { color: 'secondaryGrey.400' },
           },
         }),
         auth: () => ({
           field: {
             bg: 'white',
             border: '1px solid',
-            borderColor: 'secondaryGray.100',
+            borderColor: 'secondaryGrey.100',
             borderRadius: '16px',
-            _placeholder: { color: 'secondaryGray.600' },
+            _placeholder: { color: 'secondaryGrey.600' },
           },
         }),
         authSecondary: () => ({
@@ -37,9 +37,9 @@ export const textareaStyles = {
             bg: 'white',
             border: '1px solid',
 
-            borderColor: 'secondaryGray.100',
+            borderColor: 'secondaryGrey.100',
             borderRadius: '16px',
-            _placeholder: { color: 'secondaryGray.600' },
+            _placeholder: { color: 'secondaryGrey.600' },
           },
         }),
         search: () => ({
@@ -47,7 +47,7 @@ export const textareaStyles = {
             border: 'none',
             py: '11px',
             borderRadius: 'inherit',
-            _placeholder: { color: 'secondaryGray.600' },
+            _placeholder: { color: 'secondaryGrey.600' },
           },
         }),
       },

@@ -52,36 +52,36 @@ export const buttonStyles = {
             bg: mode('#F2EFFF', 'whiteAlpha.100')(props),
           },
           _active: {
-            bg: mode('secondaryGray.300', 'whiteAlpha.100')(props),
+            bg: mode('secondaryGrey.300', 'whiteAlpha.100')(props),
           },
           _hover: {
-            bg: mode('secondaryGray.400', 'whiteAlpha.200')(props),
+            bg: mode('secondaryGrey.400', 'whiteAlpha.200')(props),
           },
         }),
         light: (props: any) => ({
-          bg: mode('secondaryGray.300', 'whiteAlpha.100')(props),
-          color: mode('secondaryGray.900', 'white')(props),
+          bg: mode('secondaryGrey.300', 'whiteAlpha.100')(props),
+          color: mode('secondaryGrey.900', 'white')(props),
           _focus: {
-            bg: mode('secondaryGray.300', 'whiteAlpha.100')(props),
+            bg: mode('secondaryGrey.300', 'whiteAlpha.100')(props),
           },
           _active: {
-            bg: mode('secondaryGray.300', 'whiteAlpha.100')(props),
+            bg: mode('secondaryGrey.300', 'whiteAlpha.100')(props),
           },
           _hover: {
-            bg: mode('secondaryGray.400', 'whiteAlpha.200')(props),
+            bg: mode('secondaryGrey.400', 'whiteAlpha.200')(props),
           },
         }),
         action: (props: any) => ({
           fontWeight: '500',
           borderRadius: '50px',
-          bg: mode('secondaryGray.300', 'brand.400')(props),
+          bg: mode('secondaryGrey.300', 'brand.400')(props),
           color: mode('brand.500', 'white')(props),
           _focus: {
-            bg: mode('secondaryGray.300', 'brand.400')(props),
+            bg: mode('secondaryGrey.300', 'brand.400')(props),
           },
-          _active: { bg: mode('secondaryGray.300', 'brand.400')(props) },
+          _active: { bg: mode('secondaryGrey.300', 'brand.400')(props) },
           _hover: {
-            bg: mode('secondaryGray.200', 'brand.400')(props),
+            bg: mode('secondaryGrey.200', 'brand.400')(props),
           },
         }),
         setup: (props: any) => ({
@@ -89,14 +89,14 @@ export const buttonStyles = {
           borderRadius: '50px',
           bg: mode('transparent', 'brand.400')(props),
           border: mode('1px solid', '0px solid')(props),
-          borderColor: mode('secondaryGray.400', 'transparent')(props),
-          color: mode('secondaryGray.900', 'white')(props),
+          borderColor: mode('secondaryGrey.400', 'transparent')(props),
+          color: mode('secondaryGrey.900', 'white')(props),
           _focus: {
             bg: mode('transparent', 'brand.400')(props),
           },
           _active: { bg: mode('transparent', 'brand.400')(props) },
           _hover: {
-            bg: mode('secondaryGray.100', 'brand.400')(props),
+            bg: mode('secondaryGrey.100', 'brand.400')(props),
           },
         }),
       },

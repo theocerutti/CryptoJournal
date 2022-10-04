@@ -48,7 +48,7 @@ const InvestmentTable = ({
   handleDelete: (investmentID: number) => void;
   handleEdit: (investment: GetInvestmentDto) => void;
 }) => {
-  const textColorSecondary = 'secondaryGray.600';
+  const textColorSecondary = 'secondaryGrey.600';
 
   const getGrowthColor = (value: number) => {
     if (value === 0) return textColorSecondary;
@@ -190,8 +190,8 @@ const InvestmentTable = ({
     usePagination
   );
 
-  const textColor = useColorModeValue('secondaryGray.900', 'white');
-  const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
+  const textColor = useColorModeValue('secondaryGrey.900', 'white');
+  const borderColor = useColorModeValue('grey.200', 'whiteAlpha.100');
 
   return (
     <Card
@@ -200,7 +200,7 @@ const InvestmentTable = ({
       px='0px'
       overflowX={{ sm: 'scroll', lg: 'hidden' }}
     >
-      <Table {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
+      <Table {...getTableProps()} variant='simple' color='grey.500' mb='24px'>
         <Thead>
           {headerGroups.map((headerGroup, index) => (
             <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
@@ -215,7 +215,7 @@ const InvestmentTable = ({
                     justify='space-between'
                     align='center'
                     fontSize={{ sm: '10px', lg: '12px' }}
-                    color='gray.400'
+                    color='grey.400'
                   >
                     {column.render('Header')}
                   </Flex>

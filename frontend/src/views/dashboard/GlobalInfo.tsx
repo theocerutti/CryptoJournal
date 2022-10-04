@@ -23,7 +23,7 @@ import {
 
 const GlobalInfo = () => {
   const brandColor = useColorModeValue('brand.500', 'white');
-  const boxBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.100');
+  const boxBg = useColorModeValue('secondaryGrey.300', 'whiteAlpha.100');
   const { data, isError, isLoading } = useQuery(
     [INVESTMENT_GLOBAL_INFO_QUERY_KEY],
     getInvestmentsGlobalInfoQuery,
