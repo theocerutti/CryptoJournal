@@ -180,6 +180,7 @@ const InvestmentForm = () => {
             name={valueKey}
             type={type}
             variant='filled'
+            placeholder='placeholder'
             disabled={disabled}
             onChange={formik.handleChange}
             // @ts-ignore
@@ -236,7 +237,7 @@ const InvestmentForm = () => {
     if (buyPrice !== null && investedAmount !== null && buyPrice !== 0)
       holdings = investedAmount / buyPrice;
     formik.setFieldValue('holdings', holdings);
-    // @eslint-disable-next-line
+    // eslint-disable-next-line
   }, [formik.values.buyPrice, formik.values.investedAmount]);
 
   return (

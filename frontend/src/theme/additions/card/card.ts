@@ -1,6 +1,8 @@
 import { mode } from '@chakra-ui/theme-tools';
+import { StyleFunctionProps } from '@chakra-ui/theme-tools';
+
 const Card = {
-  baseStyle: (props: any) => ({
+  baseStyle: (props: StyleFunctionProps) => ({
     p: '20px',
     display: 'flex',
     flexDirection: 'column',

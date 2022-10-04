@@ -1,4 +1,5 @@
-import { mode } from '@chakra-ui/theme-tools';
+import { mode, StyleFunctionProps } from '@chakra-ui/theme-tools';
+
 export const inputStyles = {
   components: {
     Input: {
@@ -8,9 +9,16 @@ export const inputStyles = {
           borderRadius: '8px',
         },
       },
-
       variants: {
-        main: (props: any) => ({
+        filled: (props: StyleFunctionProps) => {
+          console.log(props);
+          return {
+            field: {
+              color: mode('grey.700', 'secondaryGray.400')(props),
+            },
+          };
+        },
+        main: (props: StyleFunctionProps) => ({
           field: {
             bg: mode('transparent', 'navy.800')(props),
             border: '1px solid',
@@ -22,7 +30,7 @@ export const inputStyles = {
             _placeholder: { color: 'secondaryGray.400' },
           },
         }),
-        auth: (props: any) => ({
+        auth: (props: StyleFunctionProps) => ({
           field: {
             fontWeight: '500',
             color: mode('navy.700', 'white')(props),
@@ -36,15 +44,6 @@ export const inputStyles = {
             _placeholder: { color: 'secondaryGray.600', fontWeight: '400' },
           },
         }),
-        authSecondary: () => ({
-          field: {
-            bg: 'transparent',
-            border: '1px solid',
-            borderColor: 'secondaryGray.100',
-            borderRadius: '16px',
-            _placeholder: { color: 'secondaryGray.600' },
-          },
-        }),
         search: () => ({
           field: {
             border: 'none',
@@ -55,19 +54,18 @@ export const inputStyles = {
         }),
       },
     },
+
     NumberInput: {
       baseStyle: {
         field: {
           fontWeight: 400,
         },
       },
-
       variants: {
         main: () => ({
           field: {
             bg: 'transparent',
             border: '1px solid',
-
             borderColor: 'secondaryGray.100',
             borderRadius: '16px',
             _placeholder: { color: 'secondaryGray.600' },
@@ -77,17 +75,6 @@ export const inputStyles = {
           field: {
             bg: 'transparent',
             border: '1px solid',
-
-            borderColor: 'secondaryGray.100',
-            borderRadius: '16px',
-            _placeholder: { color: 'secondaryGray.600' },
-          },
-        }),
-        authSecondary: () => ({
-          field: {
-            bg: 'transparent',
-            border: '1px solid',
-
             borderColor: 'secondaryGray.100',
             borderRadius: '16px',
             _placeholder: { color: 'secondaryGray.600' },
@@ -103,33 +90,21 @@ export const inputStyles = {
         }),
       },
     },
+
     Select: {
       baseStyle: {
         field: {
           fontWeight: 400,
         },
       },
-
       variants: {
-        main: (props: any) => ({
+        main: (props: StyleFunctionProps) => ({
           field: {
             bg: mode('transparent', 'navy.800')(props),
             border: '1px solid',
             color: 'secondaryGray.600',
             borderColor: mode('secondaryGray.100', 'whiteAlpha.100')(props),
             borderRadius: '16px',
-            _placeholder: { color: 'secondaryGray.600' },
-          },
-          icon: {
-            color: 'secondaryGray.600',
-          },
-        }),
-        mini: (props: any) => ({
-          field: {
-            bg: mode('transparent', 'navy.800')(props),
-            border: '0px solid transparent',
-            fontSize: '0px',
-            p: '10px',
             _placeholder: { color: 'secondaryGray.600' },
           },
           icon: {
@@ -152,28 +127,6 @@ export const inputStyles = {
             color: 'secondaryGray.600',
           },
         }),
-        transparent: (props: any) => ({
-          field: {
-            bg: 'transparent',
-            border: '0px solid',
-            width: 'min-content',
-            color: mode('secondaryGray.600', 'secondaryGray.600')(props),
-            borderColor: 'transparent',
-            padding: '0px',
-            paddingLeft: '8px',
-            paddingRight: '20px',
-            fontWeight: '700',
-            fontSize: '14px',
-            _placeholder: { color: 'secondaryGray.600' },
-          },
-          icon: {
-            transform: 'none !important',
-            position: 'unset !important',
-            width: 'unset',
-            color: 'secondaryGray.600',
-            right: '0px',
-          },
-        }),
         auth: () => ({
           field: {
             bg: 'transparent',
@@ -184,17 +137,7 @@ export const inputStyles = {
             _placeholder: { color: 'secondaryGray.600' },
           },
         }),
-        authSecondary: (props: any) => ({
-          field: {
-            bg: 'transparent',
-            border: '1px solid',
-
-            borderColor: 'secondaryGray.100',
-            borderRadius: '16px',
-            _placeholder: { color: 'secondaryGray.600' },
-          },
-        }),
-        search: (props: any) => ({
+        search: () => ({
           field: {
             border: 'none',
             py: '11px',
