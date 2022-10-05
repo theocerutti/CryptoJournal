@@ -4,6 +4,7 @@ import { Seeder } from './seeder';
 import { InvestmentModule } from '../investment/investment.module';
 import { UserModule } from '../user/user.module';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -20,13 +21,11 @@ import { ConfigModule } from '@nestjs/config';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DATABASE,
-      synchronize: false,
-      entities: ['dist/**/*.entity{ .ts,.js}'],
-      migrations: ['dist/migrations/*{.ts,.js}'],
-      migrationsTableName: 'migrations_typeorm',
-      migrationsRun: true,
+      synchronize: process.env.NODE_ENV !== 'production',
+      autoLoadEntities: process.env.NODE_ENV !== 'production',
     }),
     UserModule,
+    AuthModule,
     InvestmentModule,
   ],
   providers: [Seeder],

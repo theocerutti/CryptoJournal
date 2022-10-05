@@ -1,4 +1,11 @@
-import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { InvestmentStatus } from './investment';
 
 export class InvestmentDto {
   @IsNumber()
@@ -52,4 +59,7 @@ export class InvestmentDto {
 
   @IsString()
   priceLink: string;
+
+  @IsEnum(InvestmentStatus)
+  status: InvestmentStatus;
 }

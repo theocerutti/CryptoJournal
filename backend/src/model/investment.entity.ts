@@ -1,4 +1,6 @@
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -9,6 +11,7 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { ColumnNumericTransformer } from '../utils/transformer';
+import { InvestmentStatus } from '../shared/investment';
 
 @Entity()
 export class Investment {
@@ -26,6 +29,13 @@ export class Investment {
   })
   @JoinColumn()
   user: User;
+
+  @Column({
+    type: 'enum',
+    enum: InvestmentStatus,
+    default: InvestmentStatus.OPEN,
+  })
+  status: InvestmentStatus;
 
   @Column({ type: 'timestamp', nullable: false })
   buyDate: Date;
@@ -88,4 +98,20 @@ export class Investment {
 
   @Column({ nullable: false })
   priceLink: string;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  recalculateHoldings() {
+    this.holdings = this.investedAmount / this.buyPrice;
+  }
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  updateStatus() {
+    if (this.sellPrice) {
+      this.status = InvestmentStatus.CLOSED;
+    } else {
+      this.status = InvestmentStatus.OPEN;
+    }
+  }
 }

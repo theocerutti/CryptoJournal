@@ -3,6 +3,7 @@ import { CreateInvestmentDto } from './create-investment.dto';
 import { UpdateInvestmentDto } from './update-investment.dto';
 import { InvestmentGlobalInfoDto } from './investment-global-info.dto';
 import { GetInvestmentDto } from './get-investment.dto';
+import { InvestmentStatus } from './investment';
 
 export {
   InvestmentDto,
@@ -10,4 +11,5 @@ export {
   UpdateInvestmentDto,
   InvestmentGlobalInfoDto,
   GetInvestmentDto,
+  InvestmentStatus,
 };

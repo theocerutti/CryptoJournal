@@ -11,19 +11,19 @@ const investmentsDatas: {
   [key: string]: { averagePrice: number; priceLink: string };
 } = {
   BTC: {
-    averagePrice: 50,
+    averagePrice: 20000,
     priceLink: 'https://coinmarketcap.com/currencies/bitcoin/',
   },
   ETH: {
-    averagePrice: 50,
+    averagePrice: 1400,
     priceLink: 'https://coinmarketcap.com/currencies/ethereum/',
   },
   EGLD: {
-    averagePrice: 50,
+    averagePrice: 60,
     priceLink: 'https://coinmarketcap.com/currencies/elrond-egld/',
   },
   HBAR: {
-    averagePrice: 50,
+    averagePrice: 0.07,
     priceLink: 'https://coinmarketcap.com/currencies/hedera/',
   },
 };
@@ -60,6 +60,7 @@ export class Seeder {
     const user = new User();
     user.email = 'user@gmail.com';
     user.password = 'password';
+    users.push(user);
     return await this.userRepo.save(users);
   }
 

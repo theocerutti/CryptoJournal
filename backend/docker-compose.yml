@@ -14,7 +14,6 @@ services:
       - '5432:5432'
     networks:
       - net
-    restart: unless-stopped
 
   backend:
     container_name: crypto-journal-backend

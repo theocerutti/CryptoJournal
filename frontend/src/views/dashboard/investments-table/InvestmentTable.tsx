@@ -4,6 +4,7 @@ import {
   HStack,
   Icon,
   IconButton,
+  Link,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
@@ -36,8 +37,14 @@ import {
 import Card from 'components/card/Card';
 import { GetInvestmentDto } from '@shared/investment';
 import { MdDelete, MdEdit } from 'react-icons/md';
+import { RiCheckboxBlankCircleFill } from 'react-icons/ri';
 import { formatCurrency } from '../../../utils/format';
 import { getSign } from '../../../utils/math';
+
+export enum InvestmentStatus {
+  OPEN = 'OPEN',
+  CLOSED = 'CLOSED',
+}
 
 const InvestmentTable = ({
   investments,
@@ -48,6 +55,11 @@ const InvestmentTable = ({
   handleDelete: (investmentID: number) => void;
   handleEdit: (investment: GetInvestmentDto) => void;
 }) => {
+  const investmentStatusOpenColor = useColorModeValue('green.500', 'green.500');
+  const investmentStatusClosedColor = useColorModeValue(
+    'orange.500',
+    'orange.500'
+  );
   const textColorSecondary = 'secondaryGrey.600';
 
   const getGrowthColor = (value: number) => {
@@ -58,6 +70,24 @@ const InvestmentTable = ({
   const paginationIndex = [10, 20, 30, 40, 50]; // null = all
   const columns = useMemo(
     () => [
+      {
+        Header: 'STATUS',
+        accessor: 'status',
+        Cell: ({ value }: { value: InvestmentStatus }) => (
+          <Tooltip label={value} placement='top'>
+            <Flex width='100%' justify='center'>
+              <Icon
+                color={
+                  value === InvestmentStatus.OPEN
+                    ? investmentStatusOpenColor
+                    : investmentStatusClosedColor
+                }
+                as={RiCheckboxBlankCircleFill}
+              />
+            </Flex>
+          </Tooltip>
+        ),
+      },
       {
         Header: 'NAME',
         accessor: 'name',
@@ -135,6 +165,9 @@ const InvestmentTable = ({
       {
         Header: 'PRICE LINK',
         accessor: 'priceLink',
+        Cell: ({ value }: { value: string }) => (
+          <Link href={value}>{value}</Link>
+        ),
       },
       {
         id: 'actions',
