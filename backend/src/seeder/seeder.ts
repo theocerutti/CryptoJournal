@@ -28,6 +28,16 @@ const investmentsDatas: {
   },
 };
 
+const locationNames = [
+  'Kraken',
+  'Binance',
+  'Coinbase',
+  'Bitstamp',
+  'Bitfinex',
+  'BourseDirect',
+  'TradeRepublic',
+];
+
 @Injectable()
 export class Seeder {
   private readonly logger = new Logger(Seeder.name);
@@ -88,7 +98,8 @@ export class Seeder {
             max: 1000,
           });
           investment.holdings = investment.investedAmount / investment.buyPrice;
-          investment.locationName = faker.address.country();
+          investment.locationName =
+            locationNames[faker.datatype.number(locationNames.length - 1)];
           investment.primaryTag = key;
           investment.secondaryTag = 'Crypto';
           investment.priceLink = value.priceLink;
