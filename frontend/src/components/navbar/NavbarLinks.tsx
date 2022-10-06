@@ -11,7 +11,6 @@ import {
   useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { SearchBar } from 'components/navbar/searchBar/SearchBar';
 import { SidebarResponsive } from 'components/sidebar/Sidebar';
 import React from 'react';
 import { IoMdMoon, IoMdSunny } from 'react-icons/io';
@@ -51,14 +50,6 @@ export default function NavbarLinks() {
       borderRadius='30px'
       boxShadow={shadow}
     >
-      <SearchBar
-        mb={() => {
-          return 'unset';
-        }}
-        me='10px'
-        borderRadius='30px'
-      />
-
       <SidebarResponsive routes={routes} />
 
       <Button
@@ -116,6 +107,7 @@ export default function NavbarLinks() {
           </Flex>
           <Flex flexDirection='column' p='10px'>
             <MenuItem
+              onClick={() => history.push('/dashboard/profile')}
               _hover={{ bg: 'none' }}
               _focus={{ bg: 'none' }}
               borderRadius='8px'

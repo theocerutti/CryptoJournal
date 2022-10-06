@@ -2,7 +2,7 @@ import { Box, SimpleGrid } from '@chakra-ui/react';
 import Investments from './investments-table/Investments';
 import Card from 'components/card/Card';
 import GlobalInfo from './GlobalInfo';
-import ChartBalance from './ChartBalance';
+import ChartBalance from './ChartTotalInvested';
 
 export default function Dashboard() {
   return (
