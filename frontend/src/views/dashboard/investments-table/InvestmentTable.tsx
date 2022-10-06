@@ -27,7 +27,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from '@chakra-ui/icons';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   useGlobalFilter,
   usePagination,
@@ -67,7 +67,8 @@ const InvestmentTable = ({
     return value > 0 ? 'green.500' : 'red.500';
   };
 
-  const paginationIndex = [10, 20, 30, 40, 50]; // null = all
+  const [pageSizeAll, setPageSizeAll] = useState(false);
+  const paginationIndex = [10, 20, 30, 40, 50, 'All']; // null = all
   const columns = useMemo(
     () => [
       {
@@ -191,7 +192,12 @@ const InvestmentTable = ({
         ),
       },
     ],
-    [handleDelete, handleEdit]
+    [
+      handleDelete,
+      handleEdit,
+      investmentStatusClosedColor,
+      investmentStatusOpenColor,
+    ]
   );
 
   const data = useMemo(() => investments, [investments]);
@@ -335,9 +341,15 @@ const InvestmentTable = ({
           </NumberInput>
           <Select
             w={32}
-            value={pageSize}
+            value={pageSizeAll === true ? 'All' : pageSize}
             onChange={(e) => {
-              setPageSize(Number(e.target.value));
+              if (e.target.value === 'All') {
+                setPageSizeAll(true);
+                setPageSize(investments.length);
+              } else {
+                setPageSizeAll(false);
+                setPageSize(Number(e.target.value));
+              }
             }}
           >
             {paginationIndex.map((pageSize) => (
