@@ -49,3 +49,6 @@ si on veut ajouter un nouveau nom, on peut le faire aussi (dernier choix)
 ajouter un status = sold / order
 
 Dans l'interface pour rajouter des investments il faudrait aussi pouvoir rajouter des "free" gain (par exemple si on a gagné des cryptos en faisant des airdrops, coinbase...)
+format intelligent: example:
+si Holdings BTC = 0.00001 alors on va pas faire un .toFixed(2) mais un .toFixed(5)
+-> mais de base si on a 12.32318723 alors la on fait applique le toFixed par default .toFixed(2)

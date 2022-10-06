@@ -11,6 +11,9 @@ import {
   NumberInputField,
   NumberInputStepper,
   Select,
+  Stat,
+  StatHelpText,
+  StatLabel,
   Table,
   Tbody,
   Td,
@@ -24,11 +27,14 @@ import {
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
+  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  ChevronUpIcon,
 } from '@chakra-ui/icons';
 import React, { useMemo, useState } from 'react';
 import {
+  useFilters,
   useGlobalFilter,
   usePagination,
   useSortBy,
@@ -40,6 +46,10 @@ import { MdDelete, MdEdit } from 'react-icons/md';
 import { RiCheckboxBlankCircleFill } from 'react-icons/ri';
 import { formatCurrency } from '../../../utils/format';
 import { getSign } from '../../../utils/math';
+import {
+  MultiCheckBoxColumnFilter,
+  multiSelectFilterType,
+} from '../../../components/table/MultiCheckBoxColumnFilter';
 
 export enum InvestmentStatus {
   OPEN = 'OPEN',
@@ -68,7 +78,7 @@ const InvestmentTable = ({
   };
 
   const [pageSizeAll, setPageSizeAll] = useState(false);
-  const paginationIndex = [10, 20, 30, 40, 50, 'All']; // null = all
+  const paginationIndex = [10, 20, 30, 40, 50, 'All'];
   const columns = useMemo(
     () => [
       {
@@ -92,10 +102,28 @@ const InvestmentTable = ({
       {
         Header: 'NAME',
         accessor: 'name',
+        Cell: ({ value, row }: { value: string; row: any }) => (
+          <Stat>
+            <StatLabel>{value}</StatLabel>
+            {row.original.status === InvestmentStatus.OPEN && (
+              <StatHelpText fontSize='12px'>
+                {formatCurrency(row.original.price)}
+              </StatHelpText>
+            )}
+          </Stat>
+        ),
+        Filter: MultiCheckBoxColumnFilter,
+        filter: 'multiSelect',
+        disableSortBy: true,
       },
       {
-        Header: 'PRICE',
-        accessor: 'price',
+        Header: 'BALANCE',
+        accessor: 'total',
+        Cell: ({ value }: { value: number }) => formatCurrency(value),
+      },
+      {
+        Header: 'INVESTED AMOUNT',
+        accessor: 'investedAmount',
         Cell: ({ value }: { value: number }) => formatCurrency(value),
       },
       {
@@ -117,18 +145,9 @@ const InvestmentTable = ({
         ),
       },
       {
-        Header: 'BALANCE',
-        accessor: 'total',
-        Cell: ({ value }: { value: number }) => formatCurrency(value),
-      },
-      {
-        Header: 'INVESTED AMOUNT',
-        accessor: 'investedAmount',
-        Cell: ({ value }: { value: number }) => formatCurrency(value),
-      },
-      {
         Header: 'HOLDINGS',
         accessor: 'holdings',
+        Cell: ({ value }: { value: number }) => value.toFixed(3),
       },
       {
         Header: 'BUY PRICE',
@@ -162,6 +181,9 @@ const InvestmentTable = ({
       {
         Header: 'LOCATION NAME',
         accessor: 'locationName',
+        Filter: MultiCheckBoxColumnFilter,
+        filter: 'multiSelect',
+        disableSortBy: true,
       },
       {
         Header: 'PRICE LINK',
@@ -202,6 +224,13 @@ const InvestmentTable = ({
 
   const data = useMemo(() => investments, [investments]);
 
+  const filterTypes = React.useMemo(
+    () => ({
+      multiSelect: multiSelectFilterType,
+    }),
+    []
+  );
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -223,7 +252,10 @@ const InvestmentTable = ({
       columns,
       data,
       initialState: { pageIndex: 0, pageSize: 5 },
+      // @ts-ignore
+      filterTypes,
     },
+    useFilters,
     useGlobalFilter,
     useSortBy,
     usePagination
@@ -231,6 +263,20 @@ const InvestmentTable = ({
 
   const textColor = useColorModeValue('secondaryGrey.900', 'white');
   const borderColor = useColorModeValue('grey.200', 'whiteAlpha.100');
+
+  const showDefaultFilter = (column: any): JSX.Element => (
+    <span>
+      {column.isSorted ? (
+        column.isSortedDesc ? (
+          <ChevronDownIcon />
+        ) : (
+          <ChevronUpIcon />
+        )
+      ) : (
+        ''
+      )}
+    </span>
+  );
 
   return (
     <Card
@@ -243,23 +289,31 @@ const InvestmentTable = ({
         <Thead>
           {headerGroups.map((headerGroup, index) => (
             <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
-              {headerGroup.headers.map((column, index) => (
-                <Th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  pe='10px'
-                  key={index}
-                  borderColor={borderColor}
-                >
-                  <Flex
-                    justify='space-between'
-                    align='center'
-                    fontSize={{ sm: '10px', lg: '12px' }}
-                    color='grey.400'
+              {headerGroup.headers.map((column, index) => {
+                return (
+                  <Th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    pe='10px'
+                    key={index}
+                    borderColor={borderColor}
                   >
-                    {column.render('Header')}
-                  </Flex>
-                </Th>
-              ))}
+                    <Flex
+                      justify='space-between'
+                      align='center'
+                      fontSize={{ sm: '10px', lg: '12px' }}
+                      color='grey.400'
+                    >
+                      {column.render('Header')}
+
+                      <div>
+                        {column.canFilter && column.Filter
+                          ? column.render('Filter')
+                          : showDefaultFilter(column)}
+                      </div>
+                    </Flex>
+                  </Th>
+                );
+              })}
             </Tr>
           ))}
         </Thead>

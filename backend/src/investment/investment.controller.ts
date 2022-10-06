@@ -17,6 +17,7 @@ import {
   CreateInvestmentDto,
   InvestmentDto,
   InvestmentGlobalInfoDto,
+  InvestmentStatus,
   UpdateInvestmentDto,
 } from 'shared/investment';
 import { ScrapeDataContainer } from '../schedulers/ScrapeDataContainer';
@@ -34,11 +35,18 @@ export class InvestmentController {
   ): GetInvestmentDto {
     const dto = new GetInvestmentDto();
     Object.assign(dto, investment);
+    let priceForCalcul = 0;
 
-    dto.price = ScrapeDataContainer.getInstance().getPrice(
-      investment.priceLink
-    );
-    dto.total = dto.price * dto.holdings;
+    if (dto.status === InvestmentStatus.OPEN) {
+      dto.price = ScrapeDataContainer.getInstance().getPrice(
+        investment.priceLink
+      );
+      priceForCalcul = dto.price;
+    } else {
+      dto.price = null; // don't need to send price if order is closed
+      priceForCalcul = dto.sellPrice;
+    }
+    dto.total = priceForCalcul * dto.holdings;
     dto.pnl = dto.total - dto.investedAmount;
     dto.pnlPercent = (dto.pnl / dto.investedAmount) * 100;
     return dto;
