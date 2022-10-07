@@ -24,7 +24,10 @@ async function bootstrap() {
 
   // Enable Cors
   app.enableCors({
-    origin: true,
+    origin: [
+      'https://crypto-journal.light.ovh',
+      'https://backend-crypto-journal.light.ovh',
+    ],
     methods: '*',
     allowedHeaders: '*',
     exposedHeaders: '*',
