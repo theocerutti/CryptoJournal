@@ -75,12 +75,14 @@ export class Seeder {
   }
 
   async seedInvestments(users: User[]) {
+    const yearAgo = new Date();
+    yearAgo.setFullYear(yearAgo.getFullYear() - 1);
     for (const user of users) {
       for (let i = 0; i < SEED_INVESTMENT_BY_USER; i++) {
         for (const [key, value] of Object.entries(investmentsDatas)) {
           const investment = new Investment();
           investment.user = user;
-          investment.buyDate = faker.date.recent();
+          investment.buyDate = faker.date.between(yearAgo, new Date());
           investment.sellDate = null;
           investment.buyPrice =
             faker.datatype.float({ min: 0.1, max: 2 }) * value.averagePrice; // add/remove between -90% and 100% of the average price
