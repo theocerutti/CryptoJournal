@@ -43,7 +43,7 @@ export default function ChartTotalInvested() {
 
   const [loadingCalculation, setLoadingCalculation] = useState(true);
 
-  const { data, isError, isLoading, isSuccess } = useQuery(
+  const { data, isError, isSuccess } = useQuery(
     [INVESTMENT_QUERY_KEY],
     getInvestmentsQuery,
     {
@@ -81,10 +81,10 @@ export default function ChartTotalInvested() {
         zoomApexChart('line-datetime', startDate, new Date());
         break;
       }
-      // case 'ALL': {
-      //   zoomApexChart('line-datetime', new Date(lineChartData[0].data[0]), new Date());
-      //   break;
-      // }
+      case 'ALL': {
+        zoomApexChart('line-datetime', new Date(lineChartData[0].data[0][0]), new Date());
+        break;
+      }
     }
   }, [lineChartData]);
 
@@ -108,10 +108,10 @@ export default function ChartTotalInvested() {
   }, [isSuccess, data, lineChartData]);
 
   useEffect(() => {
-    if (isSuccess && !loadingCalculation) {
+    if (isSuccess && !loadingCalculation && lineChartData[0].data.length > 0) {
       updateTimeline('YTD');
     }
-  }, [isSuccess, loadingCalculation, updateTimeline]);
+  }, [isSuccess, lineChartData, loadingCalculation, updateTimeline]);
 
   const lineChartOptionsTotalSpent = {
     chart: {
@@ -138,9 +138,10 @@ export default function ChartTotalInvested() {
       style: 'hollow',
     },
     yaxis: {
+      tickAmount: 5,
       labels: {
         formatter: function(val: number) {
-          return (val !== null && val !== undefined) ? val.toFixed(0) : 0;
+          return formatCurrency(val);
         },
         style: {
           colors: '#A3AED0',
@@ -151,8 +152,8 @@ export default function ChartTotalInvested() {
     },
     xaxis: {
       type: 'datetime',
-      min: new Date(lineChartData[0].data[0]).getTime(),
-      tickAmount: 30,
+      min: lineChartData[0].data[0] && lineChartData[0].data[0].length !== 0 ? new Date(lineChartData[0].data[0][0]).getTime() : new Date().getTime(),
+      tickAmount: 30, // 30 days
       tooltip: {
         enabled: false,
       },
@@ -172,7 +173,7 @@ export default function ChartTotalInvested() {
       x: {
         format: 'dd MMM yyyy',
       },
-      custom: function({ series, seriesIndex, dataPointIndex, w }: any) {
+      custom: function({ seriesIndex, dataPointIndex, w }: any) {
         const data = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
         setTooltipValue({ x: data[1], y: new Date(data[0]) });
         return '';
@@ -238,7 +239,6 @@ export default function ChartTotalInvested() {
         </Flex>
         <Box minW='92%' minH='300px' mt='auto'>
           <div id='chart-timeline'>
-            {isLoading && loadingCalculation ? <Spinner /> : (
               <ReactApexChart
                 onMouseLeave={() => setTooltipValue({ x: 0, y: new Date() })}
                 // @ts-ignore
@@ -247,8 +247,7 @@ export default function ChartTotalInvested() {
                 type='area'
                 width='100%'
                 height={300}
-              />)
-            }
+              />
           </div>
         </Box>
       </Flex>

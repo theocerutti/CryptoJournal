@@ -4,5 +4,9 @@ const formatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 2,
 });
 
-export const formatCurrency = (value: number): string =>
-  formatter.format(value);
+export const formatCurrency = (value: number): string => {
+  if (value === null || value === undefined || isNaN(value)) {
+    return formatter.format(0);
+  }
+  return formatter.format(value);
+}
