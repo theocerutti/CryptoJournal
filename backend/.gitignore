@@ -34,4 +34,4 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 generate_migration.sh
-.env.prod
+src/.env.prod
