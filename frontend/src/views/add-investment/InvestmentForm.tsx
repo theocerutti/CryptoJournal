@@ -1,34 +1,12 @@
 import React, { HTMLInputTypeAttribute, useCallback, useEffect } from 'react';
 import { useFormik } from 'formik';
-import {
-  Button,
-  Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  HStack,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Textarea,
-  Tooltip,
-  useToast,
-  VStack,
-} from '@chakra-ui/react';
+import { Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputLeftElement, Textarea, Tooltip, useToast, VStack } from '@chakra-ui/react';
 import * as Yup from 'yup';
-import {
-  createInvestmentMutation,
-  INVESTMENT_QUERY_KEY,
-  updateInvestmentMutation,
-} from '../../queries/investments';
+import { createInvestmentMutation, INVESTMENT_QUERY_KEY, updateInvestmentMutation } from '../../queries/investments';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { useHistory, useLocation } from 'react-router-dom';
-import {
-  CreateInvestmentDto,
-  GetInvestmentDto,
-  UpdateInvestmentDto,
-} from '@shared/investment';
+import { useHistory } from 'react-router-dom';
+import { CreateInvestmentDto, GetInvestmentDto, UpdateInvestmentDto } from '@shared/investment';
 
 type InputProps = {
   valueKey: keyof CreateInvestmentDto;
@@ -62,24 +40,22 @@ const validationSchema = Yup.object().shape({
   primaryTag: Yup.string().nullable().optional(),
   secondaryTag: Yup.string().nullable().optional(),
   priceLink: Yup.string()
-    .url("This link doesn't seems to be an url")
+    .url('This link doesn\'t seems to be an url')
     .required('Price link is required'),
 });
 
-const InvestmentForm = () => {
+const InvestmentForm = ({
+                          editInvestment,
+                        }: {
+  editInvestment: GetInvestmentDto | null;
+}) => {
   const toast = useToast();
-  const location = useLocation();
   const history = useHistory();
   const queryClient = useQueryClient();
 
-  const isEditing = !!location.state;
-
-  // @ts-ignore
-  const editInvestment = location.state?.investment as GetInvestmentDto;
-
   const showSuccessToast = () => {
     toast({
-      title: `Successfully ${isEditing ? 'updated' : 'created'} investment`,
+      title: `Successfully ${editInvestment ? 'updated' : 'created'} investment`,
       status: 'success',
       duration: 4500,
       position: 'bottom-right',
@@ -107,24 +83,24 @@ const InvestmentForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      buyDate: isEditing ? new Date(editInvestment.buyDate) : new Date(),
-      sellDate: isEditing
+      buyDate: editInvestment ? new Date(editInvestment.buyDate) : new Date(),
+      sellDate: editInvestment
         ? editInvestment.sellDate === null
           ? null
           : new Date(editInvestment.sellDate)
         : null,
-      buyPrice: isEditing ? editInvestment.buyPrice : 0,
-      sellPrice: isEditing ? editInvestment.sellPrice : null,
-      buyNote: isEditing ? editInvestment.buyNote : null,
-      sellNote: isEditing ? editInvestment.sellNote : null,
-      name: isEditing ? editInvestment.name : 'BTC',
-      fees: isEditing ? editInvestment.fees : 0,
-      investedAmount: isEditing ? editInvestment.investedAmount : 0,
-      holdings: isEditing ? editInvestment.holdings : 0,
-      locationName: isEditing ? editInvestment.locationName : 'Binance',
-      primaryTag: isEditing ? editInvestment.primaryTag : 'Crypto',
-      secondaryTag: isEditing ? editInvestment.secondaryTag : 'Bitcoin',
-      priceLink: isEditing
+      buyPrice: editInvestment ? editInvestment.buyPrice : 0,
+      sellPrice: editInvestment ? editInvestment.sellPrice : null,
+      buyNote: editInvestment ? editInvestment.buyNote : null,
+      sellNote: editInvestment ? editInvestment.sellNote : null,
+      name: editInvestment ? editInvestment.name : 'BTC',
+      fees: editInvestment ? editInvestment.fees : 0,
+      investedAmount: editInvestment ? editInvestment.investedAmount : 0,
+      holdings: editInvestment ? editInvestment.holdings : 0,
+      locationName: editInvestment ? editInvestment.locationName : 'Binance',
+      primaryTag: editInvestment ? editInvestment.primaryTag : 'Crypto',
+      secondaryTag: editInvestment ? editInvestment.secondaryTag : 'Bitcoin',
+      priceLink: editInvestment
         ? editInvestment.priceLink
         : 'https://coinmarketcap.com/currencies/bitcoin/',
     },
@@ -133,7 +109,7 @@ const InvestmentForm = () => {
       values.buyDate = dayjs(values.buyDate).toDate();
       values.sellDate = dayjs(values.sellDate).toDate();
 
-      if (isEditing) {
+      if (editInvestment) {
         const v = values as UpdateInvestmentDto;
         v.id = editInvestment.id;
         mutationUpdate.mutate(v);
@@ -145,14 +121,14 @@ const InvestmentForm = () => {
 
   const addInput = useCallback(
     ({
-      valueKey,
-      label,
-      type = 'text',
-      inputLeftElement = null,
-      disabled = false,
-      tooltip = null,
-      required = false,
-    }: InputProps) => {
+       valueKey,
+       label,
+       type = 'text',
+       inputLeftElement = null,
+       disabled = false,
+       tooltip = null,
+       required = false,
+     }: InputProps) => {
       let input: JSX.Element;
       let value =
         formik.values[valueKey] === null ? '' : formik.values[valueKey];
@@ -228,7 +204,7 @@ const InvestmentForm = () => {
 
       return form;
     },
-    [formik.errors, formik.handleChange, formik.values]
+    [formik.errors, formik.handleChange, formik.values],
   );
 
   useEffect(() => {
@@ -263,7 +239,7 @@ const InvestmentForm = () => {
             type: 'number',
             disabled: true,
             tooltip:
-              "This field is automatically calculated using 'Invested Amount' and 'Buy Price'",
+              'This field is automatically calculated using \'Invested Amount\' and \'Buy Price\'',
             required: true,
           })}
         </HStack>
@@ -364,7 +340,7 @@ const InvestmentForm = () => {
             colorScheme='blue'
             mr={3}
           >
-            {isEditing ? 'Update' : 'Add'}
+            {editInvestment ? 'Update' : 'Add'}
           </Button>
         </HStack>
       </VStack>

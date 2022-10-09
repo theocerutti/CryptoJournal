@@ -5,7 +5,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { InvestmentStatus } from './investment';
+import { InvestmentType, OrderInvestmentStatus } from './investment';
 
 export class InvestmentDto {
   @IsNumber()
@@ -60,6 +60,9 @@ export class InvestmentDto {
   @IsString()
   priceLink: string;
 
-  @IsEnum(InvestmentStatus)
-  status: InvestmentStatus;
+  @IsEnum(OrderInvestmentStatus)
+  orderStatus: OrderInvestmentStatus;
+
+  @IsEnum(InvestmentType)
+  type: InvestmentType;
 }

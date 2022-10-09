@@ -4,7 +4,6 @@ import { InvestmentRepository } from './investment.repository';
 import { Investment } from '../model/investment.entity';
 import {
   CreateInvestmentDto,
-  InvestmentDto,
   InvestmentGlobalInfoDto,
   UpdateInvestmentDto,
 } from '../shared/investment';

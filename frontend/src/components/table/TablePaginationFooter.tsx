@@ -18,7 +18,7 @@ import {
   ChevronRightIcon,
 } from '@chakra-ui/icons';
 
-const InvestmentTablePaginationFooter = ({
+const TablePaginationFooter = ({
   gotoPage,
   canPreviousPage,
   previousPage,
@@ -28,7 +28,7 @@ const InvestmentTablePaginationFooter = ({
   canNextPage,
   pageCount,
   pageSize,
-  investments,
+  data,
   nextPage,
 }: any) => {
   const [pageSizeAll, setPageSizeAll] = useState(false);
@@ -92,7 +92,7 @@ const InvestmentTablePaginationFooter = ({
           onChange={(e) => {
             if (e.target.value === 'All') {
               setPageSizeAll(true);
-              setPageSize(investments.length);
+              setPageSize(data.length);
             } else {
               setPageSizeAll(false);
               setPageSize(Number(e.target.value));
@@ -130,4 +130,4 @@ const InvestmentTablePaginationFooter = ({
   );
 };
 
-export default InvestmentTablePaginationFooter;
+export default TablePaginationFooter;

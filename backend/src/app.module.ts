@@ -11,6 +11,7 @@ import { ConfigModule } from '@nestjs/config';
 import { InvestmentModule } from './investment/investment.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './schedulers/TasksModule';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { TasksModule } from './schedulers/TasksModule';
     }),
     TasksModule,
     InvestmentModule,
+    TransactionModule,
     UserModule,
     AuthModule,
   ],

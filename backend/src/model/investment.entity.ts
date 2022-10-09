@@ -11,7 +11,8 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { ColumnNumericTransformer } from '../utils/transformer';
-import { InvestmentStatus } from '../shared/investment';
+import { OrderInvestmentStatus } from '../shared/investment';
+import { InvestmentType } from '../shared/investment/investment';
 
 @Entity()
 export class Investment {
@@ -32,10 +33,17 @@ export class Investment {
 
   @Column({
     type: 'enum',
-    enum: InvestmentStatus,
-    default: InvestmentStatus.OPEN,
+    enum: OrderInvestmentStatus,
+    default: OrderInvestmentStatus.OPEN,
   })
-  status: InvestmentStatus;
+  orderStatus: OrderInvestmentStatus;
+
+  @Column({
+    type: 'enum',
+    enum: InvestmentType,
+    default: InvestmentType.NONE,
+  })
+  type: InvestmentType;
 
   @Column({ type: 'timestamp', nullable: false })
   buyDate: Date;
@@ -101,6 +109,23 @@ export class Investment {
 
   @BeforeInsert()
   @BeforeUpdate()
+  checkDate() {
+    if (this.buyDate > new Date()) {
+      throw new Error('Buy date cannot be in the future');
+    }
+    if (this.sellDate && this.sellDate < this.buyDate) {
+      throw new Error('Sell date cannot be before buy date');
+    }
+    if (this.investedAmount < 0)
+      throw new Error('Invested amount cannot be negative');
+    if (this.fees < 0) throw new Error('Fees cannot be negative');
+    if (this.buyPrice < 0) throw new Error('Buy price cannot be negative');
+    if (this.sellPrice && this.sellPrice < 0)
+      throw new Error('Sell price cannot be negative');
+  }
+
+  @BeforeInsert()
+  @BeforeUpdate()
   recalculateHoldings() {
     this.holdings = this.investedAmount / this.buyPrice;
   }
@@ -109,9 +134,13 @@ export class Investment {
   @BeforeUpdate()
   updateStatus() {
     if (this.sellPrice) {
-      this.status = InvestmentStatus.CLOSED;
+      this.orderStatus = OrderInvestmentStatus.CLOSED;
     } else {
-      this.status = InvestmentStatus.OPEN;
+      this.orderStatus = OrderInvestmentStatus.OPEN;
+    }
+
+    if (this.investedAmount === 0 && this.type !== InvestmentType.GIFT) {
+      throw new Error('Invested amount cannot be 0 if it is not a gift');
     }
   }
 }

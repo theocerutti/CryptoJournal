@@ -5,8 +5,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { formatCurrency } from '../../utils/format';
 import { zoomApexChart } from '../../utils/chart';
-import { useQuery } from '@tanstack/react-query';
-import { getInvestmentsQuery, INVESTMENT_QUERY_KEY } from '../../queries/investments';
+import { useQueries } from '@tanstack/react-query';
+import { getInvestmentsGlobalInfoQuery, getInvestmentsQuery, INVESTMENT_GLOBAL_INFO_QUERY_KEY, INVESTMENT_QUERY_KEY } from '../../queries/investments';
 import { defaultQueryConfig } from '../../queries/config';
 import { GetInvestmentDto } from '@shared/investment';
 
@@ -43,13 +43,26 @@ export default function ChartTotalInvested() {
 
   const [loadingCalculation, setLoadingCalculation] = useState(true);
 
-  const { data, isError, isSuccess } = useQuery(
-    [INVESTMENT_QUERY_KEY],
-    getInvestmentsQuery,
-    {
-      ...defaultQueryConfig,
+  const queries = useQueries({
+      queries: [
+        {
+          queryKey: [INVESTMENT_QUERY_KEY],
+          queryFn: getInvestmentsQuery,
+          ...defaultQueryConfig,
+        },
+        {
+          queryKey: [INVESTMENT_GLOBAL_INFO_QUERY_KEY],
+          queryFn: getInvestmentsGlobalInfoQuery,
+          ...defaultQueryConfig,
+        },
+      ],
     },
   );
+
+  const isSuccess = queries.every((query) => query.isSuccess);
+  const isError = queries.find((query) => query.isError);
+  const dataInvestments = queries[0].data;
+  const dataGlobalInfo = queries[1].data;
 
   const updateTimeline = useCallback((timeline: ChartTimeline) => {
     setCurrentTimeline(timeline);
@@ -88,24 +101,34 @@ export default function ChartTotalInvested() {
     }
   }, [lineChartData]);
 
+  const resetTooltip = useCallback(() => {
+    if (dataGlobalInfo && dataGlobalInfo.data) {
+      setTooltipValue({ x: dataGlobalInfo.data.totalInvested, y: new Date() });
+    }
+  }, [dataGlobalInfo]);
+
   useEffect(() => {
     if (isSuccess) {
       setLoadingCalculation(true);
       let chartData = lineChartData;
-      chartData[0].data = data.data.map((investment) => {
+      chartData[0].data = dataInvestments.data.map((investment: GetInvestmentDto) => {
         // @ts-ignore
         return [Date.parse(new Date(investment.buyDate))];
       }).sort((a, b) => a[0] - b[0]);
       let amount = 0;
-      for (let i = 0; i < data.data.length; i++) {
-        const investment: GetInvestmentDto = data.data[i];
+      for (let i = 0; i < dataInvestments.data.length; i++) {
+        const investment: GetInvestmentDto = dataInvestments.data[i];
         amount += investment.investedAmount;
         chartData[0].data[i].push(amount);
       }
       setData(chartData);
       setLoadingCalculation(false);
     }
-  }, [isSuccess, data, lineChartData]);
+  }, [isSuccess, dataInvestments, lineChartData]);
+
+  useEffect(() => {
+    resetTooltip();
+  }, [resetTooltip]);
 
   useEffect(() => {
     if (isSuccess && !loadingCalculation && lineChartData[0].data.length > 0) {
@@ -121,13 +144,22 @@ export default function ChartTotalInvested() {
       zoom: {
         autoScaleYaxis: true,
       },
-      dropShadow: {
-        enabled: true,
-        top: 13,
-        left: 0,
-        blur: 10,
-        opacity: 0.1,
-        color: '#4318FF',
+      events: {
+        mouseLeave: () => {
+          resetTooltip();
+        },
+        mouseMove: (event: any, chartContext: any, config: any) => {
+          const seriesIndex = config.seriesIndex;
+          const dataPointIndex = config.dataPointIndex === -1 ? 0 : config.dataPointIndex;
+          const w = chartContext.w;
+
+          if (seriesIndex !== -1) {
+            const data = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
+            setTooltipValue({ x: data[1], y: new Date(data[0]) });
+          } else {
+            resetTooltip();
+          }
+        },
       },
     },
     dataLabels: {
@@ -169,24 +201,7 @@ export default function ChartTotalInvested() {
       show: false,
     },
     tooltip: {
-      theme: 'dark',
-      x: {
-        format: 'dd MMM yyyy',
-      },
-      custom: function({ seriesIndex, dataPointIndex, w }: any) {
-        const data = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
-        setTooltipValue({ x: data[1], y: new Date(data[0]) });
-        return '';
-      },
-    },
-    fill: {
-      type: 'gradient',
-      gradient: {
-        shadeIntensity: 1,
-        opacityFrom: 0.7,
-        opacityTo: 0.9,
-        stops: [0, 100],
-      },
+      custom: () => '',
     },
   };
 
@@ -239,15 +254,14 @@ export default function ChartTotalInvested() {
         </Flex>
         <Box minW='92%' minH='300px' mt='auto'>
           <div id='chart-timeline'>
-              <ReactApexChart
-                onMouseLeave={() => setTooltipValue({ x: 0, y: new Date() })}
-                // @ts-ignore
-                options={lineChartOptionsTotalSpent}
-                series={lineChartData}
-                type='area'
-                width='100%'
-                height={300}
-              />
+            <ReactApexChart
+              // @ts-ignore
+              options={lineChartOptionsTotalSpent}
+              series={lineChartData}
+              type='area'
+              width='100%'
+              height={300}
+            />
           </div>
         </Box>
       </Flex>

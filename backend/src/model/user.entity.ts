@@ -11,6 +11,7 @@ import { Exclude } from 'class-transformer';
 import { IsNotEmpty, Length } from 'class-validator';
 import { RefreshToken } from './refresh_token.entity';
 import { Investment } from './investment.entity';
+import { Transaction } from './transaction.entity';
 
 @Entity()
 export class User {
@@ -36,6 +37,17 @@ export class User {
     onDelete: 'CASCADE',
   })
   investments: Investment[];
+
+  @OneToMany(() => Transaction, (transaction) => transaction.user, {
+    onDelete: 'CASCADE',
+  })
+  transactions: Transaction[];
+
+  @Column({ nullable: true })
+  erc20Address: string;
+
+  @Column({ nullable: true })
+  btcAddress: string;
 
   @BeforeInsert()
   async hashPassword() {

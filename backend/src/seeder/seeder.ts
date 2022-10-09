@@ -108,7 +108,7 @@ export class Seeder {
 
           // add sell investments
           if (i % 2 === 0) {
-            investment.sellDate = faker.date.soon(
+            investment.sellDate = faker.date.future(
               faker.datatype.number({ min: 1, max: 365 }),
               investment.buyDate
             );
@@ -125,11 +125,12 @@ export class Seeder {
             }
             // loose investment
             else {
+              const minPrice =
+                investment.buyPrice -
+                (value.averagePrice / 5) *
+                  faker.datatype.float({ min: 0.1, max: 2 });
               investment.sellPrice = faker.datatype.number({
-                min:
-                  investment.buyPrice -
-                  (value.averagePrice / 5) *
-                    faker.datatype.float({ min: 0.1, max: 2 }),
+                min: minPrice < 0 ? 1 : minPrice,
                 max: investment.buyPrice,
               });
             }

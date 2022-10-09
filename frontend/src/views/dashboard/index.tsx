@@ -3,6 +3,7 @@ import Investments from './investments-table/Investments';
 import Card from 'components/card/Card';
 import GlobalInfo from './GlobalInfo';
 import ChartBalance from './ChartTotalInvested';
+import Transactions from './transaction-table/Transactions';
 
 export default function Dashboard() {
   return (
@@ -16,6 +17,12 @@ export default function Dashboard() {
       <SimpleGrid gap='20px' mb='20px'>
         <Card>
           <Investments />
+        </Card>
+      </SimpleGrid>
+
+      <SimpleGrid gap='20px' mb='20px'>
+        <Card>
+          <Transactions />
         </Card>
       </SimpleGrid>
     </Box>

@@ -3,5 +3,5 @@ import { OmitType } from '@nestjs/swagger';
 
 export class CreateInvestmentDto extends OmitType(InvestmentDto, [
   'id',
-  'status',
+  'orderStatus',
 ] as const) {}

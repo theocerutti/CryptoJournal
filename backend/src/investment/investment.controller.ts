@@ -15,9 +15,8 @@ import { InvestmentService } from './investment.service';
 import { Investment } from 'model/investment.entity';
 import {
   CreateInvestmentDto,
-  InvestmentDto,
   InvestmentGlobalInfoDto,
-  InvestmentStatus,
+  OrderInvestmentStatus,
   UpdateInvestmentDto,
 } from 'shared/investment';
 import { ScrapeDataContainer } from '../schedulers/ScrapeDataContainer';
@@ -37,7 +36,7 @@ export class InvestmentController {
     Object.assign(dto, investment);
     let priceForCalcul = 0;
 
-    if (dto.status === InvestmentStatus.OPEN) {
+    if (dto.orderStatus === OrderInvestmentStatus.OPEN) {
       dto.price = ScrapeDataContainer.getInstance().getPrice(
         investment.priceLink
       );
