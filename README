@@ -58,3 +58,5 @@ tell the user if there is a mismatch betweens transactions and investments
 faire un menu pour donation
 
 mettre des chakras skeleton loaders
+
+faire en sorte que les rows soient clickable (amene sur la page d'edition)

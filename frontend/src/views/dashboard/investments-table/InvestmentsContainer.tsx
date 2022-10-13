@@ -5,14 +5,16 @@ import {
   getInvestmentsQuery,
   INVESTMENT_QUERY_KEY,
 } from '../../../queries/investments';
-import { Alert, Flex, Spinner } from '@chakra-ui/react';
+import { Alert, Flex, Spinner, useToast } from '@chakra-ui/react';
 import NoInvestments from './NoInvestments';
 import { defaultQueryConfig } from 'queries/config';
 import { GetInvestmentDto } from '@shared/investment';
 import InvestmentTable from './InvestmentTable';
 import { useHistory } from 'react-router-dom';
+import { showToast } from '../../../utils/toast';
 
 const InvestmentsContainer = () => {
+  const toast = useToast();
   const history = useHistory();
   const queryClient = useQueryClient();
   const { data, isError, isLoading, isSuccess } = useQuery(
@@ -26,6 +28,7 @@ const InvestmentsContainer = () => {
   const mutation = useMutation(deleteInvestmentMutation, {
     onSuccess: () => {
       queryClient.invalidateQueries([INVESTMENT_QUERY_KEY]);
+      showToast(toast, 'Investment deleted successfully', 'success');
     },
   });
 

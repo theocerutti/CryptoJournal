@@ -19,10 +19,16 @@ import { RiCheckboxBlankCircleFill } from 'react-icons/ri';
 import { formatCurrency } from '../../../utils/format';
 import { getSign } from '../../../utils/math';
 import { MultiCheckBoxColumnFilter } from '../../../components/table/MultiCheckBoxColumnFilter';
+import { FaGift } from 'react-icons/fa';
 
 export enum OrderInvestmentStatus {
   OPEN = 'OPEN',
   CLOSED = 'CLOSED',
+}
+
+export enum InvestmentType {
+  NONE = 'NONE',
+  GIFT = 'GIFT',
 }
 
 const InvestmentTable = ({
@@ -72,16 +78,25 @@ const InvestmentTable = ({
       Header: 'NAME',
       accessor: 'name',
       Cell: ({ value, row }: { value: string; row: any }) => (
-        <Stat>
-          <StatLabel>
-            <Link href={row.original.priceLink}>{value}</Link>
-          </StatLabel>
-          {row.original.orderStatus === OrderInvestmentStatus.OPEN && (
-            <StatHelpText fontSize='12px'>
-              {formatCurrency(row.original.price)}
-            </StatHelpText>
+        <Flex alignItems='center' flexDirection='row'>
+          {row.original.type === InvestmentType.GIFT && (
+            <Tooltip label='Investment is a gift, meaning you earned this asset from airdrop, sponsorship...'>
+              <div>
+                <Icon mr='5px' as={FaGift} />
+              </div>
+            </Tooltip>
           )}
-        </Stat>
+          <Stat>
+            <StatLabel>
+              <Link href={row.original.priceLink}>{value}</Link>
+            </StatLabel>
+            {row.original.orderStatus === OrderInvestmentStatus.OPEN && (
+              <StatHelpText fontSize='12px'>
+                {formatCurrency(row.original.price)}
+              </StatHelpText>
+            )}
+          </Stat>
+        </Flex>
       ),
       Filter: MultiCheckBoxColumnFilter,
       filter: 'multiSelect',

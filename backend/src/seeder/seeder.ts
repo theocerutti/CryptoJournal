@@ -4,6 +4,7 @@ import { getRepository, Repository } from 'typeorm';
 import * as faker from 'faker';
 import { Investment } from '../model/investment.entity';
 import { Transaction } from '../model/transaction.entity';
+import { InvestmentType } from '../shared/investment/investment';
 
 const SEED_USER = 5;
 const SEED_INVESTMENT_BY_USER = 100;
@@ -113,6 +114,8 @@ export class Seeder {
           investment.primaryTag = key;
           investment.secondaryTag = 'Crypto';
           investment.priceLink = value.priceLink;
+
+          if (i % 8 === 0) investment.type = InvestmentType.GIFT;
 
           // add sell investments
           if (i % 2 === 0) {

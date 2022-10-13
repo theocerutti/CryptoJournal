@@ -6,6 +6,7 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Select,
   Textarea,
   Tooltip,
 } from '@chakra-ui/react';
@@ -16,6 +17,7 @@ type MixedInputProps = {
   label: string;
   formik: any;
   type?: HTMLInputTypeAttribute;
+  selectValues?: string[];
   inputLeftElement?: string;
   disabled?: boolean;
   tooltip?: string;
@@ -32,6 +34,7 @@ const FormikInput = ({
   tooltip = null,
   required = false,
   placeholder = null,
+  selectValues = null,
   formik,
 }: MixedInputProps) => {
   let input: JSX.Element;
@@ -48,6 +51,22 @@ const FormikInput = ({
         onChange={formik.handleChange}
         size='sm'
       />
+    );
+  } else if (type === 'select') {
+    input = (
+      <Select
+        id={valueKey}
+        name={valueKey}
+        disabled={disabled}
+        onChange={formik.handleChange}
+        value={value}
+        placeholder={placeholder}
+        variant='filled'
+      >
+        {selectValues.map((v) => (
+          <option value={v}>{v}</option>
+        ))}
+      </Select>
     );
   } else {
     if (type === 'date') {
@@ -86,7 +105,7 @@ const FormikInput = ({
       input
     );
 
-  const form = (
+  return (
     <FormControl isRequired={required} isInvalid={isError}>
       <FormLabel htmlFor={valueKey}>{label}</FormLabel>
       {tooltip !== null ? (
@@ -105,8 +124,6 @@ const FormikInput = ({
       )}
     </FormControl>
   );
-
-  return form;
 };
 
 export default FormikInput;

@@ -16,17 +16,7 @@ import {
   UpdateInvestmentDto,
 } from '@shared/investment';
 import FormikInput from '../../components/form/FormikInput';
-
-type InputProps = {
-  valueKey: keyof CreateInvestmentDto;
-  label: string;
-  type?: HTMLInputTypeAttribute;
-  inputLeftElement?: string;
-  disabled?: boolean;
-  tooltip?: string;
-  required?: boolean;
-  placeholder?: string;
-};
+import { showToast } from '../../utils/toast';
 
 const validationSchema = Yup.object().shape({
   buyDate: Yup.date().required('Buy date is required'),
@@ -64,15 +54,10 @@ const InvestmentForm = ({
   const queryClient = useQueryClient();
 
   const showSuccessToast = () => {
-    toast({
-      title: `Successfully ${
-        editInvestment ? 'updated' : 'created'
-      } investment`,
-      status: 'success',
-      duration: 4500,
-      position: 'bottom-right',
-      isClosable: true,
-    });
+    showToast(
+      toast,
+      `Successfully ${editInvestment ? 'updated' : 'created'} investment`
+    );
   };
 
   const mutationCreate = useMutation(createInvestmentMutation, {
@@ -101,6 +86,8 @@ const InvestmentForm = ({
           ? null
           : new Date(editInvestment.sellDate)
         : null,
+      // @ts-ignore
+      type: editInvestment ? editInvestment.type : 'NONE',
       buyPrice: editInvestment ? editInvestment.buyPrice : 0,
       sellPrice: editInvestment ? editInvestment.sellPrice : null,
       buyNote: editInvestment ? editInvestment.buyNote : null,
@@ -206,7 +193,7 @@ const InvestmentForm = ({
             type='date'
           />
         </HStack>
-        <Flex width='50%'>
+        <HStack width='100%' spacing='10px'>
           <FormikInput
             formik={formik}
             valueKey='fees'
@@ -216,7 +203,16 @@ const InvestmentForm = ({
             inputLeftElement='$'
             required
           />
-        </Flex>
+          <FormikInput
+            formik={formik}
+            valueKey='type'
+            label='Investment Type'
+            tooltip='Specify Type of the investment'
+            type='select'
+            selectValues={['NONE', 'GIFT']}
+            required
+          />
+        </HStack>
         <HStack width='100%' spacing='10px'>
           <FormikInput
             formik={formik}
