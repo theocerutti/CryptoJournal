@@ -7,6 +7,7 @@ import theme from './theme/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './App';
 import InjectAxiosInterceptors from './InjectAxiosInterceptors';
+import 'utils/yup.ts';
 
 const queryClient = new QueryClient();
 

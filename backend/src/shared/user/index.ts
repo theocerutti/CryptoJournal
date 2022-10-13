@@ -1,4 +1,5 @@
-import { UserDTO } from './user.dto';
-import { UserUpdateDTO } from './update-user.dto';
+import { UserDto } from './user.dto';
+import { UpdateUserDto } from './update-user.dto';
+import { GetUserDto } from './get-user.dto';
 
-export { UserDTO, UserUpdateDTO };
+export { UserDto, UpdateUserDto, GetUserDto };

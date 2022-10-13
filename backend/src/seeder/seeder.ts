@@ -3,9 +3,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import { getRepository, Repository } from 'typeorm';
 import * as faker from 'faker';
 import { Investment } from '../model/investment.entity';
+import { Transaction } from '../model/transaction.entity';
 
 const SEED_USER = 5;
 const SEED_INVESTMENT_BY_USER = 100;
+const SEED_TRANSACTIONS_BY_USER = 10;
 
 const investmentsDatas: {
   [key: string]: { averagePrice: number; priceLink: string };
@@ -44,11 +46,13 @@ export class Seeder {
 
   userRepo: Repository<User>;
   investmentRepo: Repository<Investment>;
+  transactionRepo: Repository<Transaction>;
 
   buildSeeder() {
     this.logger.log('Getting repositories...');
     this.userRepo = getRepository(User);
     this.investmentRepo = getRepository(Investment);
+    this.transactionRepo = getRepository(Transaction);
   }
 
   async cleanDatabase() {
@@ -65,11 +69,15 @@ export class Seeder {
       const user = new User();
       user.email = faker.internet.email();
       user.password = 'password';
+      user.erc20Address = faker.finance.ethereumAddress();
+      user.btcAddress = faker.finance.bitcoinAddress();
       users.push(user);
     }
     const user = new User();
     user.email = 'user@gmail.com';
     user.password = 'password';
+    user.erc20Address = faker.finance.ethereumAddress();
+    user.btcAddress = faker.finance.bitcoinAddress();
     users.push(user);
     return await this.userRepo.save(users);
   }
@@ -141,6 +149,31 @@ export class Seeder {
     }
   }
 
+  async seedTransactions(users: User[]) {
+    for (const user of users) {
+      for (let i = 0; i < SEED_TRANSACTIONS_BY_USER; i++) {
+        const transaction = new Transaction();
+        transaction.user = user;
+        transaction.date = faker.date.past();
+        transaction.amount = faker.datatype.float({
+          min: 0,
+          max: 1000,
+          precision: 2,
+        });
+        transaction.fees = faker.datatype.float({
+          min: 0,
+          max: 10,
+          precision: 2,
+        });
+        transaction.from =
+          locationNames[faker.datatype.number(locationNames.length - 1)];
+        transaction.to =
+          locationNames[faker.datatype.number(locationNames.length - 1)];
+        await this.transactionRepo.save(transaction);
+      }
+    }
+  }
+
   async seed() {
     // call constructor-like
     this.buildSeeder();
@@ -151,5 +184,6 @@ export class Seeder {
     // seeds
     const seededUsers = await this.seedUsers();
     await this.seedInvestments(seededUsers);
+    await this.seedTransactions(seededUsers);
   }
 }

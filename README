@@ -54,3 +54,5 @@ si Holdings BTC = 0.00001 alors on va pas faire un .toFixed(2) mais un .toFixed(
 -> mais de base si on a 12.32318723 alors la on fait applique le toFixed par default .toFixed(2)
 
 tell the user if there is a mismatch betweens transactions and investments
+
+faire un menu pour donation

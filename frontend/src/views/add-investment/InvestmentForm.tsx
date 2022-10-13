@@ -16,6 +16,7 @@ type InputProps = {
   disabled?: boolean;
   tooltip?: string;
   required?: boolean;
+  placeholder?: string;
 };
 
 const validationSchema = Yup.object().shape({
@@ -128,6 +129,7 @@ const InvestmentForm = ({
        disabled = false,
        tooltip = null,
        required = false,
+       placeholder = null,
      }: InputProps) => {
       let input: JSX.Element;
       let value =
@@ -156,7 +158,7 @@ const InvestmentForm = ({
             name={valueKey}
             type={type}
             variant='filled'
-            placeholder='placeholder'
+            placeholder={placeholder}
             disabled={disabled}
             onChange={formik.handleChange}
             // @ts-ignore

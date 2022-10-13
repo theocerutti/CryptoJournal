@@ -1,4 +1,4 @@
-import { UserDTO, UserUpdateDTO } from 'shared/user';
+import { UserDto, UpdateUserDto } from 'shared/user';
 import { User } from 'model/user.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -56,7 +56,7 @@ export class UserService {
     }
   }
 
-  async create(userDTO: UserDTO): Promise<User> {
+  async create(userDTO: UserDto): Promise<User> {
     const user: User = new User();
 
     user.email = userDTO.email;
@@ -72,7 +72,7 @@ export class UserService {
     }
   }
 
-  async update(userID: number, userDTO: UserUpdateDTO): Promise<User> {
+  async update(userID: number, userDTO: UpdateUserDto): Promise<User> {
     const user: User = await this.getById(userID);
     const updated = Object.assign(user, userDTO);
 

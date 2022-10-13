@@ -10,12 +10,15 @@ import {
 import { User } from '../model/user.entity';
 import { UserService } from '../user/user.service';
 import { ScrapeDataContainer } from '../schedulers/ScrapeDataContainer';
+import { TransactionRepository } from '../transaction/transaction.repository';
 
 @Injectable()
 export class InvestmentService {
   constructor(
     @InjectRepository(InvestmentRepository)
     private readonly InvestmentRepo: InvestmentRepository,
+    @InjectRepository(TransactionRepository)
+    private readonly TransactionRepo: TransactionRepository,
     @Inject(forwardRef(() => UserService)) private userService: UserService
   ) {}
 
@@ -35,7 +38,9 @@ export class InvestmentService {
   async getGlobalInfo(user: User): Promise<InvestmentGlobalInfoDto> {
     const globalInfo = new InvestmentGlobalInfoDto();
     const scrapeData = ScrapeDataContainer.getInstance().getData();
-    globalInfo.totalInvested = await this.InvestmentRepo.getTotalInvested(user);
+    globalInfo.totalInvested = await this.TransactionRepo.getTotalInvested(
+      user
+    );
     globalInfo.totalFees = await this.InvestmentRepo.getTotalFees(user);
     globalInfo.pnl = 0;
     globalInfo.totalBalance = 0;

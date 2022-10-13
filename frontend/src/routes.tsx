@@ -10,7 +10,7 @@ import MainDashboard from 'views/dashboard';
 import AddInvestmentPage from './views/add-investment/AddInvestmentPage';
 import AddTransactionPage from './views/add-transaction/AddTransactionPage';
 import ChartsPage from './views/charts';
-import ProfilePage from './views/profile';
+import ProfilePage from './views/profile/ProfilePage';
 
 const routes = [
   {

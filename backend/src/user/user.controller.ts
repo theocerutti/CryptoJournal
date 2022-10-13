@@ -9,7 +9,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { User } from 'model/user.entity';
-import { UserUpdateDTO } from 'shared/user';
+import { GetUserDto, UpdateUserDto } from 'shared/user';
 import { UserService } from './user.service';
 import { CurrentUser } from 'auth/current-user.decorator';
 
@@ -19,25 +19,34 @@ export class UserController {
 
   constructor(private userService: UserService) {}
 
-  @Get()
-  public async getMe(@CurrentUser() user: User): Promise<User> {
-    this.logger.log('GetMe with userId=', user.id);
-    return user;
+  private static mapUserToGetDto(user: User): GetUserDto {
+    const userDTO = new GetUserDto();
+    delete user.password; // TODO: must work with automapper
+    Object.assign(userDTO, user);
+    return userDTO;
   }
 
-  @Get('all')
-  public async getAll(): Promise<User[]> {
+  @Get('/me')
+  public async getMe(@CurrentUser() user: User): Promise<GetUserDto> {
+    this.logger.log('GetMe with userId=', user.id);
+    return UserController.mapUserToGetDto(user);
+  }
+
+  @Get()
+  public async getAll(): Promise<GetUserDto[]> {
     this.logger.log('GetAll');
-    return this.userService.getAll();
+    const users = await this.userService.getAll();
+    return users.map((user) => UserController.mapUserToGetDto(user));
   }
 
   @Put()
   public async updateMe(
     @CurrentUser() user: User,
-    @Body() userDTO: UserUpdateDTO
-  ): Promise<User> {
+    @Body() userDTO: UpdateUserDto
+  ): Promise<GetUserDto> {
     this.logger.log('Update me with userId=', user.id, ', DTO=', userDTO);
-    return await this.userService.update(user.id, userDTO);
+    const updatedUser = await this.userService.update(user.id, userDTO);
+    return UserController.mapUserToGetDto(updatedUser);
   }
 
   @Delete()
@@ -49,8 +58,9 @@ export class UserController {
   @Delete(':userId')
   public async deleteUser(
     @Param('userId', ParseIntPipe) userId: number
-  ): Promise<User> {
+  ): Promise<GetUserDto> {
     this.logger.log('Delete user with id=', userId);
-    return await this.userService.delete(userId);
+    const deletedUser = await this.userService.delete(userId);
+    return UserController.mapUserToGetDto(deletedUser);
   }
 }
