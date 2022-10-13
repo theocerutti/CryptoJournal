@@ -1,8 +1,10 @@
 import {
   Avatar,
+  Box,
   Button,
   Flex,
   Icon,
+  Link,
   Menu,
   MenuButton,
   MenuItem,
@@ -20,6 +22,10 @@ import {
   deleteTokenFromStorage,
 } from '../../utils/authStorage';
 import { useHistory } from 'react-router-dom';
+import { MdOutlineVolunteerActivism } from 'react-icons/md';
+import TextCopy from '../TextCopy';
+import { SiBinance, SiBitcoinsv, SiEthereum } from 'react-icons/si';
+import { TbCurrency } from 'react-icons/tb';
 
 export default function NavbarLinks() {
   const history = useHistory();
@@ -47,10 +53,81 @@ export default function NavbarLinks() {
       bg={menuBg}
       flexWrap={'unset'}
       p='10px'
+      px='20px'
       borderRadius='30px'
       boxShadow={shadow}
     >
       <SidebarResponsive routes={routes} />
+
+      <Menu>
+        <MenuButton p='0px'>
+          <Icon
+            mt='6px'
+            as={MdOutlineVolunteerActivism}
+            color={navbarIcon}
+            w='18px'
+            h='18px'
+            me='10px'
+          />
+        </MenuButton>
+        <MenuList
+          boxShadow={shadow}
+          p='20px'
+          borderRadius='20px'
+          bg={menuBg}
+          border='none'
+          mt='22px'
+          me={{ base: '30px', md: 'unset' }}
+          minW={{ base: 'unset', md: '400px', xl: '450px' }}
+          maxW={{ base: '360px', md: 'unset' }}
+        >
+          <Flex w='100%' mb='20px'>
+            <Text fontSize='md' fontWeight='600' color={textColor}>
+              Donate to the project!
+            </Text>
+          </Flex>
+          <Flex flexDirection='column'>
+            <Box py='5px'>
+              <Flex alignItems='center'>
+                <Icon mr='5px' as={SiEthereum} />
+                <Text fontWeight='bold'>ETH (ERC20):</Text>
+              </Flex>
+              <TextCopy>0x17ded84d45b28d5ea359bb1b3a6343ff97a94217</TextCopy>
+            </Box>
+            <Box py='5px'>
+              <Flex alignItems='center'>
+                <Icon mr='5px' as={SiBitcoinsv} />
+                <Text fontWeight='bold'>BTC:</Text>
+              </Flex>
+              <TextCopy>1GEqsD4YFW9P4ihfceRuF9HDcsAv1jNnSF</TextCopy>
+            </Box>
+            <Box py='5px'>
+              <Flex alignItems='center'>
+                <Icon mr='5px' as={TbCurrency} />
+                <Text fontWeight='bold'>Nexo Referral:</Text>
+              </Flex>
+              <Link
+                href='https://nexo.io/ref/c4ey5fhjuf?src=web-link'
+                isExternal
+              >
+                https://nexo.io/ref/c4ey5fhjuf?src=web-link
+              </Link>
+            </Box>
+            <Box py='5px'>
+              <Flex alignItems='center'>
+                <Icon mr='5px' as={SiBinance} />
+                <Text fontWeight='bold'>Binance Referral:</Text>
+              </Flex>
+              <Link
+                href='https://accounts.binance.com/en/register?ref=374537611'
+                isExternal
+              >
+                https://accounts.binance.com/en/register?ref=374537611
+              </Link>
+            </Box>
+          </Flex>
+        </MenuList>
+      </Menu>
 
       <Button
         variant='no-hover'

@@ -1,4 +1,21 @@
-import { Alert, Box, Button, Flex, Icon, Menu, MenuButton, MenuItem, MenuList, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, useColorModeValue } from '@chakra-ui/react';
+import {
+  Alert,
+  Box,
+  Button,
+  Flex,
+  Icon,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Spinner,
+  Stat,
+  StatHelpText,
+  StatLabel,
+  StatNumber,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import Card from 'components/card/Card';
 import { MdOutlineCalendarToday } from 'react-icons/md';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -6,11 +23,21 @@ import ReactApexChart from 'react-apexcharts';
 import { formatCurrency } from '../../utils/format';
 import { zoomApexChart } from '../../utils/chart';
 import { useQueries } from '@tanstack/react-query';
-import { getInvestmentsGlobalInfoQuery, getInvestmentsQuery, INVESTMENT_GLOBAL_INFO_QUERY_KEY, INVESTMENT_QUERY_KEY } from '../../queries/investments';
+import {
+  getInvestmentsGlobalInfoQuery,
+  getInvestmentsQuery,
+  INVESTMENT_GLOBAL_INFO_QUERY_KEY,
+  INVESTMENT_QUERY_KEY,
+} from '../../queries/investments';
 import { defaultQueryConfig } from '../../queries/config';
 import { GetInvestmentDto } from '@shared/investment';
 
-export type ChartTimeline = 'ONE_MONTH' | 'SIX_MONTHS' | 'ONE_YEAR' | 'YTD' | 'ALL';
+export type ChartTimeline =
+  | 'ONE_MONTH'
+  | 'SIX_MONTHS'
+  | 'ONE_YEAR'
+  | 'YTD'
+  | 'ALL';
 
 const chartTimelineToString = (timeline: ChartTimeline): string => {
   switch (timeline) {
@@ -36,70 +63,78 @@ export default function ChartTotalInvested() {
   const [currentTimeline, setCurrentTimeline] = useState<ChartTimeline>('YTD');
   const [tooltipValue, setTooltipValue] = useState({ x: 0, y: new Date() });
 
-  const [lineChartData, setData] = useState<{ name: string, data: any[] }[]>([{
-    name: 'Profit',
-    data: [],
-  }]);
+  const [lineChartData, setData] = useState<{ name: string; data: any[] }[]>([
+    {
+      name: 'Profit',
+      data: [],
+    },
+  ]);
 
   const [loadingCalculation, setLoadingCalculation] = useState(true);
 
   const queries = useQueries({
-      queries: [
-        {
-          queryKey: [INVESTMENT_QUERY_KEY],
-          queryFn: getInvestmentsQuery,
-          ...defaultQueryConfig,
-        },
-        {
-          queryKey: [INVESTMENT_GLOBAL_INFO_QUERY_KEY],
-          queryFn: getInvestmentsGlobalInfoQuery,
-          ...defaultQueryConfig,
-        },
-      ],
-    },
-  );
+    queries: [
+      {
+        queryKey: [INVESTMENT_QUERY_KEY],
+        queryFn: getInvestmentsQuery,
+        ...defaultQueryConfig,
+      },
+      {
+        queryKey: [INVESTMENT_GLOBAL_INFO_QUERY_KEY],
+        queryFn: getInvestmentsGlobalInfoQuery,
+        ...defaultQueryConfig,
+      },
+    ],
+  });
 
   const isSuccess = queries.every((query) => query.isSuccess);
   const isError = queries.find((query) => query.isError);
   const dataInvestments = queries[0].data;
   const dataGlobalInfo = queries[1].data;
 
-  const updateTimeline = useCallback((timeline: ChartTimeline) => {
-    setCurrentTimeline(timeline);
+  const updateTimeline = useCallback(
+    (timeline: ChartTimeline) => {
+      setCurrentTimeline(timeline);
 
-    switch (timeline) {
-      case 'ONE_MONTH': {
-        const startDate = new Date();
-        startDate.setMonth(startDate.getMonth() - 1);
-        zoomApexChart('line-datetime', startDate, new Date());
-        break;
+      switch (timeline) {
+        case 'ONE_MONTH': {
+          const startDate = new Date();
+          startDate.setMonth(startDate.getMonth() - 1);
+          zoomApexChart('line-datetime', startDate, new Date());
+          break;
+        }
+        case 'SIX_MONTHS': {
+          const startDate = new Date();
+          startDate.setMonth(startDate.getMonth() - 6);
+          zoomApexChart('line-datetime', startDate, new Date());
+          break;
+        }
+        case 'ONE_YEAR': {
+          const startDate = new Date();
+          startDate.setFullYear(startDate.getFullYear() - 1);
+          zoomApexChart('line-datetime', startDate, new Date());
+          break;
+        }
+        default:
+        case 'YTD': {
+          const startDate = new Date();
+          startDate.setMonth(0);
+          startDate.setDate(1);
+          zoomApexChart('line-datetime', startDate, new Date());
+          break;
+        }
+        case 'ALL': {
+          zoomApexChart(
+            'line-datetime',
+            new Date(lineChartData[0].data[0][0]),
+            new Date()
+          );
+          break;
+        }
       }
-      case 'SIX_MONTHS': {
-        const startDate = new Date();
-        startDate.setMonth(startDate.getMonth() - 6);
-        zoomApexChart('line-datetime', startDate, new Date());
-        break;
-      }
-      case 'ONE_YEAR': {
-        const startDate = new Date();
-        startDate.setFullYear(startDate.getFullYear() - 1);
-        zoomApexChart('line-datetime', startDate, new Date());
-        break;
-      }
-      default:
-      case 'YTD': {
-        const startDate = new Date();
-        startDate.setMonth(0);
-        startDate.setDate(1);
-        zoomApexChart('line-datetime', startDate, new Date());
-        break;
-      }
-      case 'ALL': {
-        zoomApexChart('line-datetime', new Date(lineChartData[0].data[0][0]), new Date());
-        break;
-      }
-    }
-  }, [lineChartData]);
+    },
+    [lineChartData]
+  );
 
   const resetTooltip = useCallback(() => {
     if (dataGlobalInfo && dataGlobalInfo.data) {
@@ -111,10 +146,12 @@ export default function ChartTotalInvested() {
     if (isSuccess) {
       setLoadingCalculation(true);
       let chartData = lineChartData;
-      chartData[0].data = dataInvestments.data.map((investment: GetInvestmentDto) => {
-        // @ts-ignore
-        return [Date.parse(new Date(investment.buyDate))];
-      }).sort((a, b) => a[0] - b[0]);
+      chartData[0].data = dataInvestments.data
+        .map((investment: GetInvestmentDto) => {
+          // @ts-ignore
+          return [Date.parse(new Date(investment.buyDate))];
+        })
+        .sort((a, b) => a[0] - b[0]);
       let amount = 0;
       for (let i = 0; i < dataInvestments.data.length; i++) {
         const investment: GetInvestmentDto = dataInvestments.data[i];
@@ -150,11 +187,13 @@ export default function ChartTotalInvested() {
         },
         mouseMove: (event: any, chartContext: any, config: any) => {
           const seriesIndex = config.seriesIndex;
-          const dataPointIndex = config.dataPointIndex === -1 ? 0 : config.dataPointIndex;
+          const dataPointIndex =
+            config.dataPointIndex === -1 ? 0 : config.dataPointIndex;
           const w = chartContext.w;
 
           if (seriesIndex !== -1) {
-            const data = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
+            const data =
+              w.globals.initialSeries[seriesIndex].data[dataPointIndex];
             setTooltipValue({ x: data[1], y: new Date(data[0]) });
           } else {
             resetTooltip();
@@ -172,7 +211,7 @@ export default function ChartTotalInvested() {
     yaxis: {
       tickAmount: 5,
       labels: {
-        formatter: function(val: number) {
+        formatter: function (val: number) {
           return formatCurrency(val);
         },
         style: {
@@ -184,7 +223,10 @@ export default function ChartTotalInvested() {
     },
     xaxis: {
       type: 'datetime',
-      min: lineChartData[0].data[0] && lineChartData[0].data[0].length !== 0 ? new Date(lineChartData[0].data[0][0]).getTime() : new Date().getTime(),
+      min:
+        lineChartData[0].data[0] && lineChartData[0].data[0].length !== 0
+          ? new Date(lineChartData[0].data[0][0]).getTime()
+          : new Date().getTime(),
       tickAmount: 30, // 30 days
       tooltip: {
         enabled: false,
@@ -228,11 +270,16 @@ export default function ChartTotalInvested() {
             {chartTimelineToString(currentTimeline)}
           </MenuButton>
           <MenuList>
-            {(['ALL', 'YTD', 'ONE_YEAR', 'SIX_MONTHS', 'ONE_MONTH'] as ChartTimeline[]).map((timeline: ChartTimeline) => (
-              <MenuItem
-                onClick={() => updateTimeline(timeline)}
-                key={timeline}
-              >
+            {(
+              [
+                'ALL',
+                'YTD',
+                'ONE_YEAR',
+                'SIX_MONTHS',
+                'ONE_MONTH',
+              ] as ChartTimeline[]
+            ).map((timeline: ChartTimeline) => (
+              <MenuItem onClick={() => updateTimeline(timeline)} key={timeline}>
                 <Text>{chartTimelineToString(timeline)}</Text>
               </MenuItem>
             ))}
@@ -253,7 +300,7 @@ export default function ChartTotalInvested() {
           </Stat>
         </Flex>
         <Box minW='92%' minH='300px' mt='auto'>
-          <div id='chart-timeline'>
+          <div id='chart-timeline' style={{ zIndex: 0 }}>
             <ReactApexChart
               // @ts-ignore
               options={lineChartOptionsTotalSpent}

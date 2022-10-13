@@ -20,6 +20,7 @@ export function SearchBar(props: {
   const searchIconColor = useColorModeValue('grey.700', 'white');
   const inputBg = useColorModeValue('secondaryGrey.300', 'navy.900');
   const inputText = useColorModeValue('grey.700', 'grey.100');
+
   return (
     <InputGroup w={{ base: '100%', md: '200px' }} {...rest}>
       <InputLeftElement

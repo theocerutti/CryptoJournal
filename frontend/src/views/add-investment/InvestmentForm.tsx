@@ -1,12 +1,21 @@
-import React, { HTMLInputTypeAttribute, useCallback, useEffect } from 'react';
+import React, { HTMLInputTypeAttribute, useEffect } from 'react';
 import { useFormik } from 'formik';
-import { Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputLeftElement, Textarea, Tooltip, useToast, VStack } from '@chakra-ui/react';
+import { Button, Flex, HStack, useToast, VStack } from '@chakra-ui/react';
 import * as Yup from 'yup';
-import { createInvestmentMutation, INVESTMENT_QUERY_KEY, updateInvestmentMutation } from '../../queries/investments';
+import {
+  createInvestmentMutation,
+  INVESTMENT_QUERY_KEY,
+  updateInvestmentMutation,
+} from '../../queries/investments';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useHistory } from 'react-router-dom';
-import { CreateInvestmentDto, GetInvestmentDto, UpdateInvestmentDto } from '@shared/investment';
+import {
+  CreateInvestmentDto,
+  GetInvestmentDto,
+  UpdateInvestmentDto,
+} from '@shared/investment';
+import FormikInput from '../../components/form/FormikInput';
 
 type InputProps = {
   valueKey: keyof CreateInvestmentDto;
@@ -41,13 +50,13 @@ const validationSchema = Yup.object().shape({
   primaryTag: Yup.string().nullable().optional(),
   secondaryTag: Yup.string().nullable().optional(),
   priceLink: Yup.string()
-    .url('This link doesn\'t seems to be an url')
+    .url("This link doesn't seems to be an url")
     .required('Price link is required'),
 });
 
 const InvestmentForm = ({
-                          editInvestment,
-                        }: {
+  editInvestment,
+}: {
   editInvestment: GetInvestmentDto | null;
 }) => {
   const toast = useToast();
@@ -56,7 +65,9 @@ const InvestmentForm = ({
 
   const showSuccessToast = () => {
     toast({
-      title: `Successfully ${editInvestment ? 'updated' : 'created'} investment`,
+      title: `Successfully ${
+        editInvestment ? 'updated' : 'created'
+      } investment`,
       status: 'success',
       duration: 4500,
       position: 'bottom-right',
@@ -120,95 +131,6 @@ const InvestmentForm = ({
     },
   });
 
-  const addInput = useCallback(
-    ({
-       valueKey,
-       label,
-       type = 'text',
-       inputLeftElement = null,
-       disabled = false,
-       tooltip = null,
-       required = false,
-       placeholder = null,
-     }: InputProps) => {
-      let input: JSX.Element;
-      let value =
-        formik.values[valueKey] === null ? '' : formik.values[valueKey];
-
-      if (type === 'textarea') {
-        input = (
-          <Textarea
-            id={valueKey}
-            name={valueKey}
-            // @ts-ignore
-            value={value || ''}
-            disabled={disabled}
-            onChange={formik.handleChange}
-            size='sm'
-          />
-        );
-      } else {
-        if (type === 'date') {
-          value = dayjs(value).format('YYYY-MM-DD');
-        }
-
-        input = (
-          <Input
-            id={valueKey}
-            name={valueKey}
-            type={type}
-            variant='filled'
-            placeholder={placeholder}
-            disabled={disabled}
-            onChange={formik.handleChange}
-            // @ts-ignore
-            value={value}
-          />
-        );
-      }
-
-      const isError: boolean = !!formik.errors[valueKey];
-
-      const inputContainer =
-        type !== 'textarea' && inputLeftElement ? (
-          <InputGroup>
-            <InputLeftElement
-              pointerEvents='none'
-              color='grey.300'
-              fontSize='1.2em'
-              children='$'
-            />
-            {input}
-          </InputGroup>
-        ) : (
-          input
-        );
-
-      const form = (
-        <FormControl isRequired={required} isInvalid={isError}>
-          <FormLabel htmlFor={valueKey}>{label}</FormLabel>
-          {tooltip !== null ? (
-            <Tooltip label={tooltip} placement='top'>
-              <span tabIndex={0}>{inputContainer}</span>
-            </Tooltip>
-          ) : (
-            inputContainer
-          )}
-
-          {isError && (
-            <FormErrorMessage>
-              {/* @ts-ignore */}
-              {formik.errors[valueKey] || 'Error'}
-            </FormErrorMessage>
-          )}
-        </FormControl>
-      );
-
-      return form;
-    },
-    [formik.errors, formik.handleChange, formik.values],
-  );
-
   useEffect(() => {
     const { buyPrice, investedAmount } = formik.values;
     let holdings = 0;
@@ -222,110 +144,124 @@ const InvestmentForm = ({
     <form onSubmit={formik.handleSubmit}>
       <VStack spacing={4} align='flex-start'>
         <HStack width='100%' spacing='10px'>
-          {addInput({
-            valueKey: 'name',
-            label: 'Name',
-            tooltip: 'Name of the investment (BTC, ETH, S&P500...)',
-            required: true,
-          })}
-          {addInput({
-            valueKey: 'investedAmount',
-            label: 'Invested Amount',
-            type: 'number',
-            inputLeftElement: '$',
-            required: true,
-          })}
-          {addInput({
-            valueKey: 'holdings',
-            label: 'Holdings',
-            type: 'number',
-            disabled: true,
-            tooltip:
-              'This field is automatically calculated using \'Invested Amount\' and \'Buy Price\'',
-            required: true,
-          })}
+          <FormikInput
+            formik={formik}
+            valueKey='name'
+            label='Name'
+            tooltip='Name of the investment (BTC, ETH, S&P500...)'
+            required
+          />
+          <FormikInput
+            formik={formik}
+            valueKey='investedAmount'
+            label='Invested amount'
+            tooltip='Amount of money invested'
+            type='number'
+            inputLeftElement='$'
+            required
+          />
+          <FormikInput
+            formik={formik}
+            valueKey='holdings'
+            label='Holdings'
+            tooltip="This field is automatically calculated using 'Invested Amount' and 'Buy Price'"
+            type='number'
+            disabled
+            required
+          />
         </HStack>
         <HStack width='100%' spacing='10px'>
-          {addInput({
-            valueKey: 'buyPrice',
-            label: 'Buy Price',
-            type: 'number',
-            inputLeftElement: '$',
-            tooltip: 'Price of the investment when you bought it',
-            required: true,
-          })}
-          {addInput({
-            valueKey: 'buyDate',
-            label: 'Buy Date',
-            type: 'date',
-            tooltip: 'Date when you bought the investment',
-            required: true,
-          })}
+          <FormikInput
+            formik={formik}
+            valueKey='buyPrice'
+            label='Buy price'
+            tooltip='Price at which you bought the investment'
+            type='number'
+            inputLeftElement='$'
+            required
+          />
+          <FormikInput
+            formik={formik}
+            valueKey='buyDate'
+            label='Buy date'
+            tooltip='Date at which you bought the investment'
+            type='date'
+            required
+          />
         </HStack>
         <HStack width='100%' spacing='10px'>
-          {addInput({
-            valueKey: 'sellPrice',
-            label: 'Sell Price',
-            type: 'number',
-            inputLeftElement: '$',
-            tooltip: 'Price of the investment when you sold it',
-          })}
-          {addInput({
-            valueKey: 'sellDate',
-            label: 'Sell Date',
-            type: 'date',
-            tooltip: 'Date when you sold the investment',
-          })}
+          <FormikInput
+            formik={formik}
+            valueKey='sellPrice'
+            label='Sell price'
+            tooltip='Price at which you sold the investment'
+            type='number'
+            inputLeftElement='$'
+          />
+          <FormikInput
+            formik={formik}
+            valueKey='sellDate'
+            label='Sell date'
+            tooltip='Date at which you sold the investment'
+            type='date'
+          />
         </HStack>
         <Flex width='50%'>
-          {addInput({
-            valueKey: 'fees',
-            label: 'Fees',
-            type: 'number',
-            inputLeftElement: '$',
-            tooltip: 'Fees',
-            required: true,
-          })}
+          <FormikInput
+            formik={formik}
+            valueKey='fees'
+            label='Fees'
+            tooltip='Fees paid for the investment'
+            type='number'
+            inputLeftElement='$'
+            required
+          />
         </Flex>
         <HStack width='100%' spacing='10px'>
-          {addInput({
-            valueKey: 'priceLink',
-            label: 'Price Link',
-            type: 'url',
-            tooltip: 'Link to the price of the investment',
-            required: true,
-          })}
-          {addInput({
-            valueKey: 'locationName',
-            label: 'Location Name',
-            tooltip: 'Name of the location where you bought the investment',
-          })}
+          <FormikInput
+            formik={formik}
+            valueKey='priceLink'
+            label='Price link'
+            tooltip='Link to the price of the investment'
+            type='url'
+            required
+          />
+          <FormikInput
+            formik={formik}
+            valueKey='locationName'
+            label='Location Name'
+            tooltip='Name of the location where you bought the investment'
+          />
         </HStack>
         <HStack width='100%' spacing='10px'>
-          {addInput({
-            valueKey: 'primaryTag',
-            label: 'Primary Tag',
-            tooltip: 'Primary tag of the investment',
-          })}
-          {addInput({
-            valueKey: 'secondaryTag',
-            label: 'Secondary Tag',
-            tooltip: 'Secondary tag of the investment',
-          })}
+          <FormikInput
+            formik={formik}
+            valueKey='primaryTag'
+            label='Primary tag'
+            tooltip='Primary tag of the investment'
+          />
+          <FormikInput
+            formik={formik}
+            valueKey='secondaryTag'
+            label='Secondary tag'
+            tooltip='Secondary tag of the investment'
+          />
         </HStack>
         <HStack width='100%' spacing='10px'>
-          {addInput({
-            valueKey: 'buyNote',
-            label: 'Buy Note',
-            type: 'textarea',
-            tooltip: 'Note about the buy',
-          })}
-          {addInput({
-            valueKey: 'sellNote',
-            label: 'Sell Note',
-            type: 'textarea',
-            tooltip: 'Note about the sell',
-          })}
+          <FormikInput
+            formik={formik}
+            valueKey='buyNote'
+            label='Buy note'
+            tooltip='Note about the buy'
+            type='textarea'
+          />
+          <FormikInput
+            formik={formik}
+            valueKey='sellNote'
+            label='Sell note'
+            tooltip='Note about the sell'
+            type='textarea'
+          />
         </HStack>
 
         <HStack justify='end' w='100%'>

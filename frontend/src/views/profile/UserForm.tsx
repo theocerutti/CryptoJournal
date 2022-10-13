@@ -1,155 +1,74 @@
-import React, { HTMLInputTypeAttribute, useCallback } from 'react';
-import { GetUserDto } from '@shared/user';
+import React, { HTMLInputTypeAttribute } from 'react';
+import { GetUserDto, UpdateUserDto } from '@shared/user';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputLeftElement, Textarea, Tooltip, VStack } from '@chakra-ui/react';
-import dayjs from 'dayjs';
+import { Button, HStack, VStack } from '@chakra-ui/react';
 import { CryptoAddressType } from '../../utils/address';
 import { setupYup } from '../../utils/yup';
-
-type InputProps = {
-  valueKey: keyof GetUserDto;
-  label: string;
-  type?: HTMLInputTypeAttribute;
-  inputLeftElement?: string;
-  disabled?: boolean;
-  tooltip?: string;
-  required?: boolean;
-  placeholder?: string;
-};
+import FormikInput from '../../components/form/FormikInput';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { GET_USER, updateUserMutation } from '../../queries/user';
 
 setupYup();
 const validationSchema = Yup.object().shape({
-  erc20Address: Yup.string().cryptoAddress(CryptoAddressType.ERC20, 'This is not an ERC20 Address').optional(),
-  btcAddress: Yup.string().cryptoAddress(CryptoAddressType.BTC, 'This is not a BTC Address').optional(),
+  erc20Address: Yup.string()
+    .cryptoAddress(CryptoAddressType.ERC20, 'This is not an ERC20 Address')
+    .optional(),
+  btcAddress: Yup.string()
+    .cryptoAddress(CryptoAddressType.BTC, 'This is not a BTC Address')
+    .optional(),
   email: Yup.string().email().required('Email is required'),
 });
 
 const UserForm = ({ user }: { user: GetUserDto }) => {
-  const formik = useFormik({
+  const queryClient = useQueryClient();
+  const mutation = useMutation(updateUserMutation, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([GET_USER]);
+    },
+  });
+
+  const formik = useFormik<GetUserDto>({
     initialValues: {
       email: user.email,
       erc20Address: user.erc20Address || '',
       btcAddress: user.btcAddress || '',
     },
     validationSchema: validationSchema,
-    onSubmit: (user: GetUserDto) => {
-
+    onSubmit: (user: GetUserDto, actions) => {
+      mutation.mutateAsync(user as UpdateUserDto).then(() => {
+        actions.setSubmitting(false);
+        actions.resetForm({ values: user });
+      });
     },
   });
-
-  const addInput = useCallback(
-    ({
-       valueKey,
-       label,
-       type = 'text',
-       inputLeftElement = null,
-       disabled = false,
-       tooltip = null,
-       required = false,
-       placeholder = null,
-     }: InputProps) => {
-      let input: JSX.Element;
-      let value =
-        formik.values[valueKey] === null ? '' : formik.values[valueKey];
-
-      if (type === 'textarea') {
-        input = (
-          <Textarea
-            id={valueKey}
-            name={valueKey}
-            // @ts-ignore
-            value={value || ''}
-            disabled={disabled}
-            onChange={formik.handleChange}
-            size='sm'
-          />
-        );
-      } else {
-        if (type === 'date') {
-          value = dayjs(value).format('YYYY-MM-DD');
-        }
-
-        input = (
-          <Input
-            id={valueKey}
-            name={valueKey}
-            type={type}
-            variant='filled'
-            placeholder={placeholder}
-            disabled={disabled}
-            onChange={formik.handleChange}
-            // @ts-ignore
-            value={value}
-          />
-        );
-      }
-
-      const isError: boolean = !!formik.errors[valueKey];
-
-      const inputContainer =
-        type !== 'textarea' && inputLeftElement ? (
-          <InputGroup>
-            <InputLeftElement
-              pointerEvents='none'
-              color='grey.300'
-              fontSize='1.2em'
-              children='$'
-            />
-            {input}
-          </InputGroup>
-        ) : (
-          input
-        );
-
-      const form = (
-        <FormControl isRequired={required} isInvalid={isError}>
-          <FormLabel htmlFor={valueKey}>{label}</FormLabel>
-          {tooltip !== null ? (
-            <Tooltip label={tooltip} placement='top'>
-              <span tabIndex={0}>{inputContainer}</span>
-            </Tooltip>
-          ) : (
-            inputContainer
-          )}
-
-          {isError && (
-            <FormErrorMessage>
-              {/* @ts-ignore */}
-              {formik.errors[valueKey] || 'Error'}
-            </FormErrorMessage>
-          )}
-        </FormControl>
-      );
-
-      return form;
-    },
-    [formik.errors, formik.handleChange, formik.values],
-  );
 
   return (
     <form onSubmit={formik.handleSubmit}>
       <VStack width='50%' spacing={4} align='flex-start'>
         <HStack width='100%' spacing='10px'>
-          {addInput({
-            valueKey: 'email',
-            label: 'Email',
-            tooltip: 'Your email address',
-          })}
+          <FormikInput
+            valueKey='email'
+            label='Email'
+            tooltip='Your email address'
+            formik={formik}
+          />
         </HStack>
         <HStack width='100%' spacing='10px'>
-          {addInput({
-            valueKey: 'erc20Address',
-            label: 'ERC20 Address',
-            tooltip: 'ERC20 Address',
-          })}
+          <FormikInput
+            valueKey='erc20Address'
+            label='ERC20 Address'
+            tooltip='Your ERC20 Address'
+            formik={formik}
+          />
         </HStack>
         <HStack width='100%' spacing='10px'>
-          {addInput({
-            valueKey: 'btcAddress',
-            label: 'BTC Address',
-            tooltip: 'BTC Address',
-          })}
+          <FormikInput
+            valueKey='btcAddress'
+            label='BTC Address'
+            tooltip='Your BTC Address'
+            formik={formik}
+          />
         </HStack>
         {formik.dirty === true && (
           <HStack justify='end' w='100%'>

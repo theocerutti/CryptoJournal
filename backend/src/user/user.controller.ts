@@ -39,7 +39,7 @@ export class UserController {
     return users.map((user) => UserController.mapUserToGetDto(user));
   }
 
-  @Put()
+  @Put('/me')
   public async updateMe(
     @CurrentUser() user: User,
     @Body() userDTO: UpdateUserDto
@@ -49,7 +49,7 @@ export class UserController {
     return UserController.mapUserToGetDto(updatedUser);
   }
 
-  @Delete()
+  @Delete('/me')
   public async deleteMe(@CurrentUser() user: User): Promise<User> {
     this.logger.log('Delete user with userId=', user.id);
     return await this.userService.delete(user.id);

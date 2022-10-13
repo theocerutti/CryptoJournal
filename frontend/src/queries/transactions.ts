@@ -8,7 +8,7 @@ import { AxiosResponse } from 'axios';
 
 export const getTransactionsQuery = (): Promise<
   AxiosResponse<GetTransactionDto[]>
-  > => api.get<GetTransactionDto[]>('/transactions');
+> => api.get<GetTransactionDto[]>('/transactions');
 
 export const deleteTransactionMutation = (investmentID: number) =>
   api.delete(`/transactions/${investmentID}`);

@@ -7,10 +7,10 @@ import { formatCurrency } from '../../../utils/format';
 import { GetTransactionDto } from '@shared/transaction';
 
 const TransactionTable = ({
-                            transactions,
-                            handleDelete,
-                            handleEdit,
-                          }: {
+  transactions,
+  handleDelete,
+  handleEdit,
+}: {
   transactions: GetTransactionDto[];
   handleDelete: (investmentID: number) => void;
   handleEdit: (investment: GetInvestmentDto) => void;
@@ -32,7 +32,8 @@ const TransactionTable = ({
     {
       Header: 'DATE',
       accessor: 'date',
-      Cell: ({ value }: { value: string }) => new Date(value).toLocaleDateString(),
+      Cell: ({ value }: { value: string }) =>
+        new Date(value).toLocaleDateString(),
     },
     {
       Header: 'FEES',
@@ -63,9 +64,7 @@ const TransactionTable = ({
     },
   ];
 
-  return (
-    <Table data={transactions} columns={columns} />
-  );
+  return <Table data={transactions} columns={columns} />;
 };
 
 export default TransactionTable;

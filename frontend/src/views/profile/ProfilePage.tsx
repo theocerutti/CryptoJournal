@@ -7,26 +7,24 @@ import UserForm from './UserForm';
 import Card from '../../components/card/Card';
 
 const ProfilePage = () => {
-  const { isSuccess, isError, isLoading, data } = useQuery([GET_USER], getUserQuery, { ...defaultQueryConfig });
+  const { isSuccess, isError, isLoading, data } = useQuery(
+    [GET_USER],
+    getUserQuery,
+    { ...defaultQueryConfig }
+  );
 
   const body = () => {
     if (isSuccess)
       return (
         <Card>
-            <UserForm user={data.data} />
+          <UserForm user={data.data} />
         </Card>
       );
-    if (isError)
-      return <div>Error</div>;
-    if (isLoading)
-      return <div>Loading...</div>;
+    if (isError) return <div>Error</div>;
+    if (isLoading) return <div>Loading...</div>;
   };
 
-  return (
-    <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
-      {body()}
-    </Box>
-  );
+  return <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>{body()}</Box>;
 };
 
 export default ProfilePage;

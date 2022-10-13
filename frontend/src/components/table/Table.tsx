@@ -1,23 +1,32 @@
-import { Flex, Table as ChakraTable, Tbody, Td, Th, Thead, Tr, useColorModeValue } from '@chakra-ui/react';
+import {
+  Flex,
+  Table as ChakraTable,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import React from 'react';
-import { useFilters, useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table';
+import {
+  useFilters,
+  useGlobalFilter,
+  usePagination,
+  useSortBy,
+  useTable,
+} from 'react-table';
 import Card from 'components/card/Card';
 import { multiSelectFilterType } from 'components/table/MultiCheckBoxColumnFilter';
 import TablePaginationFooter from 'components/table/TablePaginationFooter';
 
-const Table = ({
-                 columns,
-                 data,
-               }: {
-  columns: any;
-  data: any;
-}) => {
+const Table = ({ columns, data }: { columns: any; data: any }) => {
   const filterTypes = React.useMemo(
     () => ({
       multiSelect: multiSelectFilterType,
     }),
-    [],
+    []
   );
 
   const {
@@ -47,7 +56,7 @@ const Table = ({
     useFilters,
     useGlobalFilter,
     useSortBy,
-    usePagination,
+    usePagination
   );
 
   const textColor = useColorModeValue('secondaryGrey.900', 'white');
@@ -74,7 +83,12 @@ const Table = ({
       px='0px'
       overflowX={{ sm: 'scroll', lg: 'hidden' }}
     >
-      <ChakraTable {...getTableProps()} variant='simple' color='grey.500' mb='24px'>
+      <ChakraTable
+        {...getTableProps()}
+        variant='simple'
+        color='grey.500'
+        mb='24px'
+      >
         <Thead>
           {headerGroups.map((headerGroup, index) => (
             <Tr {...headerGroup.getHeaderGroupProps()} key={index}>

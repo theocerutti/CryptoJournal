@@ -9,4 +9,4 @@ export const formatCurrency = (value: number): string => {
     return formatter.format(0);
   }
   return formatter.format(value);
-}
+};

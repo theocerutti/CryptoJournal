@@ -1,4 +1,16 @@
-import { Button, Flex, HStack, Icon, Link, Stat, StatHelpText, StatLabel, Text, Tooltip, useColorModeValue } from '@chakra-ui/react';
+import {
+  Button,
+  Flex,
+  HStack,
+  Icon,
+  Link,
+  Stat,
+  StatHelpText,
+  StatLabel,
+  Text,
+  Tooltip,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import Table from 'components/table/Table';
 import React from 'react';
 import { GetInvestmentDto } from '@shared/investment';
@@ -14,18 +26,21 @@ export enum OrderInvestmentStatus {
 }
 
 const InvestmentTable = ({
-                           investments,
-                           handleDelete,
-                           handleEdit,
-                         }: {
+  investments,
+  handleDelete,
+  handleEdit,
+}: {
   investments: GetInvestmentDto[];
   handleDelete: (investmentID: number) => void;
   handleEdit: (investment: GetInvestmentDto) => void;
 }) => {
-  const orderInvestmentStatusOpenColor = useColorModeValue('green.500', 'green.500');
+  const orderInvestmentStatusOpenColor = useColorModeValue(
+    'green.500',
+    'green.500'
+  );
   const orderInvestmentStatusClosedColor = useColorModeValue(
     'orange.500',
-    'orange.500',
+    'orange.500'
   );
   const textColorSecondary = 'secondaryGrey.600';
 
@@ -164,9 +179,7 @@ const InvestmentTable = ({
     },
   ];
 
-  return (
-    <Table data={investments} columns={columns} />
-  );
+  return <Table data={investments} columns={columns} />;
 };
 
 export default InvestmentTable;

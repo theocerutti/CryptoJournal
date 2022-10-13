@@ -4,7 +4,7 @@ import {
   MdHome,
   MdOutlinePlaylistAdd,
   MdPerson,
-  MdOutlineRepeat
+  MdOutlineRepeat,
 } from 'react-icons/md';
 import MainDashboard from 'views/dashboard';
 import AddInvestmentPage from './views/add-investment/AddInvestmentPage';
@@ -46,12 +46,7 @@ const routes = [
     layout: '/dashboard',
     path: '/add-transaction',
     icon: (
-      <Icon
-        as={MdOutlineRepeat}
-        width='20px'
-        height='20px'
-        color='inherit'
-      />
+      <Icon as={MdOutlineRepeat} width='20px' height='20px' color='inherit' />
     ),
     component: AddTransactionPage,
   },

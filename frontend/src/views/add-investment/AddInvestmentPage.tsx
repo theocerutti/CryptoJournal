@@ -11,7 +11,10 @@ const AddInvestmentPage = () => {
   const history = useHistory();
   const location = useLocation();
   // @ts-ignore
-  const editInvestment = !!location.state?.investment ? (location.state.investment as GetInvestmentDto) : null;
+  const editInvestment = !!location.state?.investment
+    ? // @ts-ignore
+      (location.state.investment as GetInvestmentDto)
+    : null;
 
   return (
     <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
