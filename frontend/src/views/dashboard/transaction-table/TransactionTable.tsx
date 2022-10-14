@@ -44,7 +44,7 @@ const TransactionTable = ({
     {
       id: 'actions',
       Cell: ({ row }: { row: { original: GetInvestmentDto } }) => (
-        <HStack>
+        <HStack justify={'end'}>
           <Button
             onClick={() => handleEdit(row.original)}
             colorScheme='yellow'

@@ -1,4 +1,4 @@
-import React, { HTMLInputTypeAttribute } from 'react';
+import React from 'react';
 import { GetUserDto, UpdateUserDto } from '@shared/user';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
