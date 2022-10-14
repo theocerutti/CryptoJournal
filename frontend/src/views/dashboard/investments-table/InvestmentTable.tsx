@@ -57,7 +57,7 @@ const InvestmentTable = ({
 
   const columns = [
     {
-      Header: 'STATUS',
+      Header: 'ORDER STATUS',
       accessor: 'orderStatus',
       Cell: ({ value }: { value: OrderInvestmentStatus }) => (
         <Tooltip label={value} placement='top'>
