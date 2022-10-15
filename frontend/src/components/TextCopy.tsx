@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link, Tooltip } from '@chakra-ui/react';
 import { copyToClipboard } from '../utils/clipboard';
 import { PlacementWithLogical } from '@chakra-ui/popper';

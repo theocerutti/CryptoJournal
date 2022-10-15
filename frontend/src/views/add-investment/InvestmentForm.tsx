@@ -1,6 +1,6 @@
-import React, { HTMLInputTypeAttribute, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useFormik } from 'formik';
-import { Button, Flex, HStack, useToast, VStack } from '@chakra-ui/react';
+import { Button, HStack, useToast, VStack } from '@chakra-ui/react';
 import * as Yup from 'yup';
 import {
   createInvestmentMutation,

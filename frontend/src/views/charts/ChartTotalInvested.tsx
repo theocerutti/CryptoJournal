@@ -1,5 +1,5 @@
 import { Alert, Spinner } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQueries } from '@tanstack/react-query';
 import {
   getInvestmentsGlobalInfoQuery,
@@ -14,7 +14,7 @@ import LineChart from '../../components/charts/LineChart';
 export default function ChartTotalInvested() {
   const [lineChartData, setData] = useState<{ name: string; data: any[] }[]>([
     {
-      name: 'Profit',
+      name: 'Total Invested',
       data: [],
     },
   ]);
@@ -40,18 +40,6 @@ export default function ChartTotalInvested() {
   const isError = queries.find((query) => query.isError);
   const dataInvestments = queries[0].data;
   const dataGlobalInfo = queries[1].data;
-
-  const resetTooltip = useCallback(
-    (setTooltipValue: any) => {
-      if (dataGlobalInfo && dataGlobalInfo.data) {
-        setTooltipValue({
-          x: dataGlobalInfo.data.totalInvested,
-          y: new Date(),
-        });
-      }
-    },
-    [dataGlobalInfo]
-  );
 
   useEffect(() => {
     if (isSuccess) {
@@ -79,8 +67,8 @@ export default function ChartTotalInvested() {
 
   return (
     <LineChart
-      chartId='line-datetime'
-      resetTooltip={resetTooltip}
+      chartId='line-chart-total-invested'
+      resetTooltipValue={dataGlobalInfo.data.totalInvested}
       canZoom={true}
       data={lineChartData}
       tooltipTitle='Total Invested'

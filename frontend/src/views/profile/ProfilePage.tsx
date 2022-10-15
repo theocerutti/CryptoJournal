@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { GET_USER, getUserQuery } from '../../queries/user';

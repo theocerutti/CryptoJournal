@@ -6,3 +6,7 @@ export const getSign = (value: number) => {
   }
   return '';
 };
+
+export const valueToPercent = (value: number, total: number) => {
+  return Math.round((value / total) * 100);
+};

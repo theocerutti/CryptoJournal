@@ -20,6 +20,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { formatCurrency } from '../../utils/format';
 import { zoomApexChart } from '../../utils/chart';
+import { ChartProps } from './index';
+import { ApexOptions } from 'apexcharts';
 
 export type ChartTimeline =
   | 'ONE_MONTH'
@@ -46,18 +48,15 @@ const chartTimelineToString = (timeline: ChartTimeline): string => {
 };
 
 type LineChartProps = {
-  chartId: string;
-  resetTooltip?: any;
-  canZoom?: boolean;
-  data: { name: string; data: any[] }[];
   tooltipTitle: string;
-  height?: number;
-  options?: any;
-};
+  data: { name: string; data: any[] }[];
+  resetTooltipValue?: number;
+  canZoom?: boolean;
+} & ChartProps;
 
 const LineChart = ({
   chartId,
-  resetTooltip = null,
+  resetTooltipValue = null,
   canZoom = true,
   data,
   tooltipTitle,
@@ -107,11 +106,20 @@ const LineChart = ({
         }
       }
     },
-    [data]
+    [data, chartId]
   );
 
+  const resetTooltip = useCallback(() => {
+    if (resetTooltipValue) {
+      setTooltipValue({
+        x: resetTooltipValue,
+        y: new Date(),
+      });
+    }
+  }, [resetTooltipValue]);
+
   useEffect(() => {
-    resetTooltip(setTooltipValue);
+    resetTooltip();
   }, [resetTooltip]);
 
   useEffect(() => {
@@ -120,7 +128,7 @@ const LineChart = ({
     }
   }, [data, updateTimeline]);
 
-  const chartOptions = {
+  const chartOptions: ApexOptions = {
     chart: {
       id: chartId,
       type: 'area',
@@ -130,9 +138,7 @@ const LineChart = ({
       },
       events: {
         mouseLeave: () => {
-          if (resetTooltip) {
-            resetTooltip(setTooltipValue);
-          }
+          resetTooltip();
         },
         mouseMove: (event: any, chartContext: any, config: any) => {
           const seriesIndex = config.seriesIndex;
@@ -145,9 +151,7 @@ const LineChart = ({
               w.globals.initialSeries[seriesIndex].data[dataPointIndex];
             setTooltipValue({ x: data[1], y: new Date(data[0]) });
           } else {
-            if (resetTooltip) {
-              resetTooltip(setTooltipValue);
-            }
+            resetTooltip();
           }
         },
       },
@@ -157,7 +161,6 @@ const LineChart = ({
     },
     markers: {
       size: 0,
-      style: 'hollow',
     },
     yaxis: {
       tickAmount: 5,
@@ -254,9 +257,8 @@ const LineChart = ({
           </Stat>
         </Flex>
         <Box minW='92%' minH={`${height}px`} mt='auto'>
-          <div id='chart-timeline' style={{ zIndex: 0 }}>
+          <div id={chartId} style={{ zIndex: 0 }}>
             <ReactApexChart
-              // @ts-ignore
               options={chartOptions}
               series={data}
               type='area'

@@ -11,12 +11,15 @@
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
+    "@nivo/bar": "^0.80.0",
+    "@nivo/core": "^0.80.0",
     "@reduxjs/toolkit": "^1.8.5",
     "@tanstack/react-query": "^4.6.0",
     "@testing-library/dom": "^8.18.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "animate.css": "^4.1.1",
     "apexcharts": "^3.35.5",
     "axios": "^0.27.2",
     "dayjs": "^1.11.5",
@@ -38,8 +41,7 @@
     "stylis-plugin-rtl": "2.0.2",
     "typescript": "^4.8.4",
     "web-vitals": "^1.1.2",
-    "yup": "^0.32.11",
-    "animate.css": "^4.1.1"
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",

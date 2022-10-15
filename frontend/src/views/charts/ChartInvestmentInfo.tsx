@@ -9,10 +9,10 @@ import { Alert, Spinner } from '@chakra-ui/react';
 import PieChart from '../../components/charts/PieChart';
 import { GetInvestmentDto } from '@shared/investment';
 
-const ChartInvestedByAsset = () => {
+const ChartInvestmentInfo = () => {
   const [chartData, setData] = useState<{ [label: string]: number }>({});
   const [loadingCalculation, setLoadingCalculation] = useState(true);
-  const { data, isError, isLoading, isSuccess } = useQuery(
+  const { data, isError, isSuccess } = useQuery(
     [INVESTMENT_QUERY_KEY],
     getInvestmentsQuery,
     {
@@ -26,10 +26,11 @@ const ChartInvestedByAsset = () => {
       const updatedChartData = {} as { [key: string]: number };
       for (let i = 0; i < data.data.length; i++) {
         const investment = data.data[i] as GetInvestmentDto;
-        if (updatedChartData[investment.name]) {
-          updatedChartData[investment.name] += investment.investedAmount;
+        const name = `${investment.name} ${investment.orderStatus} ${investment.type}`;
+        if (updatedChartData[name]) {
+          updatedChartData[name] += 1;
         } else {
-          updatedChartData[investment.name] = investment.investedAmount;
+          updatedChartData[name] = 1;
         }
       }
       setData(updatedChartData);
@@ -42,11 +43,11 @@ const ChartInvestedByAsset = () => {
 
   return (
     <PieChart
-      title='Total invested by asset'
-      chartId='pie-chart-invested-by-asset'
+      title='Investment status by asset'
+      chartId='pie-chart-investment-info'
       data={chartData}
     />
   );
 };
 
-export default ChartInvestedByAsset;
+export default ChartInvestmentInfo;
