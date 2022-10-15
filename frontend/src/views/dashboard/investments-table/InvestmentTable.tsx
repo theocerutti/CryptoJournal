@@ -80,7 +80,7 @@ const InvestmentTable = ({
       Cell: ({ value, row }: { value: string; row: any }) => (
         <Flex alignItems='center' flexDirection='row'>
           {row.original.type === InvestmentType.GIFT && (
-            <Tooltip label='Investment is a gift, meaning you earned this asset from airdrop, sponsorship...'>
+            <Tooltip label='This investment is a gift, meaning you have earned this asset from airdrop, sponsorship...'>
               <div>
                 <Icon mr='5px' as={FaGift} />
               </div>
