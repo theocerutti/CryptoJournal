@@ -244,7 +244,7 @@ const LineChart = ({
         )}
       </Flex>
       <Flex w='100%' flexDirection='row'>
-        <Flex w='8%' justify='center' align='center'>
+        <Flex w='20%' justify='center' align='center'>
           <Stat
             style={{
               display: 'flex',
@@ -256,7 +256,7 @@ const LineChart = ({
             <StatHelpText>{tooltipValue.y.toLocaleDateString()}</StatHelpText>
           </Stat>
         </Flex>
-        <Box minW='92%' minH={`${height}px`} mt='auto'>
+        <Box minW='80%' minH={`${height}px`} mt='auto'>
           <div id={chartId} style={{ zIndex: 0 }}>
             <ReactApexChart
               options={chartOptions}

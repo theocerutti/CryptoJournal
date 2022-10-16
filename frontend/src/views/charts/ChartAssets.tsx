@@ -12,7 +12,7 @@ import { GetInvestmentDto } from '@shared/investment';
 const ChartAssets = () => {
   const [chartData, setData] = useState<{ [label: string]: number }>({});
   const [loadingCalculation, setLoadingCalculation] = useState(true);
-  const { data, isError, isLoading, isSuccess } = useQuery(
+  const { data, isError, isSuccess } = useQuery(
     [INVESTMENT_QUERY_KEY],
     getInvestmentsQuery,
     {
@@ -35,7 +35,7 @@ const ChartAssets = () => {
       setData(updatedChartData);
       setLoadingCalculation(false);
     }
-  }, [isSuccess, data, chartData]);
+  }, [isSuccess]);
 
   if (isError) return <Alert status='error'>Can't fetch investments</Alert>;
   if (loadingCalculation) return <Spinner />;

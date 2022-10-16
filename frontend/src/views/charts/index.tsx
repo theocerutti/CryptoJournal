@@ -3,10 +3,8 @@ import { Alert, Box, SimpleGrid, Spinner } from '@chakra-ui/react';
 import ChartTotalInvested from './ChartTotalInvested';
 import ChartFees from './ChartFees';
 import ChartAssets from './ChartAssets';
-import ChartBalance from './ChartBalance';
-import ChartBalanceByAsset from './ChartBalanceByAsset';
 import ChartInvestedByAsset from './ChartInvestedByAsset';
-import ChartInvestmentInfo from './ChartInvestmentInfo';
+import ChartInvestmentStatus from './ChartInvestmentStatus';
 import NumberChart from '../../components/charts/NumberChart';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -14,17 +12,8 @@ import {
   INVESTMENT_GLOBAL_INFO_QUERY_KEY,
 } from '../../queries/investments';
 import { defaultQueryConfig } from '../../queries/config';
-import ChartAverageBuyPriceByAsset from './ChartAverageBuyPriceByAsset';
+import TableInvestmentInfoByAsset from './TableInvestmentInfoByAsset';
 import { formatCurrency } from '../../utils/format';
-
-/*
- ChartBalance LineChart: balance over time
-
- ChartInvestmentInfo -> donut de OPEN/CLOSED ORDER, gift...
- ChartAssets: donut chart of assets (percentage)
- ChartBalanceByAsset: donut chart balance by asset
- ChartInvestedByAsset: donut chart invested by asset
- */
 
 const Charts = () => {
   const { data, isError, isLoading, isSuccess } = useQuery(
@@ -59,17 +48,11 @@ const Charts = () => {
       </SimpleGrid>
       <SimpleGrid gap='20px' mb='20px' columns={3}>
         <ChartAssets />
-        <ChartInvestmentInfo />
+        <ChartInvestmentStatus />
         <ChartInvestedByAsset />
       </SimpleGrid>
       <SimpleGrid gap='20px' mb='20px'>
-        <ChartAverageBuyPriceByAsset />
-      </SimpleGrid>
-      <SimpleGrid gap='20px' mb='20px'>
-        <ChartBalance />
-      </SimpleGrid>
-      <SimpleGrid gap='20px' mb='20px'>
-        <ChartBalanceByAsset />
+        <TableInvestmentInfoByAsset />
       </SimpleGrid>
     </Box>
   );

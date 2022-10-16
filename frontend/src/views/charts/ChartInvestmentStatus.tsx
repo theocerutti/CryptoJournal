@@ -9,7 +9,7 @@ import { Alert, Spinner } from '@chakra-ui/react';
 import PieChart from '../../components/charts/PieChart';
 import { GetInvestmentDto } from '@shared/investment';
 
-const ChartInvestmentInfo = () => {
+const ChartInvestmentStatus = () => {
   const [chartData, setData] = useState<{ [label: string]: number }>({});
   const [loadingCalculation, setLoadingCalculation] = useState(true);
   const { data, isError, isSuccess } = useQuery(
@@ -36,7 +36,7 @@ const ChartInvestmentInfo = () => {
       setData(updatedChartData);
       setLoadingCalculation(false);
     }
-  }, [isSuccess, data, chartData]);
+  }, [isSuccess]);
 
   if (isError) return <Alert status='error'>Can't fetch investments</Alert>;
   if (loadingCalculation) return <Spinner />;
@@ -50,4 +50,4 @@ const ChartInvestmentInfo = () => {
   );
 };
 
-export default ChartInvestmentInfo;
+export default ChartInvestmentStatus;
