@@ -1,22 +1,8 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import {
-  getInvestmentsGlobalInfoQuery,
-  INVESTMENT_GLOBAL_INFO_QUERY_KEY,
-} from '../../queries/investments';
+import { getInvestmentsGlobalInfoQuery, INVESTMENT_GLOBAL_INFO_QUERY_KEY } from '../../queries/investments';
 import { defaultQueryConfig } from '../../queries/config';
-import {
-  Alert,
-  Flex,
-  Heading,
-  Spinner,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Thead,
-  Tr,
-} from '@chakra-ui/react';
+import { Alert, Flex, Heading, Spinner, Table, TableContainer, Tbody, Td, Thead, Tr } from '@chakra-ui/react';
 import Card from '../../components/card/Card';
 
 const TableInvestmentInfoByAsset = () => {
@@ -25,7 +11,7 @@ const TableInvestmentInfoByAsset = () => {
     getInvestmentsGlobalInfoQuery,
     {
       ...defaultQueryConfig,
-    }
+    },
   );
 
   if (isError) return <Alert status='error'>Can't fetch investments</Alert>;
@@ -33,10 +19,15 @@ const TableInvestmentInfoByAsset = () => {
 
   const infoByName = data.data.infoByName;
 
+  const tableColumnNames = !infoByName || Object.keys(infoByName).length === 0 ?
+    [] : Object.keys(infoByName[Object.keys(infoByName)[0]]);
+  const tableRows = !infoByName || Object.keys(infoByName).length === 0 ?
+    [] : Object.keys(infoByName);
+
   return (
     <Card>
       <Flex flexDirection='column'>
-        <Heading as='h1' size='lg'>
+        <Heading as='h1' size='md' paddingBottom='24px'>
           Investment Info By Asset
         </Heading>
         <TableContainer>
@@ -44,20 +35,20 @@ const TableInvestmentInfoByAsset = () => {
             <Thead>
               <Tr>
                 <Td>NAME</Td>
-                {Object.keys(infoByName['BTC']).map((name) => (
+                {tableColumnNames.map((name) => (
                   <Td>{name.toUpperCase()}</Td>
                 ))}
               </Tr>
             </Thead>
             <Tbody>
-              {Object.keys(infoByName).map((name) => (
+              {tableRows.length > 0 ? tableRows.map((name) => (
                 <Tr>
                   <Td>{name}</Td>
                   {Object.values(infoByName[name]).map((value) => (
                     <Td>{value}</Td>
                   ))}
                 </Tr>
-              ))}
+              )) : <Tr><Td>No Data</Td></Tr>}
             </Tbody>
           </Table>
         </TableContainer>

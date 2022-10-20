@@ -10,7 +10,7 @@ const NumberChart = ({ children }: ChartNumberProps) => {
   return (
     <Card>
       <Flex justify='center'>
-        <Heading as='h1' size='lg'>
+        <Heading as='h1' size='md'>
           {children}
         </Heading>
       </Flex>
