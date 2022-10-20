@@ -64,3 +64,5 @@ faire en sorte que les rows soient clickable (amene sur la page d'edition)
 refaire les charts comme sur coinbase
 react apex chart to nivo?
 chart donut status to sunburst
+
+mettre une petite alert pour dire qu'il y a un pb avec le totalInvested et ce qu'on a acheté

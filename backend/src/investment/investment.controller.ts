@@ -29,7 +29,7 @@ export class InvestmentController {
 
   constructor(private investmentService: InvestmentService) {}
 
-  private static mapInvestmentToGetDto(
+  public static mapInvestmentToGetDto(
     investment: Investment
   ): GetInvestmentDto {
     const dto = new GetInvestmentDto();

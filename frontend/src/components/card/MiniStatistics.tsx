@@ -1,16 +1,10 @@
-import {
-  Flex,
-  Stat,
-  StatLabel,
-  StatNumber,
-  Text,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Flex, Stat, StatLabel, StatNumber, Text, useColorModeValue } from '@chakra-ui/react';
 import Card from 'components/card/Card';
 import { getSign } from '../../utils/math';
 import { formatCurrency } from '../../utils/format';
+import { getGrowthColor } from '../../utils/colors';
 
-export default function Default(props: {
+export default function MiniStatistics(props: {
   startContent?: JSX.Element;
   endContent?: JSX.Element;
   name: string;
@@ -22,11 +16,6 @@ export default function Default(props: {
     props;
   const textColor = useColorModeValue('secondaryGrey.900', 'white');
   const textColorSecondary = 'secondaryGrey.600';
-
-  const getGrowthColor = () => {
-    if (growth === 0) return textColorSecondary;
-    return growth > 0 ? 'green.500' : 'red.500';
-  };
 
   return (
     <Card py='15px'>
@@ -59,7 +48,7 @@ export default function Default(props: {
           {growth ? (
             <Flex align='center'>
               <Text
-                color={getGrowthColor()}
+                color={getGrowthColor(growth)}
                 fontSize='xs'
                 fontWeight='700'
                 me='5px'

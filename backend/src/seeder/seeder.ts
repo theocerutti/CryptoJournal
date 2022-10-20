@@ -115,7 +115,10 @@ export class Seeder {
           investment.secondaryTag = 'Crypto';
           investment.priceLink = value.priceLink;
 
-          if (i % 8 === 0) investment.type = InvestmentType.GIFT;
+          if (i % 8 === 0) {
+            investment.type = InvestmentType.GIFT;
+            investment.investedAmount = 0;
+          }
 
           // add sell investments
           if (i % 2 === 0) {

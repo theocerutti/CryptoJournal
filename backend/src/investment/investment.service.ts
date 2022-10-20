@@ -12,6 +12,7 @@ import { UserService } from '../user/user.service';
 import { ScrapeDataContainer } from '../schedulers/ScrapeDataContainer';
 import { TransactionRepository } from '../transaction/transaction.repository';
 import { InvestmentInfoByNames } from '../shared/investment/investment-global-info.dto';
+import { InvestmentController } from './investment.controller';
 
 @Injectable()
 export class InvestmentService {
@@ -39,7 +40,10 @@ export class InvestmentService {
   async getGlobalInfo(user: User): Promise<InvestmentGlobalInfoDto> {
     const globalInfo = new InvestmentGlobalInfoDto();
     const scrapeData = ScrapeDataContainer.getInstance().getData();
-    const investments = await this.getAll(user.id);
+    const _investments = await this.getAll(user.id);
+    const investments = _investments.map((i) =>
+      InvestmentController.mapInvestmentToGetDto(i)
+    );
     globalInfo.investmentCount = investments.length;
     globalInfo.hasScrapedPrices =
       ScrapeDataContainer.getInstance().hasScrapedPrices();
@@ -49,32 +53,50 @@ export class InvestmentService {
         if (!acc[investment.name])
           acc[investment.name] = {
             count: 1,
-            totalInvested: 1,
-            totalFees: 1,
-            totalBalance: 1,
-            pnl: 1,
-            pnlPercent: 1,
-            averageBuyPrice: 18013,
-            minBuyPrice: 17034,
-            maxBuyPrice: 47344,
-            minSellPrice: 1,
-            maxSellPrice: 1,
+            totalInvested: investment.investedAmount,
+            totalFees: investment.fees,
+            totalBalance: investment.total,
+            pnl: 0,
+            pnlPercent: 0,
+            averageBuyPrice: 0,
+            minBuyPrice: investment.buyPrice,
+            maxBuyPrice: investment.buyPrice,
+            minSellPrice: investment.sellPrice,
+            maxSellPrice: investment.sellPrice,
           };
         acc[investment.name].count += 1;
-        acc[investment.name].totalInvested += 1;
-        acc[investment.name].totalFees += 1;
-        acc[investment.name].totalBalance += 1;
-        acc[investment.name].pnl += 1;
-        acc[investment.name].pnlPercent += 1;
-        acc[investment.name].averageBuyPrice += 1;
-        acc[investment.name].minBuyPrice += 1;
-        acc[investment.name].maxBuyPrice += 1;
-        acc[investment.name].minSellPrice += 1;
-        acc[investment.name].maxSellPrice += 1;
+        acc[investment.name].totalInvested += investment.investedAmount;
+        acc[investment.name].totalFees += investment.fees;
+        acc[investment.name].totalBalance += investment.total;
+        acc[investment.name].minBuyPrice =
+          investment.buyPrice < acc[investment.name].maxBuyPrice
+            ? investment.buyPrice
+            : acc[investment.name].maxBuyPrice;
+        acc[investment.name].maxBuyPrice =
+          investment.buyPrice > acc[investment.name].maxBuyPrice
+            ? investment.buyPrice
+            : acc[investment.name].maxBuyPrice;
+        acc[investment.name].minSellPrice =
+          investment.sellPrice < acc[investment.name].maxSellPrice
+            ? investment.sellPrice
+            : acc[investment.name].maxSellPrice;
+        acc[investment.name].maxSellPrice =
+          investment.sellPrice > acc[investment.name].maxSellPrice
+            ? investment.sellPrice
+            : acc[investment.name].maxSellPrice;
         return acc;
       },
       {}
     );
+    // then calculate average, pnl..
+    for (let i = 0; i < Object.keys(globalInfo.infoByName).length; i++) {
+      const key = Object.keys(globalInfo.infoByName)[i];
+      const info = globalInfo.infoByName[key];
+      info.averageBuyPrice = info.totalInvested / info.count;
+      info.pnl = info.totalBalance - info.totalInvested;
+      info.pnlPercent = (info.pnl / info.totalInvested) * 100;
+    }
+
     globalInfo.investmentNameCount = Object.keys(globalInfo.infoByName).length;
     globalInfo.totalInvested = await this.TransactionRepo.getTotalInvested(
       user
@@ -84,12 +106,8 @@ export class InvestmentService {
     globalInfo.totalBalance = 0;
 
     if (Object.keys(scrapeData).length > 0) {
-      for (const investment of investments) {
-        const price = scrapeData[investment.priceLink];
-        if (price) {
-          globalInfo.totalBalance += price * investment.holdings;
-        }
-      }
+      for (const investment of investments)
+        globalInfo.totalBalance += investment.total;
       globalInfo.pnl = globalInfo.totalBalance - globalInfo.totalInvested;
       globalInfo.pnlPercent = (globalInfo.pnl / globalInfo.totalInvested) * 100;
     }
