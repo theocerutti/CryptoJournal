@@ -41,6 +41,8 @@ export class InvestmentService {
     const scrapeData = ScrapeDataContainer.getInstance().getData();
     const investments = await this.getAll(user.id);
     globalInfo.investmentCount = investments.length;
+    globalInfo.hasScrapedPrices =
+      ScrapeDataContainer.getInstance().hasScrapedPrices();
     // TODO
     globalInfo.infoByName = investments.reduce(
       (acc: InvestmentInfoByNames, investment) => {

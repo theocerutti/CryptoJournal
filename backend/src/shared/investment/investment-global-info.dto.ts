@@ -1,4 +1,4 @@
-import { IsNumber, IsObject } from 'class-validator';
+import { IsBoolean, IsNumber, IsObject } from 'class-validator';
 
 export type InvestmentInfoByName = {
   count: number;
@@ -42,4 +42,7 @@ export class InvestmentGlobalInfoDto {
 
   @IsObject()
   infoByName: InvestmentInfoByNames;
+
+  @IsBoolean()
+  hasScrapedPrices: boolean;
 }

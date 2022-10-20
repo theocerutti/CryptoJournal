@@ -2,6 +2,7 @@ import { ScrapeData } from '../shared/investment/scrape';
 
 export class ScrapeDataContainer {
   private data: ScrapeData = {};
+  private _hasScrapedPrices: boolean = false;
   private static instance: ScrapeDataContainer;
 
   public static getInstance(): ScrapeDataContainer {
@@ -12,7 +13,8 @@ export class ScrapeDataContainer {
     return ScrapeDataContainer.instance;
   }
 
-  public setData(data: ScrapeData) {
+  public setData(data: ScrapeData): void {
+    this._hasScrapedPrices = data && Object.keys(data).length > 0;
     this.data = data;
   }
 
@@ -20,7 +22,11 @@ export class ScrapeDataContainer {
     return this.data[link] ? this.data[link] : null;
   }
 
-  public getData() {
+  public getData(): ScrapeData {
     return this.data;
+  }
+
+  public hasScrapedPrices(): boolean {
+    return this._hasScrapedPrices;
   }
 }
