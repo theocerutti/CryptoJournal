@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import './assets/css/App.css';
 import { BrowserRouter } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
@@ -11,7 +11,8 @@ import 'utils/yup.ts';
 
 const queryClient = new QueryClient();
 
-ReactDOM.render(
+const container = document.getElementById('root');
+createRoot(container).render(
   <QueryClientProvider client={queryClient}>
     <ChakraProvider theme={theme}>
       <React.StrictMode>
@@ -21,6 +22,5 @@ ReactDOM.render(
         </BrowserRouter>
       </React.StrictMode>
     </ChakraProvider>
-  </QueryClientProvider>,
-  document.getElementById('root')
+  </QueryClientProvider>
 );
