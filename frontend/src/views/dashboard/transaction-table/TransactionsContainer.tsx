@@ -1,10 +1,6 @@
 import React from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  deleteTransactionMutation,
-  getTransactionsQuery,
-  TRANSACTION_QUERY_KEY,
-} from '../../../queries/transactions';
+import { deleteTransactionMutation, getTransactionsQuery, TRANSACTION_QUERY_KEY } from '../../../queries/transactions';
 import { Alert, Flex, Spinner } from '@chakra-ui/react';
 import NoTransactions from './NoTransactions';
 import { defaultQueryConfig } from 'queries/config';
@@ -12,17 +8,14 @@ import TransactionTable from './TransactionTable';
 import { useHistory } from 'react-router-dom';
 import { INVESTMENT_QUERY_KEY } from '../../../queries/investments';
 import { GetTransactionDto } from '@shared/transaction';
+import CenteredSpinner from '../../../components/CenteredSpinner';
 
 const TransactionsContainer = () => {
   const history = useHistory();
   const queryClient = useQueryClient();
-  const { data, isError, isLoading, isSuccess } = useQuery(
-    [TRANSACTION_QUERY_KEY],
-    getTransactionsQuery,
-    {
-      ...defaultQueryConfig,
-    }
-  );
+  const { data, isError, isLoading, isSuccess } = useQuery([TRANSACTION_QUERY_KEY], getTransactionsQuery, {
+    ...defaultQueryConfig,
+  });
 
   const mutation = useMutation(deleteTransactionMutation, {
     onSuccess: () => {
@@ -40,23 +33,12 @@ const TransactionsContainer = () => {
 
   if (isError) return <Alert status='error'>Can't fetch transactions</Alert>;
 
-  if (isLoading)
-    return (
-      <Flex justify='center'>
-        <Spinner />
-      </Flex>
-    );
+  if (isLoading) return <CenteredSpinner />;
 
   if (isSuccess) {
     if (data.data.length === 0) return <NoTransactions />;
 
-    return (
-      <TransactionTable
-        transactions={data.data}
-        handleDelete={handleDelete}
-        handleEdit={handleEdit}
-      />
-    );
+    return <TransactionTable transactions={data.data} handleDelete={handleDelete} handleEdit={handleEdit} />;
   }
 };
 

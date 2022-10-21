@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Box, SimpleGrid, Spinner } from '@chakra-ui/react';
+import { Alert, Box, SimpleGrid } from '@chakra-ui/react';
 import ChartTotalInvested from './ChartTotalInvested';
 import ChartFees from './ChartFees';
 import ChartAssets from './ChartAssets';
@@ -12,6 +12,7 @@ import { defaultQueryConfig } from '../../queries/config';
 import TableInvestmentInfoByAsset from './TableInvestmentInfoByAsset';
 import { formatCurrency } from '../../utils/format';
 import { MdAccountBalanceWallet, MdAttachMoney, MdBarChart, MdConfirmationNumber, MdWebAsset } from 'react-icons/md';
+import CenteredSpinner from '../../components/CenteredSpinner';
 
 const Charts = () => {
   const { data, isError, isLoading, isSuccess } = useQuery(
@@ -23,7 +24,7 @@ const Charts = () => {
   );
 
   if (isError) return <Alert status='error'>Can't fetch investments</Alert>;
-  if (isLoading) return <Spinner />;
+  if (isLoading) return <CenteredSpinner />;
 
   return (
     <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>

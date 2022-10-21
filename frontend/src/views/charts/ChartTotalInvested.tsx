@@ -1,4 +1,4 @@
-import { Alert, Spinner } from '@chakra-ui/react';
+import { Alert } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useQueries } from '@tanstack/react-query';
 import {
@@ -10,6 +10,7 @@ import {
 import { defaultQueryConfig } from '../../queries/config';
 import { GetInvestmentDto } from '@shared/investment';
 import LineChart from '../../components/charts/LineChart';
+import CenteredSpinner from '../../components/CenteredSpinner';
 
 export default function ChartTotalInvested() {
   const [lineChartData, setData] = useState<{ name: string; data: any[] }[]>([
@@ -63,7 +64,7 @@ export default function ChartTotalInvested() {
   }, [isSuccess, dataInvestments, lineChartData]);
 
   if (isError) return <Alert status='error'>Can't fetch investments</Alert>;
-  if (loadingCalculation) return <Spinner />;
+  if (loadingCalculation) return <CenteredSpinner />;
 
   return (
     <LineChart
