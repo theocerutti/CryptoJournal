@@ -30,3 +30,6 @@ chart donut status to sunburst
 mettre une petite alert pour dire qu'il y a un pb avec le totalInvested et ce qu'on a acheté
 
 center all spinners
+
+le form des transactions doit ajouter le FROM/TO avec dropdown (comme les names dans les investments)
+passer en REM (+ mettre les mesures en variables comme sur core-ui)
