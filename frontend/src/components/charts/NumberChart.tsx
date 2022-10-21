@@ -1,18 +1,19 @@
-import React, { ReactNode } from 'react';
-import { Flex, Heading } from '@chakra-ui/react';
+import React from 'react';
+import { Flex, Highlight } from '@chakra-ui/react';
 import Card from 'components/card/Card';
 
 type ChartNumberProps = {
-  children: ReactNode;
+  title: string;
+  value: string;
 };
 
-const NumberChart = ({ children }: ChartNumberProps) => {
+const NumberChart = ({ title, value }: ChartNumberProps) => {
   return (
     <Card>
-      <Flex justify='center'>
-        <Heading as='h1' size='md'>
-          {children}
-        </Heading>
+      <Flex justify='center' align='center'>
+        <Highlight query={value} styles={{ paddingLeft: '4px', fontSize: '20px', color: 'grey.400' }}>
+          {`${title}: ${value}`}
+        </Highlight>
       </Flex>
     </Card>
   );

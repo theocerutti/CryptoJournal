@@ -20,7 +20,7 @@ export class ScrapePriceService {
   @Cron(CronExpression.EVERY_10_MINUTES, {
     name: 'scrapePrice',
   })
-  async handleCron() {
+  async scrapePrices() {
     const prices: ScrapeData = {};
     const links = await this.investmentService.getDistinctPriceLinks();
 

@@ -1,27 +1,12 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Icon,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Stat,
-  StatHelpText,
-  StatLabel,
-  StatNumber,
-  Text,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Stat, StatHelpText, StatLabel, StatNumber } from '@chakra-ui/react';
 import Card from 'components/card/Card';
-import { MdOutlineCalendarToday } from 'react-icons/md';
 import React, { useCallback, useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { formatCurrency } from '../../utils/format';
 import { zoomApexChart } from '../../utils/chart';
 import { ChartProps } from './index';
 import { ApexOptions } from 'apexcharts';
+import { globalStyles } from '../../theme/styles';
 
 export type ChartTimeline =
   | 'ONE_MONTH'
@@ -55,17 +40,15 @@ type LineChartProps = {
 } & ChartProps;
 
 const LineChart = ({
-  chartId,
-  resetTooltipValue = null,
-  canZoom = true,
-  data,
-  tooltipTitle,
-  height = 350,
-  options = {},
-}: LineChartProps) => {
-  const textColorSecondary = useColorModeValue('secondaryGrey.600', 'white');
-  const boxBg = useColorModeValue('secondaryGrey.300', 'whiteAlpha.100');
-
+                     chartId,
+                     resetTooltipValue = null,
+                     canZoom = true,
+                     data,
+                     tooltipTitle,
+                     height = 350,
+                     options = {},
+                   }: LineChartProps) => {
+  const { colors } = globalStyles;
   const [currentTimeline, setCurrentTimeline] = useState<ChartTimeline>('YTD');
   const [tooltipValue, setTooltipValue] = useState({ x: 0, y: new Date() });
 
@@ -106,7 +89,7 @@ const LineChart = ({
         }
       }
     },
-    [data, chartId]
+    [data, chartId],
   );
 
   const resetTooltip = useCallback(() => {
@@ -131,8 +114,21 @@ const LineChart = ({
   const chartOptions: ApexOptions = {
     chart: {
       id: chartId,
-      type: 'area',
+      type: 'line',
       height: height,
+      animations: {
+        easing: 'linear',
+      },
+      toolbar: {
+        tools: {
+          download: false,
+          selection: true,
+          zoom: true,
+          zoomin: true,
+          zoomout: true,
+          pan: true,
+        },
+      },
       zoom: {
         autoScaleYaxis: true,
       },
@@ -156,27 +152,35 @@ const LineChart = ({
         },
       },
     },
+    colors: [colors.brand['500']],
     dataLabels: {
       enabled: false,
+    },
+    stroke: {
+      curve: 'smooth',
+      lineCap: 'butt',
+      width: 2,
     },
     markers: {
       size: 0,
     },
+    legend: {
+      show: false,
+    },
     yaxis: {
-      tickAmount: 5,
-      labels: {
-        formatter: function (val: number) {
-          return formatCurrency(val);
-        },
-        style: {
-          colors: '#A3AED0',
-          fontSize: '12px',
-          fontWeight: '500',
-        },
-      },
+      show: false,
     },
     xaxis: {
       type: 'datetime',
+      crosshairs: {
+        show: false
+      },
+      axisBorder: {
+        show: false
+      },
+      axisTicks: {
+        show: false,
+      },
       min:
         data[0].data[0] && data[0].data[0].length !== 0
           ? new Date(data[0].data[0][0]).getTime()
@@ -187,7 +191,7 @@ const LineChart = ({
       },
       labels: {
         style: {
-          colors: '#A3AED0',
+          colors: colors.secondaryGrey['500'],
           fontSize: '12px',
           fontWeight: '500',
         },
@@ -195,6 +199,16 @@ const LineChart = ({
     },
     grid: {
       show: false,
+      xaxis: {
+        lines: {
+          show: false,
+        },
+      },
+      yaxis: {
+        lines: {
+          show: false,
+        },
+      }
     },
     tooltip: {
       custom: () => '',
@@ -203,65 +217,37 @@ const LineChart = ({
   };
 
   return (
-    <Card>
-      <Flex justify='center'>
-        {canZoom && (
-          <Menu>
-            <MenuButton
-              as={Button}
-              bg={boxBg}
-              fontSize='sm'
-              fontWeight='500'
-              color={textColorSecondary}
-              borderRadius='7px'
-            >
-              <Icon
-                as={MdOutlineCalendarToday}
-                color={textColorSecondary}
-                me='4px'
-              />
-              {chartTimelineToString(currentTimeline)}
-            </MenuButton>
-            <MenuList>
-              {(
-                [
-                  'ALL',
-                  'YTD',
-                  'ONE_YEAR',
-                  'SIX_MONTHS',
-                  'ONE_MONTH',
-                ] as ChartTimeline[]
-              ).map((timeline: ChartTimeline) => (
-                <MenuItem
-                  onClick={() => updateTimeline(timeline)}
-                  key={timeline}
-                >
-                  <Text>{chartTimelineToString(timeline)}</Text>
-                </MenuItem>
-              ))}
-            </MenuList>
-          </Menu>
-        )}
+    <Card paddingRight='0' paddingLeft='0'>
+      <Flex justify='space-around'>
+        <Stat flex={0}>
+          <StatLabel>{tooltipTitle}</StatLabel>
+          <StatNumber>{formatCurrency(tooltipValue.x)}</StatNumber>
+          <StatHelpText>{tooltipValue.y.toLocaleDateString()}</StatHelpText>
+        </Stat>
+        {canZoom && <Flex justify='center' align='center'>
+          {(
+            [
+              'ALL',
+              'YTD',
+              'ONE_YEAR',
+              'SIX_MONTHS',
+              'ONE_MONTH',
+            ] as ChartTimeline[]
+          ).map((timeline: ChartTimeline) => (
+            <Button onClick={() => updateTimeline(timeline)} size='sm' color={currentTimeline === timeline ? 'navy.300' : 'grey.400'} variant='ghost' key={timeline}>
+              {chartTimelineToString(timeline)}
+            </Button>
+          ))}
+        </Flex>}
       </Flex>
       <Flex w='100%' flexDirection='row'>
-        <Flex w='20%' justify='center' align='center'>
-          <Stat
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-          >
-            <StatLabel>{tooltipTitle}</StatLabel>
-            <StatNumber>{formatCurrency(tooltipValue.x)}</StatNumber>
-            <StatHelpText>{tooltipValue.y.toLocaleDateString()}</StatHelpText>
-          </Stat>
-        </Flex>
-        <Box minW='80%' minH={`${height}px`} mt='auto'>
-          <div id={chartId} style={{ zIndex: 0 }}>
+        <Box minW='100%' minH={`${height}px`} mt='auto'>
+          <div id={chartId}>
             <ReactApexChart
+              style={{ zIndex: 0 }}
               options={chartOptions}
               series={data}
-              type='area'
+              type='line'
               width='100%'
               height={height}
             />
