@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+body {
+  font-family: 'DM Sans', sans-serif;
+}
+
+option {
+  color: black;
+}
+
+.apexcharts-toolbar {
+  z-index: 0 !important;
+}
+
+.apexcharts-zoom-icon.apexcharts-selected svg {
+  fill: #728fea !important;
+}
+
+.apexcharts-pan-icon.apexcharts-selected svg {
+  stroke: #728fea !important;
+}
+
+.apexcharts-pan-icon > svg {
+  stroke: #A0AEC0 !important;
+}
+
+.apexcharts-menu-icon, .apexcharts-reset-icon, .apexcharts-selection-icon, .apexcharts-toolbar-custom-icon, .apexcharts-zoom-icon, .apexcharts-zoomin-icon, .apexcharts-zoomout-icon {
+  svg {
+    fill: #A0AEC0 !important;
+  }
+}
