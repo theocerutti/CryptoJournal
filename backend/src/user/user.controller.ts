@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Logger,
-  Param,
-  ParseIntPipe,
-  Put,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Put } from '@nestjs/common';
 import { User } from 'model/user.entity';
 import { GetUserDto, UpdateUserDto } from 'shared/user';
 import { UserService } from './user.service';
@@ -40,10 +31,7 @@ export class UserController {
   }
 
   @Put('/me')
-  public async updateMe(
-    @CurrentUser() user: User,
-    @Body() userDTO: UpdateUserDto
-  ): Promise<GetUserDto> {
+  public async updateMe(@CurrentUser() user: User, @Body() userDTO: UpdateUserDto): Promise<GetUserDto> {
     this.logger.log('Update me with userId=', user.id, ', DTO=', userDTO);
     const updatedUser = await this.userService.update(user.id, userDTO);
     return UserController.mapUserToGetDto(updatedUser);
@@ -56,9 +44,7 @@ export class UserController {
   }
 
   @Delete(':userId')
-  public async deleteUser(
-    @Param('userId', ParseIntPipe) userId: number
-  ): Promise<GetUserDto> {
+  public async deleteUser(@Param('userId', ParseIntPipe) userId: number): Promise<GetUserDto> {
     this.logger.log('Delete user with id=', userId);
     const deletedUser = await this.userService.delete(userId);
     return UserController.mapUserToGetDto(deletedUser);

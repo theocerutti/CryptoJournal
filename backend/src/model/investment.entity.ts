@@ -1,14 +1,4 @@
-import {
-  BeforeInsert,
-  BeforeUpdate,
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { User } from './user.entity';
 import { ColumnNumericTransformer } from '../utils/transformer';
 import { OrderInvestmentStatus } from '../shared/investment';
@@ -116,12 +106,10 @@ export class Investment {
     if (this.sellDate && this.sellDate < this.buyDate) {
       throw new Error('Sell date cannot be before buy date');
     }
-    if (this.investedAmount < 0)
-      throw new Error('Invested amount cannot be negative');
+    if (this.investedAmount < 0) throw new Error('Invested amount cannot be negative');
     if (this.fees < 0) throw new Error('Fees cannot be negative');
     if (this.buyPrice < 0) throw new Error('Buy price cannot be negative');
-    if (this.sellPrice && this.sellPrice < 0)
-      throw new Error('Sell price cannot be negative');
+    if (this.sellPrice && this.sellPrice < 0) throw new Error('Sell price cannot be negative');
   }
 
   @BeforeInsert()

@@ -1,10 +1,4 @@
-import {
-  forwardRef,
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { User } from '../model/user.entity';
 import { CreateUserDTO } from 'shared/auth';
@@ -18,19 +12,14 @@ export class AuthService {
     private refreshTokenService: RefreshTokenService
   ) {}
 
-  async login(
-    email: string,
-    password: string
-  ): Promise<{ token: string; user: User }> | undefined {
+  async login(email: string, password: string): Promise<{ token: string; user: User }> | undefined {
     let user: User = await this.userService.getByEmail(email);
 
     if (!user.checkIfUnencryptedPasswordIsValid(password)) {
       throw new HttpException('Bad password', HttpStatus.UNAUTHORIZED);
     }
 
-    const access_token = await this.refreshTokenService.generateAccessToken(
-      user
-    );
+    const access_token = await this.refreshTokenService.generateAccessToken(user);
     user = await this.refreshTokenService.createOrUpdateRefreshToken(user);
     return { token: access_token, user };
   }
@@ -44,10 +33,7 @@ export class AuthService {
     }
 
     if (user) {
-      throw new HttpException(
-        'User already exists with this email!',
-        HttpStatus.BAD_REQUEST
-      );
+      throw new HttpException('User already exists with this email!', HttpStatus.BAD_REQUEST);
     }
 
     user = new User();

@@ -74,8 +74,8 @@ const TableInvestmentInfoByAsset = () => {
                     <Td>{formatCurrency(info.averageBuyPrice)}</Td>
                     <Td>{formatCurrency(info.minBuyPrice)}</Td>
                     <Td>{formatCurrency(info.maxBuyPrice)}</Td>
-                    <Td>{formatCurrency(info.minSellPrice)}</Td>
-                    <Td>{formatCurrency(info.maxSellPrice)}</Td>
+                    <Td>{info.minSellPrice === null ? "-" : formatCurrency(info.minSellPrice)}</Td>
+                    <Td>{info.minSellPrice === null ? "-" : formatCurrency(info.maxSellPrice)}</Td>
                   </Tr>
                 );
               }) : <Tr><Td>No Data</Td></Tr>}

@@ -7,10 +7,7 @@ import { UserModule } from '../user/user.module';
 import { Transaction } from '../model/transaction.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Transaction, TransactionRepository]),
-    forwardRef(() => UserModule),
-  ],
+  imports: [TypeOrmModule.forFeature([Transaction, TransactionRepository]), forwardRef(() => UserModule)],
   controllers: [TransactionController],
   providers: [TransactionService],
   exports: [TransactionService],

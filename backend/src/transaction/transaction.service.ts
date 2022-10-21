@@ -4,10 +4,7 @@ import { TransactionRepository } from './transaction.repository';
 import { Transaction } from '../model/transaction.entity';
 import { User } from '../model/user.entity';
 import { UserService } from '../user/user.service';
-import {
-  CreateTransactionDto,
-  UpdateTransactionDto,
-} from '../shared/transaction';
+import { CreateTransactionDto, UpdateTransactionDto } from '../shared/transaction';
 
 @Injectable()
 export class TransactionService {
@@ -30,20 +27,14 @@ export class TransactionService {
     });
   }
 
-  async create(
-    user: User,
-    transactionDto: CreateTransactionDto
-  ): Promise<Transaction> {
+  async create(user: User, transactionDto: CreateTransactionDto): Promise<Transaction> {
     const transaction = new Transaction();
     Object.assign(transaction, transactionDto);
     transaction.user = user;
     return await this.TransactionRepo.save(transaction);
   }
 
-  async update(
-    userId: number,
-    transactionDto: UpdateTransactionDto
-  ): Promise<Transaction> {
+  async update(userId: number, transactionDto: UpdateTransactionDto): Promise<Transaction> {
     const transaction = await this.get(userId, transactionDto.id);
     const updated = Object.assign(transaction, transactionDto);
     return await this.TransactionRepo.save(updated);

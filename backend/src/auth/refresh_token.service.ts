@@ -1,12 +1,7 @@
 import { User } from 'model/user.entity';
 import { JwtPayloadAccessToken, JwtPayloadRefreshToken } from './auth.utils';
 import { RefreshToken } from 'model/refresh_token.entity';
-import {
-  forwardRef,
-  Inject,
-  Injectable,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { forwardRef, Inject, Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { TokenExpiredError } from 'jsonwebtoken';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RefreshTokensRepository } from './refresh_token.repository';
@@ -29,16 +24,10 @@ export class RefreshTokenService {
     const refreshToken = await this.getByUserId(user.id);
     if (refreshToken && refreshToken.isExpired()) {
       await this.RefreshTokensRepo.remove(refreshToken);
-      user.refresh_token = await this.RefreshTokensRepo.createRefreshToken(
-        user,
-        EXPIRATION_REFRESH_TOKEN * 1000
-      );
+      user.refresh_token = await this.RefreshTokensRepo.createRefreshToken(user, EXPIRATION_REFRESH_TOKEN * 1000);
       return await this.userService.save(user);
     } else if (!refreshToken) {
-      user.refresh_token = await this.RefreshTokensRepo.createRefreshToken(
-        user,
-        EXPIRATION_REFRESH_TOKEN * 1000
-      );
+      user.refresh_token = await this.RefreshTokensRepo.createRefreshToken(user, EXPIRATION_REFRESH_TOKEN * 1000);
       return await this.userService.save(user);
     }
     return user;
@@ -52,17 +41,12 @@ export class RefreshTokenService {
     return this.jwtService.signAsync(payload);
   }
 
-  public async createAccessTokenFromRefreshToken(
-    refresh: string
-  ): Promise<string> {
+  public async createAccessTokenFromRefreshToken(refresh: string): Promise<string> {
     const { user } = await this.resolveRefreshToken(refresh);
     return await this.generateAccessToken(user);
   }
 
-  public async generateRefreshToken(
-    user: User,
-    expiresIn: number
-  ): Promise<string> {
+  public async generateRefreshToken(user: User, expiresIn: number): Promise<string> {
     const refresh_token = await this.RefreshTokensRepo.findOneOrFail({
       relations: ['user'],
       where: { user: { id: user.id } },
@@ -74,22 +58,15 @@ export class RefreshTokenService {
     return this.jwtService.signAsync(payload, { expiresIn });
   }
 
-  public async resolveRefreshToken(
-    encoded: string
-  ): Promise<{ user: User; token: RefreshToken }> {
-    const payload: JwtPayloadRefreshToken = await this.decodeRefreshToken(
-      encoded
-    );
+  public async resolveRefreshToken(encoded: string): Promise<{ user: User; token: RefreshToken }> {
+    const payload: JwtPayloadRefreshToken = await this.decodeRefreshToken(encoded);
     const token = await this.getStoredTokenFromRefreshTokenPayload(payload);
 
-    if (!token)
-      throw new UnprocessableEntityException('Refresh token not found');
-    if (token.is_revoked)
-      throw new UnprocessableEntityException('Refresh token revoked');
+    if (!token) throw new UnprocessableEntityException('Refresh token not found');
+    if (token.is_revoked) throw new UnprocessableEntityException('Refresh token revoked');
 
     const user = await this.getUserFromRefreshTokenPayload(payload);
-    if (!user)
-      throw new UnprocessableEntityException('Refresh token malformed');
+    if (!user) throw new UnprocessableEntityException('Refresh token malformed');
     return { user, token };
   }
 
@@ -100,9 +77,7 @@ export class RefreshTokenService {
     });
   }
 
-  private async decodeRefreshToken(
-    token: string
-  ): Promise<JwtPayloadRefreshToken> {
+  private async decodeRefreshToken(token: string): Promise<JwtPayloadRefreshToken> {
     try {
       return await this.jwtService.verifyAsync(token);
     } catch (e) {
@@ -114,21 +89,15 @@ export class RefreshTokenService {
     }
   }
 
-  private async getUserFromRefreshTokenPayload(
-    payload: JwtPayloadRefreshToken
-  ): Promise<User> {
+  private async getUserFromRefreshTokenPayload(payload: JwtPayloadRefreshToken): Promise<User> {
     const userId = payload.userId;
-    if (!userId)
-      throw new UnprocessableEntityException('Refresh token malformed');
+    if (!userId) throw new UnprocessableEntityException('Refresh token malformed');
     return this.userService.getById(userId);
   }
 
-  private async getStoredTokenFromRefreshTokenPayload(
-    payload: JwtPayloadRefreshToken
-  ): Promise<RefreshToken | null> {
+  private async getStoredTokenFromRefreshTokenPayload(payload: JwtPayloadRefreshToken): Promise<RefreshToken | null> {
     const tokenId = payload.refreshTokenId;
-    if (!tokenId)
-      throw new UnprocessableEntityException('Refresh token malformed');
+    if (!tokenId) throw new UnprocessableEntityException('Refresh token malformed');
     return this.RefreshTokensRepo.findOne(tokenId);
   }
 }

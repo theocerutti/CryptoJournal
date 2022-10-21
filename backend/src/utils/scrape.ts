@@ -18,11 +18,7 @@ const htmlEntities: Record<string, string> = {
   apos: "'",
 };
 
-export const scrapePrice = async (
-  url: string,
-  regexInput: string,
-  retry = 0
-): Promise<number> => {
+export const scrapePrice = async (url: string, regexInput: string, retry = 0): Promise<number> => {
   if (isNaN(retry)) {
     retry = 0;
   }

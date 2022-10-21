@@ -31,15 +31,7 @@ const investmentsDatas: {
   },
 };
 
-const locationNames = [
-  'Kraken',
-  'Binance',
-  'Coinbase',
-  'Bitstamp',
-  'Bitfinex',
-  'BourseDirect',
-  'TradeRepublic',
-];
+const locationNames = ['Kraken', 'Binance', 'Coinbase', 'Bitstamp', 'Bitfinex', 'BourseDirect', 'TradeRepublic'];
 
 @Injectable()
 export class Seeder {
@@ -93,8 +85,7 @@ export class Seeder {
           investment.user = user;
           investment.buyDate = faker.date.between(yearAgo, new Date());
           investment.sellDate = null;
-          investment.buyPrice =
-            faker.datatype.float({ min: 0.1, max: 2 }) * value.averagePrice; // add/remove between -90% and 100% of the average price
+          investment.buyPrice = faker.datatype.float({ min: 0.1, max: 2 }) * value.averagePrice; // add/remove between -90% and 100% of the average price
           investment.sellPrice = null;
           investment.buyNote = faker.lorem.lines(3);
           investment.sellNote = null;
@@ -109,8 +100,7 @@ export class Seeder {
             max: 1000,
           });
           investment.holdings = investment.investedAmount / investment.buyPrice;
-          investment.locationName =
-            locationNames[faker.datatype.number(locationNames.length - 1)];
+          investment.locationName = locationNames[faker.datatype.number(locationNames.length - 1)];
           investment.primaryTag = key;
           investment.secondaryTag = 'Crypto';
           investment.priceLink = value.priceLink;
@@ -122,27 +112,18 @@ export class Seeder {
 
           // add sell investments
           if (i % 2 === 0) {
-            investment.sellDate = faker.date.future(
-              faker.datatype.number({ min: 1, max: 365 }),
-              investment.buyDate
-            );
+            investment.sellDate = faker.date.future(faker.datatype.number({ min: 1, max: 365 }), investment.buyDate);
             investment.sellNote = faker.lorem.lines(3);
             // win investment
             if (i % 3 === 0) {
               investment.sellPrice = faker.datatype.number({
                 min: investment.buyPrice,
-                max:
-                  investment.buyPrice +
-                  (value.averagePrice / 5) *
-                    faker.datatype.float({ min: 0.1, max: 2 }),
+                max: investment.buyPrice + (value.averagePrice / 5) * faker.datatype.float({ min: 0.1, max: 2 }),
               });
             }
             // loose investment
             else {
-              const minPrice =
-                investment.buyPrice -
-                (value.averagePrice / 5) *
-                  faker.datatype.float({ min: 0.1, max: 2 });
+              const minPrice = investment.buyPrice - (value.averagePrice / 5) * faker.datatype.float({ min: 0.1, max: 2 });
               investment.sellPrice = faker.datatype.number({
                 min: minPrice < 0 ? 1 : minPrice,
                 max: investment.buyPrice,
@@ -171,10 +152,8 @@ export class Seeder {
           max: 10,
           precision: 2,
         });
-        transaction.from =
-          locationNames[faker.datatype.number(locationNames.length - 1)];
-        transaction.to =
-          locationNames[faker.datatype.number(locationNames.length - 1)];
+        transaction.from = locationNames[faker.datatype.number(locationNames.length - 1)];
+        transaction.to = locationNames[faker.datatype.number(locationNames.length - 1)];
         await this.transactionRepo.save(transaction);
       }
     }

@@ -10,9 +10,7 @@ import { TransactionModule } from '../transaction/transaction.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `src/${
-        process.env.NODE_ENV === 'production' ? '.env.prod' : '.env'
-      }`,
+      envFilePath: `src/${process.env.NODE_ENV === 'production' ? '.env.prod' : '.env'}`,
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({

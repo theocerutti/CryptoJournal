@@ -12,9 +12,7 @@ export class BaseEntityRepository<T> extends Repository<T> {
   }
 
   async getDistinct(column: string): Promise<string[]> {
-    const res = await this.createQueryBuilder('investment')
-      .select(`DISTINCT(investment.${column})`, 'distinct')
-      .getRawMany();
+    const res = await this.createQueryBuilder('investment').select(`DISTINCT(investment.${column})`, 'distinct').getRawMany();
     return res.map((item) => item.distinct);
   }
 }

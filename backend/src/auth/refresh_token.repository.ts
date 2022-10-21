@@ -4,10 +4,7 @@ import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(RefreshToken)
 export class RefreshTokensRepository extends Repository<RefreshToken> {
-  public async createRefreshToken(
-    user: User,
-    ttl: number
-  ): Promise<RefreshToken> {
+  public async createRefreshToken(user: User, ttl: number): Promise<RefreshToken> {
     const token = new RefreshToken();
     token.user = user;
     token.is_revoked = false;

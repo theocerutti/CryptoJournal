@@ -6,18 +6,13 @@ import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(UserRepository) private readonly UserRepo: UserRepository
-  ) {}
+  constructor(@InjectRepository(UserRepository) private readonly UserRepo: UserRepository) {}
 
   async getAll(): Promise<User[]> {
     try {
       return await this.UserRepo.find();
     } catch (error) {
-      throw new HttpException(
-        `Can't find all user: ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw new HttpException(`Can't find all user: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -25,10 +20,7 @@ export class UserService {
     try {
       return await this.UserRepo.findOneOrFail({ where: { id: userID } });
     } catch (error) {
-      throw new HttpException(
-        `Could not find user: ${error.message}`,
-        HttpStatus.NOT_FOUND
-      );
+      throw new HttpException(`Could not find user: ${error.message}`, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -36,10 +28,7 @@ export class UserService {
     try {
       return await this.UserRepo.findByIds(userIds);
     } catch (error) {
-      throw new HttpException(
-        `Can't get users: ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw new HttpException(`Can't get users: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -49,10 +38,7 @@ export class UserService {
         where: { email: email },
       });
     } catch (error) {
-      throw new HttpException(
-        `Could not find user by email ${error.message}`,
-        HttpStatus.NOT_FOUND
-      );
+      throw new HttpException(`Could not find user by email ${error.message}`, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -65,10 +51,7 @@ export class UserService {
     try {
       return await this.UserRepo.save(user);
     } catch (error) {
-      throw new HttpException(
-        `Could not create user : ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw new HttpException(`Could not create user : ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -79,10 +62,7 @@ export class UserService {
     try {
       return await this.UserRepo.save(updated);
     } catch (error) {
-      throw new HttpException(
-        `Could not update user : ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw new HttpException(`Could not update user : ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -96,10 +76,7 @@ export class UserService {
     try {
       return await this.UserRepo.remove(user);
     } catch (error) {
-      throw new HttpException(
-        `Could not remove user: ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw new HttpException(`Could not remove user: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

@@ -1,8 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class UpdateDecimalInvestment1664627834253
-  implements MigrationInterface
-{
+export class UpdateDecimalInvestment1664627834253 implements MigrationInterface {
   name = 'UpdateDecimalInvestment1664627834253';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
