@@ -1,7 +1,6 @@
 import React from 'react';
 import { Flex, Highlight, Icon, useColorModeValue } from '@chakra-ui/react';
 import Card from 'components/card/Card';
-import { MdAccountBalanceWallet } from 'react-icons/md';
 import IconBox from '../IconBox';
 import { IconType } from 'react-icons';
 

@@ -17,6 +17,8 @@ const validationSchema = Yup.object().shape({
   amount: Yup.number().min(0, 'Amount cannot be negative').required('Amount is required'),
   fees: Yup.number().min(0, 'Fees cannot be negative').optional(),
   from: Yup.string().required('From is required'),
+  toBank: Yup.boolean(),
+  fromBank: Yup.boolean(),
   to: Yup.string().required('To is required'),
 });
 
@@ -28,8 +30,6 @@ const TransactionForm = ({ editTransaction }: { editTransaction: GetTransactionD
   const showSuccessToast = () => {
     showToast(toast, `Successfully ${editTransaction ? 'updated' : 'created'} transaction`);
   };
-
-  console.log(editTransaction);
 
   const mutationCreate = useMutation(createTransactionMutation, {
     onSuccess: () => {
@@ -56,6 +56,8 @@ const TransactionForm = ({ editTransaction }: { editTransaction: GetTransactionD
       to: editTransaction ? editTransaction.to : '',
       fees: editTransaction ? editTransaction.fees : 0,
       amount: editTransaction ? editTransaction.amount : 0,
+      toBank: editTransaction ? editTransaction.toBank : false,
+      fromBank: editTransaction ? editTransaction.fromBank : false,
     },
     validationSchema: validationSchema,
     onSubmit: (values: CreateTransactionDto | UpdateTransactionDto) => {
@@ -102,6 +104,22 @@ const TransactionForm = ({ editTransaction }: { editTransaction: GetTransactionD
             tooltip='Date of the transaction'
             type='date'
             required
+          />
+        </HStack>
+        <HStack width='50%' spacing='10px'>
+          <FormikInput
+            formik={formik}
+            valueKey='fromBank'
+            tooltip='Make sure to check this box if you receive this transaction to your bank!'
+            label='From Bank'
+            type='checkbox'
+          />
+          <FormikInput
+            formik={formik}
+            valueKey='toBank'
+            tooltip='Make sure to check this box if you send this transaction to your bank!'
+            label='To Bank'
+            type='checkbox'
           />
         </HStack>
         <HStack width='50%' spacing='10px'>

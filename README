@@ -35,3 +35,10 @@ le form des transactions doit ajouter le FROM/TO avec dropdown (comme les names 
 passer en REM (+ mettre les mesures en variables comme sur core-ui)
 
 le total des frais doivent ajouter aussi les frais de transactions (transactions + investments)
+
+PB de conception dans l'app: qu'est ce que je dois faire lorsque je veux sell la moitié d'un investment?
+
+faire en sorte qu'on puisse pas retirer de l'argent à notre banque si on a même pas de transaction.
+
+l'argent de la balance c'est: totalPositionOrder.price - totalPositionSold.soldPrice
+Est-ce qu'on devrait soustraire les transactions out (toBank)?

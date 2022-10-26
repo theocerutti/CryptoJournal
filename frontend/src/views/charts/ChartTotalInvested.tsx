@@ -51,7 +51,11 @@ export default function ChartTotalInvested() {
       let amount = 0;
       for (let i = 0; i < dataTransactions.data.length; i++) {
         const transaction: GetTransactionDto = dataTransactions.data[i];
-        amount += transaction.amount;
+        if (transaction.fromBank) {
+          amount += transaction.amount;
+        } else if (transaction.toBank) {
+          amount -= transaction.amount;
+        }
         chartData[0].data[i].push(amount);
       }
       chartData[0].data.unshift([chartData[0].data[0][0] - 86400000, 0]); // add 0$ dot in the chart

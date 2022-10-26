@@ -2,7 +2,13 @@ import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InvestmentRepository } from './investment.repository';
 import { Investment } from '../model/investment.entity';
-import { CreateInvestmentDto, GetInvestmentDto, InvestmentGlobalInfoDto, OrderInvestmentStatus, UpdateInvestmentDto } from '../shared/investment';
+import {
+  CreateInvestmentDto,
+  GetInvestmentDto,
+  InvestmentGlobalInfoDto,
+  OrderInvestmentStatus,
+  UpdateInvestmentDto,
+} from '../shared/investment';
 import { User } from '../model/user.entity';
 import { UserService } from '../user/user.service';
 import { ScrapeDataContainer } from '../schedulers/ScrapeDataContainer';
@@ -19,8 +25,6 @@ export class InvestmentService {
     private readonly TransactionRepo: TransactionRepository,
     @Inject(forwardRef(() => UserService)) private userService: UserService
   ) {}
-
-  private readonly logger = new Logger(InvestmentService.name);
 
   public static mapInvestmentToGetDto(investment: Investment): GetInvestmentDto {
     const dto = new GetInvestmentDto();

@@ -123,7 +123,8 @@ export class Seeder {
             }
             // loose investment
             else {
-              const minPrice = investment.buyPrice - (value.averagePrice / 5) * faker.datatype.float({ min: 0.1, max: 2 });
+              const minPrice =
+                investment.buyPrice - (value.averagePrice / 5) * faker.datatype.float({ min: 0.1, max: 2 });
               investment.sellPrice = faker.datatype.number({
                 min: minPrice < 0 ? 1 : minPrice,
                 max: investment.buyPrice,
@@ -140,6 +141,8 @@ export class Seeder {
     for (const user of users) {
       for (let i = 0; i < SEED_TRANSACTIONS_BY_USER; i++) {
         const transaction = new Transaction();
+        transaction.fromBank = false;
+        transaction.toBank = false;
         transaction.user = user;
         transaction.date = faker.date.past();
         transaction.amount = faker.datatype.float({
@@ -154,6 +157,15 @@ export class Seeder {
         });
         transaction.from = locationNames[faker.datatype.number(locationNames.length - 1)];
         transaction.to = locationNames[faker.datatype.number(locationNames.length - 1)];
+
+        if (i % 4 === 0) {
+          transaction.toBank = true;
+          transaction.to = 'Bank';
+        } else if (i % 3 === 0) {
+          transaction.fromBank = true;
+          transaction.from = 'Bank';
+        }
+
         await this.transactionRepo.save(transaction);
       }
     }

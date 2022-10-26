@@ -1,4 +1,12 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { User } from './user.entity';
 import { ColumnNumericTransformer } from '../utils/transformer';
 
@@ -41,4 +49,10 @@ export class Transaction {
     transformer: new ColumnNumericTransformer(),
   })
   fees: number;
+
+  @Column('boolean', { default: false })
+  fromBank: boolean = false;
+
+  @Column('boolean', { default: false })
+  toBank: boolean = false;
 }

@@ -1,5 +1,6 @@
 import React, { HTMLInputTypeAttribute } from 'react';
 import {
+  Checkbox,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -51,6 +52,12 @@ const FormikInput = ({
         onChange={formik.handleChange}
         size='sm'
       />
+    );
+  } else if (type === 'checkbox') {
+    input = (
+      <Checkbox id={valueKey} name={valueKey} isDisabled={disabled} onChange={formik.handleChange} value={value}>
+        {label}
+      </Checkbox>
     );
   } else if (type === 'select') {
     input = (
