@@ -33,3 +33,5 @@ center all spinners
 
 le form des transactions doit ajouter le FROM/TO avec dropdown (comme les names dans les investments)
 passer en REM (+ mettre les mesures en variables comme sur core-ui)
+
+le total des frais doivent ajouter aussi les frais de transactions (transactions + investments)

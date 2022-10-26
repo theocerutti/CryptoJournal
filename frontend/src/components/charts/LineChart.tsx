@@ -112,7 +112,7 @@ const LineChart = ({
       type: 'line',
       height: height,
       animations: {
-        easing: 'linear',
+        enabled: false,
       },
       toolbar: {
         tools: {

@@ -14,6 +14,9 @@ const PieChart = ({ chartId, data, height = 350, title, options = {} }: PieChart
   const chartOptions: ApexOptions = {
     chart: {
       type: 'pie',
+      animations: {
+        enabled: false,
+      },
     },
     title: {
       style: {
