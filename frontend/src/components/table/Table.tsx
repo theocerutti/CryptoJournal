@@ -1,22 +1,7 @@
-import {
-  Flex,
-  Table as ChakraTable,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Flex, Table as ChakraTable, Tbody, Td, Th, Thead, Tr, useColorModeValue } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import React from 'react';
-import {
-  useFilters,
-  useGlobalFilter,
-  usePagination,
-  useSortBy,
-  useTable,
-} from 'react-table';
+import { useFilters, useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table';
 import Card from 'components/card/Card';
 import { multiSelectFilterType } from 'components/table/MultiCheckBoxColumnFilter';
 import TablePaginationFooter from 'components/table/TablePaginationFooter';
@@ -63,32 +48,12 @@ const Table = ({ columns, data }: { columns: any; data: any }) => {
   const borderColor = useColorModeValue('grey.200', 'whiteAlpha.100');
 
   const showDefaultFilter = (column: any): JSX.Element => (
-    <span>
-      {column.isSorted ? (
-        column.isSortedDesc ? (
-          <ChevronDownIcon />
-        ) : (
-          <ChevronUpIcon />
-        )
-      ) : (
-        ''
-      )}
-    </span>
+    <span>{column.isSorted ? column.isSortedDesc ? <ChevronDownIcon /> : <ChevronUpIcon /> : ''}</span>
   );
 
   return (
-    <Card
-      flexDirection='column'
-      w='100%'
-      px='0px'
-      overflowX={{ sm: 'scroll', lg: 'hidden' }}
-    >
-      <ChakraTable
-        {...getTableProps()}
-        variant='simple'
-        color='grey.500'
-        mb='24px'
-      >
+    <Card flexDirection='column' w='100%' px='0px' overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+      <ChakraTable {...getTableProps()} variant='simple' color='grey.500' mb='24px'>
         <Thead>
           {headerGroups.map((headerGroup, index) => (
             <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
@@ -100,18 +65,11 @@ const Table = ({ columns, data }: { columns: any; data: any }) => {
                     key={index}
                     borderColor={borderColor}
                   >
-                    <Flex
-                      justify='space-between'
-                      align='center'
-                      fontSize={{ sm: '10px', lg: '12px' }}
-                      color='grey.400'
-                    >
+                    <Flex justify='space-between' align='center' fontSize={{ sm: '10px', lg: '12px' }} color='grey.400'>
                       {column.render('Header')}
 
                       <div>
-                        {column.canFilter && column.Filter
-                          ? column.render('Filter')
-                          : showDefaultFilter(column)}
+                        {column.canFilter && column.Filter ? column.render('Filter') : showDefaultFilter(column)}
                       </div>
                     </Flex>
                   </Th>

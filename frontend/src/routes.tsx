@@ -1,11 +1,5 @@
 import { Icon } from '@chakra-ui/react';
-import {
-  MdBarChart,
-  MdHome,
-  MdOutlinePlaylistAdd,
-  MdPerson,
-  MdOutlineRepeat,
-} from 'react-icons/md';
+import { MdBarChart, MdHome, MdOutlinePlaylistAdd, MdPerson, MdOutlineRepeat } from 'react-icons/md';
 import MainDashboard from 'views/dashboard';
 import AddInvestmentPage from './views/add-investment/AddInvestmentPage';
 import AddTransactionPage from './views/add-transaction/AddTransactionPage';
@@ -24,14 +18,7 @@ const routes = [
     name: 'Add investment',
     layout: '/dashboard',
     path: '/add-investment',
-    icon: (
-      <Icon
-        as={MdOutlinePlaylistAdd}
-        width='20px'
-        height='20px'
-        color='inherit'
-      />
-    ),
+    icon: <Icon as={MdOutlinePlaylistAdd} width='20px' height='20px' color='inherit' />,
     component: AddInvestmentPage,
   },
   {
@@ -45,9 +32,7 @@ const routes = [
     name: 'Add transactions',
     layout: '/dashboard',
     path: '/add-transaction',
-    icon: (
-      <Icon as={MdOutlineRepeat} width='20px' height='20px' color='inherit' />
-    ),
+    icon: <Icon as={MdOutlineRepeat} width='20px' height='20px' color='inherit' />,
     component: AddTransactionPage,
   },
   {

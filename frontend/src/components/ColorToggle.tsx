@@ -28,12 +28,7 @@ export default function ColorToggle(props: { [x: string]: any }) {
       alignItems='center'
       justifyContent='center'
     >
-      <Icon
-        h='24px'
-        w='24px'
-        color='white'
-        as={colorMode === 'light' ? IoMdMoon : IoMdSunny}
-      />
+      <Icon h='24px' w='24px' color='white' as={colorMode === 'light' ? IoMdMoon : IoMdSunny} />
     </Button>
   );
 }

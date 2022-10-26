@@ -2,62 +2,38 @@ import React, { useEffect } from 'react';
 import { useFormik } from 'formik';
 import { Button, HStack, useToast, VStack } from '@chakra-ui/react';
 import * as Yup from 'yup';
-import {
-  createInvestmentMutation,
-  INVESTMENT_QUERY_KEY,
-  updateInvestmentMutation,
-} from '../../queries/investments';
+import { createInvestmentMutation, INVESTMENT_QUERY_KEY, updateInvestmentMutation } from '../../queries/investments';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useHistory } from 'react-router-dom';
-import {
-  CreateInvestmentDto,
-  GetInvestmentDto,
-  UpdateInvestmentDto,
-} from '@shared/investment';
+import { CreateInvestmentDto, GetInvestmentDto, UpdateInvestmentDto } from '@shared/investment';
 import FormikInput from '../../components/form/FormikInput';
 import { showToast } from '../../utils/toast';
 
 const validationSchema = Yup.object().shape({
   buyDate: Yup.date().required('Buy date is required'),
   sellDate: Yup.date().nullable().optional(),
-  buyPrice: Yup.number()
-    .min(0, 'Buy price cannot be negative')
-    .required('Buy price is required'),
-  sellPrice: Yup.number()
-    .nullable()
-    .min(0, 'Sell price cannot be negative')
-    .optional(),
+  buyPrice: Yup.number().min(0, 'Buy price cannot be negative').required('Buy price is required'),
+  sellPrice: Yup.number().nullable().min(0, 'Sell price cannot be negative').optional(),
   buyNote: Yup.string().nullable().optional(),
   sellNote: Yup.string().nullable().optional(),
   name: Yup.string().required('Name is required'),
   fees: Yup.number().min(0, 'Fees cannot be negative').optional(),
-  investedAmount: Yup.number()
-    .min(0, 'Invested amount cannot be negative')
-    .required('Invested amount is required'),
+  investedAmount: Yup.number().min(0, 'Invested amount cannot be negative').required('Invested amount is required'),
   holdings: Yup.number().min(0).required('Holdings are required'),
   locationName: Yup.string().nullable().optional(),
   primaryTag: Yup.string().nullable().optional(),
   secondaryTag: Yup.string().nullable().optional(),
-  priceLink: Yup.string()
-    .url("This link doesn't seems to be an url")
-    .required('Price link is required'),
+  priceLink: Yup.string().url("This link doesn't seems to be an url").required('Price link is required'),
 });
 
-const InvestmentForm = ({
-  editInvestment,
-}: {
-  editInvestment: GetInvestmentDto | null;
-}) => {
+const InvestmentForm = ({ editInvestment }: { editInvestment: GetInvestmentDto | null }) => {
   const toast = useToast();
   const history = useHistory();
   const queryClient = useQueryClient();
 
   const showSuccessToast = () => {
-    showToast(
-      toast,
-      `Successfully ${editInvestment ? 'updated' : 'created'} investment`
-    );
+    showToast(toast, `Successfully ${editInvestment ? 'updated' : 'created'} investment`);
   };
 
   const mutationCreate = useMutation(createInvestmentMutation, {
@@ -81,11 +57,7 @@ const InvestmentForm = ({
   const formik = useFormik({
     initialValues: {
       buyDate: editInvestment ? new Date(editInvestment.buyDate) : new Date(),
-      sellDate: editInvestment
-        ? editInvestment.sellDate === null
-          ? null
-          : new Date(editInvestment.sellDate)
-        : null,
+      sellDate: editInvestment ? (editInvestment.sellDate === null ? null : new Date(editInvestment.sellDate)) : null,
       // @ts-ignore
       type: editInvestment ? editInvestment.type : 'NONE',
       buyPrice: editInvestment ? editInvestment.buyPrice : 0,
@@ -99,9 +71,7 @@ const InvestmentForm = ({
       locationName: editInvestment ? editInvestment.locationName : 'Binance',
       primaryTag: editInvestment ? editInvestment.primaryTag : 'Crypto',
       secondaryTag: editInvestment ? editInvestment.secondaryTag : 'Bitcoin',
-      priceLink: editInvestment
-        ? editInvestment.priceLink
-        : 'https://coinmarketcap.com/currencies/bitcoin/',
+      priceLink: editInvestment ? editInvestment.priceLink : 'https://coinmarketcap.com/currencies/bitcoin/',
     },
     validationSchema: validationSchema,
     onSubmit: (values: CreateInvestmentDto | UpdateInvestmentDto) => {
@@ -121,8 +91,7 @@ const InvestmentForm = ({
   useEffect(() => {
     const { buyPrice, investedAmount } = formik.values;
     let holdings = 0;
-    if (buyPrice !== null && investedAmount !== null && buyPrice !== 0)
-      holdings = investedAmount / buyPrice;
+    if (buyPrice !== null && investedAmount !== null && buyPrice !== 0) holdings = investedAmount / buyPrice;
     formik.setFieldValue('holdings', holdings);
     // eslint-disable-next-line
   }, [formik.values.buyPrice, formik.values.investedAmount]);
@@ -261,19 +230,10 @@ const InvestmentForm = ({
         </HStack>
 
         <HStack justify='end' w='100%'>
-          <Button
-            onClick={() => history.push('/dashboard')}
-            colorScheme='grey'
-            mr={3}
-          >
+          <Button onClick={() => history.push('/dashboard')} colorScheme='grey' mr={3}>
             Close
           </Button>
-          <Button
-            isLoading={formik.isSubmitting}
-            type='submit'
-            colorScheme='blue'
-            mr={3}
-          >
+          <Button isLoading={formik.isSubmitting} type='submit' colorScheme='blue' mr={3}>
             {editInvestment ? 'Update' : 'Add'}
           </Button>
         </HStack>

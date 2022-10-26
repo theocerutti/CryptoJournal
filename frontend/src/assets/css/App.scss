@@ -20,11 +20,17 @@ option {
 }
 
 .apexcharts-pan-icon > svg {
-  stroke: #A0AEC0 !important;
+  stroke: #a0aec0 !important;
 }
 
-.apexcharts-menu-icon, .apexcharts-reset-icon, .apexcharts-selection-icon, .apexcharts-toolbar-custom-icon, .apexcharts-zoom-icon, .apexcharts-zoomin-icon, .apexcharts-zoomout-icon {
+.apexcharts-menu-icon,
+.apexcharts-reset-icon,
+.apexcharts-selection-icon,
+.apexcharts-toolbar-custom-icon,
+.apexcharts-zoom-icon,
+.apexcharts-zoomin-icon,
+.apexcharts-zoomout-icon {
   svg {
-    fill: #A0AEC0 !important;
+    fill: #a0aec0 !important;
   }
 }

@@ -12,6 +12,7 @@ import { GetInvestmentDto } from '@shared/investment';
 import LineChart from '../../components/charts/LineChart';
 import CenteredSpinner from '../../components/CenteredSpinner';
 
+// TODO: add transactions fees
 export default function ChartFees() {
   const [lineChartData, setData] = useState<{ name: string; data: any[] }[]>([
     {
@@ -58,6 +59,7 @@ export default function ChartFees() {
         amount += investment.fees;
         chartData[0].data[i].push(amount);
       }
+      chartData[0].data.unshift([chartData[0].data[0][0] - 86400000, 0]); // add 0$ dot in the chart
       setData(chartData);
       setLoadingCalculation(false);
     }

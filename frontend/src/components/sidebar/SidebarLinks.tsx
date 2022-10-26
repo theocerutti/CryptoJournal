@@ -4,10 +4,7 @@ import { Box, Flex, HStack, Text, useColorModeValue } from '@chakra-ui/react';
 export function SidebarLinks(props: { routes: RoutesType[] }) {
   let location = useLocation();
   let activeColor = useColorModeValue('grey.700', 'white');
-  let inactiveColor = useColorModeValue(
-    'secondaryGrey.600',
-    'secondaryGrey.600'
-  );
+  let inactiveColor = useColorModeValue('secondaryGrey.600', 'secondaryGrey.600');
   let activeIcon = useColorModeValue('brand.500', 'white');
   let textColor = useColorModeValue('secondaryGrey.500', 'white');
   let brandColor = useColorModeValue('brand.500', 'brand.400');
@@ -15,49 +12,29 @@ export function SidebarLinks(props: { routes: RoutesType[] }) {
   const { routes } = props;
 
   const activeRoute = (routeName: string) => {
-    const pathname =
-      location.pathname.at(-1) === '/'
-        ? location.pathname.slice(0, -1)
-        : location.pathname;
+    const pathname = location.pathname.at(-1) === '/' ? location.pathname.slice(0, -1) : location.pathname;
     return pathname === routeName;
   };
 
   const createLinks = (routes: RoutesType[]) => {
     return routes
-      .filter(
-        (route) => route.showNavbar === undefined || route.showNavbar === true
-      )
+      .filter((route) => route.showNavbar === undefined || route.showNavbar === true)
       .map((route: RoutesType, index: number): JSX.Element => {
-        const fullRoutePath = (
-          route.layout + (route.path === '/' ? '' : route.path)
-        ).toLowerCase();
+        const fullRoutePath = (route.layout + (route.path === '/' ? '' : route.path)).toLowerCase();
 
         return (
           <NavLink key={index} to={route.layout + route.path}>
             {route.icon ? (
               <Box>
-                <HStack
-                  spacing={activeRoute(fullRoutePath) ? '22px' : '26px'}
-                  py='5px'
-                  ps='10px'
-                >
+                <HStack spacing={activeRoute(fullRoutePath) ? '22px' : '26px'} py='5px' ps='10px'>
                   <Flex w='100%' alignItems='center' justifyContent='center'>
-                    <Box
-                      color={
-                        activeRoute(fullRoutePath) ? activeIcon : textColor
-                      }
-                      me='18px'
-                    >
+                    <Box color={activeRoute(fullRoutePath) ? activeIcon : textColor} me='18px'>
                       {route.icon}
                     </Box>
                     <Text
                       me='auto'
-                      color={
-                        activeRoute(fullRoutePath) ? activeColor : textColor
-                      }
-                      fontWeight={
-                        activeRoute(fullRoutePath) ? 'bold' : 'normal'
-                      }
+                      color={activeRoute(fullRoutePath) ? activeColor : textColor}
+                      fontWeight={activeRoute(fullRoutePath) ? 'bold' : 'normal'}
                     >
                       {route.name}
                     </Text>
@@ -72,16 +49,10 @@ export function SidebarLinks(props: { routes: RoutesType[] }) {
               </Box>
             ) : (
               <Box>
-                <HStack
-                  spacing={activeRoute(fullRoutePath) ? '22px' : '26px'}
-                  py='5px'
-                  ps='10px'
-                >
+                <HStack spacing={activeRoute(fullRoutePath) ? '22px' : '26px'} py='5px' ps='10px'>
                   <Text
                     me='auto'
-                    color={
-                      activeRoute(fullRoutePath) ? activeColor : inactiveColor
-                    }
+                    color={activeRoute(fullRoutePath) ? activeColor : inactiveColor}
                     fontWeight={activeRoute(fullRoutePath) ? 'bold' : 'normal'}
                   >
                     {route.name}

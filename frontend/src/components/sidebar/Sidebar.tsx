@@ -20,10 +20,7 @@ function Sidebar(props: { routes: RoutesType[]; [x: string]: any }) {
   const { routes } = props;
 
   let variantChange = '0.2s linear';
-  let shadow = useColorModeValue(
-    '14px 17px 40px 4px rgba(112, 144, 176, 0.08)',
-    'unset'
-  );
+  let shadow = useColorModeValue('14px 17px 40px 4px rgba(112, 144, 176, 0.08)', 'unset');
   let sidebarBg = useColorModeValue('white', 'navy.800');
   let sidebarMargins = '0px';
 
@@ -73,12 +70,7 @@ export function SidebarResponsive(props: { routes: RoutesType[] }) {
           _hover={{ cursor: 'pointer' }}
         />
       </Flex>
-      <Drawer
-        isOpen={isOpen}
-        onClose={onClose}
-        placement={'left'}
-        finalFocusRef={btnRef}
-      >
+      <Drawer isOpen={isOpen} onClose={onClose} placement={'left'} finalFocusRef={btnRef}>
         <DrawerOverlay />
         <DrawerContent w='285px' maxW='285px' bg={sidebarBackgroundColor}>
           <DrawerCloseButton

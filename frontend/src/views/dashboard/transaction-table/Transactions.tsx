@@ -9,19 +9,11 @@ const Transactions = () => {
 
   return (
     <>
-      <Flex
-        align={{ sm: 'flex-start', lg: 'center' }}
-        justify='space-between'
-        pb='20px'
-        w='100%'
-      >
+      <Flex align={{ sm: 'flex-start', lg: 'center' }} justify='space-between' pb='20px' w='100%'>
         <Text color={textColor} fontSize='xl' fontWeight='600'>
           Transactions History
         </Text>
-        <Button
-          variant='action'
-          onClick={() => history.push('/dashboard/add-transaction')}
-        >
+        <Button variant='action' onClick={() => history.push('/dashboard/add-transaction')}>
           +
         </Button>
       </Flex>

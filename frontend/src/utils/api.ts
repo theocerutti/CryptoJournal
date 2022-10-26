@@ -11,13 +11,9 @@ import {
 const TOKEN_AUTH_RES_HEADER = 'Authorization';
 const SERVER_URL = process.env.REACT_APP_API_URL;
 
-const extractErrMessage = (err: {
-  response: { data: { message: any } };
-  message: any;
-}) => {
+const extractErrMessage = (err: { response: { data: { message: any } }; message: any }) => {
   if (!err) return 'Unknown error';
-  if (err.response && err.response.data && err.response.data.message)
-    return err.response.data.message;
+  if (err.response && err.response.data && err.response.data.message) return err.response.data.message;
   return err.message;
 };
 
@@ -44,10 +40,7 @@ const isJwtExpirationError = (err: { response: { data: any } }) => {
   return false;
 };
 
-export const setupInterceptors = (
-  history: any,
-  toast: (options: any) => void = null
-) => {
+export const setupInterceptors = (history: any, toast: (options: any) => void = null) => {
   api.interceptors.response.use(
     (res) => {
       return res;
@@ -56,10 +49,7 @@ export const setupInterceptors = (
       const originalRequest = err.config;
 
       // if even after refetch an access token on /refresh route we receive a 401 code then go to login
-      if (
-        isJwtExpirationError(err) &&
-        originalRequest.url === '/api/auth/refresh'
-      ) {
+      if (isJwtExpirationError(err) && originalRequest.url === '/api/auth/refresh') {
         deleteRefreshTokenFromStorage();
         deleteTokenFromStorage();
         history.push('/auth/sign-in', {
@@ -69,16 +59,12 @@ export const setupInterceptors = (
       } else if (isJwtExpirationError(err) && !originalRequest._retry) {
         originalRequest._retry = true;
         const refreshToken = getRefreshTokenFromStorage();
-        return api
-          .post('/auth/refresh', { refresh_token: refreshToken })
-          .then((res) => {
-            const newToken = res.data;
-            setTokenFromStorage(newToken);
-            api.defaults.headers.common[
-              TOKEN_AUTH_RES_HEADER
-            ] = `Bearer ${newToken}`;
-            return api(originalRequest);
-          });
+        return api.post('/auth/refresh', { refresh_token: refreshToken }).then((res) => {
+          const newToken = res.data;
+          setTokenFromStorage(newToken);
+          api.defaults.headers.common[TOKEN_AUTH_RES_HEADER] = `Bearer ${newToken}`;
+          return api(originalRequest);
+        });
       }
       if (err.response && err.response.status !== 403)
         // don't notify error of forbidden errors

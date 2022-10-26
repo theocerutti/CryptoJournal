@@ -40,14 +40,8 @@ const InvestmentTable = ({
   handleDelete: (investmentID: number) => void;
   handleEdit: (investment: GetInvestmentDto) => void;
 }) => {
-  const orderInvestmentStatusOpenColor = useColorModeValue(
-    'green.500',
-    'green.500'
-  );
-  const orderInvestmentStatusClosedColor = useColorModeValue(
-    'orange.500',
-    'orange.500'
-  );
+  const orderInvestmentStatusOpenColor = useColorModeValue('green.500', 'green.500');
+  const orderInvestmentStatusClosedColor = useColorModeValue('orange.500', 'orange.500');
   const textColorSecondary = 'secondaryGrey.600';
 
   const getGrowthColor = (value: number) => {
@@ -64,9 +58,7 @@ const InvestmentTable = ({
           <Flex width='100%' justify='center'>
             <Icon
               color={
-                value === OrderInvestmentStatus.OPEN
-                  ? orderInvestmentStatusOpenColor
-                  : orderInvestmentStatusClosedColor
+                value === OrderInvestmentStatus.OPEN ? orderInvestmentStatusOpenColor : orderInvestmentStatusClosedColor
               }
               as={RiCheckboxBlankCircleFill}
             />
@@ -91,9 +83,7 @@ const InvestmentTable = ({
               <Link href={row.original.priceLink}>{value}</Link>
             </StatLabel>
             {row.original.orderStatus === OrderInvestmentStatus.OPEN && (
-              <StatHelpText fontSize='12px'>
-                {formatCurrency(row.original.price)}
-              </StatHelpText>
+              <StatHelpText fontSize='12px'>{formatCurrency(row.original.price)}</StatHelpText>
             )}
           </Stat>
         </Flex>
@@ -117,15 +107,9 @@ const InvestmentTable = ({
       accessor: 'pnl',
       Cell: ({ value, row }: { value: number; row: any }) => (
         <Flex align='center'>
-          <Text
-            color={getGrowthColor(value)}
-            fontSize='xs'
-            fontWeight='700'
-            me='5px'
-          >
+          <Text color={getGrowthColor(value)} fontSize='xs' fontWeight='700' me='5px'>
             {getSign(value)}
-            {formatCurrency(Math.abs(value))} (
-            {row.original.pnlPercent?.toFixed(2)}%)
+            {formatCurrency(Math.abs(value))} ({row.original.pnlPercent?.toFixed(2)}%)
           </Text>
         </Flex>
       ),
@@ -143,26 +127,22 @@ const InvestmentTable = ({
     {
       Header: 'BUY DATE',
       accessor: 'buyDate',
-      Cell: ({ value }: { value: string }) =>
-        value ? new Date(value).toLocaleDateString() : '--',
+      Cell: ({ value }: { value: string }) => (value ? new Date(value).toLocaleDateString() : '--'),
     },
     {
       Header: 'SELL PRICE',
       accessor: 'sellPrice',
-      Cell: ({ value }: { value: number }) =>
-        value ? formatCurrency(value) : '--',
+      Cell: ({ value }: { value: number }) => (value ? formatCurrency(value) : '--'),
     },
     {
       Header: 'SELL DATE',
       accessor: 'sellDate',
-      Cell: ({ value }: { value: string }) =>
-        value ? new Date(value).toLocaleDateString() : '--',
+      Cell: ({ value }: { value: string }) => (value ? new Date(value).toLocaleDateString() : '--'),
     },
     {
       Header: 'FEES',
       accessor: 'fees',
-      Cell: ({ value }: { value: number }) =>
-        value !== 0 ? formatCurrency(value) : '--',
+      Cell: ({ value }: { value: number }) => (value !== 0 ? formatCurrency(value) : '--'),
     },
     {
       Header: 'LOCATION NAME',
@@ -175,18 +155,10 @@ const InvestmentTable = ({
       id: 'actions',
       Cell: ({ row }: { row: { original: GetInvestmentDto } }) => (
         <HStack justify={'end'}>
-          <Button
-            onClick={() => handleEdit(row.original)}
-            colorScheme='yellow'
-            variant='ghost'
-          >
+          <Button onClick={() => handleEdit(row.original)} colorScheme='yellow' variant='ghost'>
             <Icon as={MdEdit} />
           </Button>
-          <Button
-            onClick={() => handleDelete(row.original.id)}
-            colorScheme='red'
-            variant='ghost'
-          >
+          <Button onClick={() => handleDelete(row.original.id)} colorScheme='red' variant='ghost'>
             <Icon as={MdDelete} />
           </Button>
         </HStack>

@@ -30,9 +30,7 @@ const TextCopy = ({
     let containerClass = '';
     if (animation) {
       containerClass += `hvr-fade ${
-        bouncing
-          ? 'animate__animated animate__pulse animate__repeat-1 animate__faster'
-          : ''
+        bouncing ? 'animate__animated animate__pulse animate__repeat-1 animate__faster' : ''
       }`;
     }
     return `${containerClass} ${className}`;
@@ -41,10 +39,7 @@ const TextCopy = ({
   return (
     <div className={buildClass()} onClick={handleCopy}>
       <Link {...props}>
-        <Tooltip
-          label={tooltipMessage || 'Copy'}
-          placement={tooltipPlacement || 'top'}
-        >
+        <Tooltip label={tooltipMessage || 'Copy'} placement={tooltipPlacement || 'top'}>
           <span>{children}</span>
         </Tooltip>
       </Link>

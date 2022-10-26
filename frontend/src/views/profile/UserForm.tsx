@@ -11,12 +11,8 @@ import { GET_USER, updateUserMutation } from '../../queries/user';
 
 setupYup();
 const validationSchema = Yup.object().shape({
-  erc20Address: Yup.string()
-    .cryptoAddress(CryptoAddressType.ERC20, 'This is not an ERC20 Address')
-    .optional(),
-  btcAddress: Yup.string()
-    .cryptoAddress(CryptoAddressType.BTC, 'This is not a BTC Address')
-    .optional(),
+  erc20Address: Yup.string().cryptoAddress(CryptoAddressType.ERC20, 'This is not an ERC20 Address').optional(),
+  btcAddress: Yup.string().cryptoAddress(CryptoAddressType.BTC, 'This is not a BTC Address').optional(),
   email: Yup.string().email().required('Email is required'),
 });
 
@@ -47,37 +43,17 @@ const UserForm = ({ user }: { user: GetUserDto }) => {
     <form onSubmit={formik.handleSubmit}>
       <VStack width='50%' spacing={4} align='flex-start'>
         <HStack width='100%' spacing='10px'>
-          <FormikInput
-            valueKey='email'
-            label='Email'
-            tooltip='Your email address'
-            formik={formik}
-          />
+          <FormikInput valueKey='email' label='Email' tooltip='Your email address' formik={formik} />
         </HStack>
         <HStack width='100%' spacing='10px'>
-          <FormikInput
-            valueKey='erc20Address'
-            label='ERC20 Address'
-            tooltip='Your ERC20 Address'
-            formik={formik}
-          />
+          <FormikInput valueKey='erc20Address' label='ERC20 Address' tooltip='Your ERC20 Address' formik={formik} />
         </HStack>
         <HStack width='100%' spacing='10px'>
-          <FormikInput
-            valueKey='btcAddress'
-            label='BTC Address'
-            tooltip='Your BTC Address'
-            formik={formik}
-          />
+          <FormikInput valueKey='btcAddress' label='BTC Address' tooltip='Your BTC Address' formik={formik} />
         </HStack>
         {formik.dirty === true && (
           <HStack justify='end' w='100%'>
-            <Button
-              isLoading={formik.isSubmitting}
-              type='submit'
-              colorScheme='blue'
-              mr={3}
-            >
+            <Button isLoading={formik.isSubmitting} type='submit' colorScheme='blue' mr={3}>
               Update
             </Button>
           </HStack>

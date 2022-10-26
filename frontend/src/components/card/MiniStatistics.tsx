@@ -12,19 +12,13 @@ export default function MiniStatistics(props: {
   growthPercent?: number | null;
   value: number;
 }) {
-  const { startContent, endContent, name, growth, value, growthPercent } =
-    props;
+  const { startContent, endContent, name, growth, value, growthPercent } = props;
   const textColor = useColorModeValue('secondaryGrey.900', 'white');
   const textColorSecondary = 'secondaryGrey.600';
 
   return (
     <Card py='15px'>
-      <Flex
-        my='auto'
-        h='100%'
-        align={{ base: 'center', xl: 'start' }}
-        justify={{ base: 'center', xl: 'center' }}
-      >
+      <Flex my='auto' h='100%' align={{ base: 'center', xl: 'start' }} justify={{ base: 'center', xl: 'center' }}>
         {startContent}
 
         <Stat my='auto' ms={startContent ? '18px' : '0px'}>
@@ -47,15 +41,9 @@ export default function MiniStatistics(props: {
           </StatNumber>
           {growth ? (
             <Flex align='center'>
-              <Text
-                color={getGrowthColor(growth)}
-                fontSize='xs'
-                fontWeight='700'
-                me='5px'
-              >
+              <Text color={getGrowthColor(growth)} fontSize='xs' fontWeight='700' me='5px'>
                 {getSign(growth)}
-                {formatCurrency(Math.abs(growth))}{' '}
-                {growthPercent !== null && `(${growthPercent.toFixed(2)}%)`}
+                {formatCurrency(Math.abs(growth))} {growthPercent !== null && `(${growthPercent.toFixed(2)}%)`}
               </Text>
             </Flex>
           ) : null}

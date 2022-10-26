@@ -20,10 +20,7 @@ import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import ColorToggle from '../../components/ColorToggle';
 import { useMutation } from '@tanstack/react-query';
-import {
-  setRefreshTokenFromStorage,
-  setTokenFromStorage,
-} from '../../utils/authStorage';
+import { setRefreshTokenFromStorage, setTokenFromStorage } from '../../utils/authStorage';
 import { loginMutation, registerMutation } from '../../queries/auth';
 import { CreateUserDTO, LoginUserDTO } from '@shared/auth';
 
@@ -83,15 +80,8 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
           <Heading color={textColor} fontSize='36px' mb='10px'>
             {type === 'sign-in' ? 'Sign In' : 'Sign Up'}
           </Heading>
-          <Text
-            mb='36px'
-            ms='4px'
-            color={textColorSecondary}
-            fontWeight='400'
-            fontSize='md'
-          >
-            Enter your email and password to{' '}
-            {type === 'sign-in' ? 'sign in' : 'sign up'} !
+          <Text mb='36px' ms='4px' color={textColorSecondary} fontWeight='400' fontSize='md'>
+            Enter your email and password to {type === 'sign-in' ? 'sign in' : 'sign up'} !
           </Text>
         </Box>
         {mutation.isError && (
@@ -112,14 +102,7 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
           mb={{ base: '20px', md: 'auto' }}
         >
           <FormControl>
-            <FormLabel
-              display='flex'
-              ms='4px'
-              fontSize='sm'
-              fontWeight='500'
-              color={textColor}
-              mb='8px'
-            >
+            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' color={textColor} mb='8px'>
               Email<Text color={brandStars}>*</Text>
             </FormLabel>
             <Input
@@ -136,13 +119,7 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
               size='lg'
               onChange={(e) => setEmail(e.target.value)}
             />
-            <FormLabel
-              ms='4px'
-              fontSize='sm'
-              fontWeight='500'
-              color={textColor}
-              display='flex'
-            >
+            <FormLabel ms='4px' fontSize='sm' fontWeight='500' color={textColor} display='flex'>
               Password<Text color={brandStars}>*</Text>
             </FormLabel>
             <InputGroup size='md'>
@@ -180,26 +157,11 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
               {type === 'sign-in' ? 'Sign In' : 'Sign Up'}
             </Button>
           </FormControl>
-          <Flex
-            flexDirection='column'
-            justifyContent='center'
-            alignItems='start'
-            maxW='100%'
-            mt='0px'
-          >
+          <Flex flexDirection='column' justifyContent='center' alignItems='start' maxW='100%' mt='0px'>
             <Text color={textColorDetails} fontWeight='400' fontSize='14px'>
-              {type === 'sign-in'
-                ? 'Not registered yet?'
-                : 'Already have an account?'}
-              <NavLink
-                to={`/auth/${type === 'sign-in' ? 'sign-up' : 'sign-in'}`}
-              >
-                <Text
-                  color={textColorBrand}
-                  as='span'
-                  ms='5px'
-                  fontWeight='500'
-                >
+              {type === 'sign-in' ? 'Not registered yet?' : 'Already have an account?'}
+              <NavLink to={`/auth/${type === 'sign-in' ? 'sign-up' : 'sign-in'}`}>
+                <Text color={textColorBrand} as='span' ms='5px' fontWeight='500'>
                   {type === 'sign-in' ? 'Create an Account' : 'Sign In'}
                 </Text>
               </NavLink>

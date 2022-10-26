@@ -8,12 +8,7 @@ import { ChartProps } from './index';
 import { ApexOptions } from 'apexcharts';
 import { globalStyles } from '../../theme/styles';
 
-export type ChartTimeline =
-  | 'ONE_MONTH'
-  | 'SIX_MONTHS'
-  | 'ONE_YEAR'
-  | 'YTD'
-  | 'ALL';
+export type ChartTimeline = 'ONE_MONTH' | 'SIX_MONTHS' | 'ONE_YEAR' | 'YTD' | 'ALL';
 
 const chartTimelineToString = (timeline: ChartTimeline): string => {
   switch (timeline) {
@@ -40,14 +35,14 @@ type LineChartProps = {
 } & ChartProps;
 
 const LineChart = ({
-                     chartId,
-                     resetTooltipValue = null,
-                     canZoom = true,
-                     data,
-                     tooltipTitle,
-                     height = 350,
-                     options = {},
-                   }: LineChartProps) => {
+  chartId,
+  resetTooltipValue = null,
+  canZoom = true,
+  data,
+  tooltipTitle,
+  height = 350,
+  options = {},
+}: LineChartProps) => {
   const { colors } = globalStyles;
   const [currentTimeline, setCurrentTimeline] = useState<ChartTimeline>('YTD');
   const [tooltipValue, setTooltipValue] = useState({ x: 0, y: new Date() });
@@ -89,7 +84,7 @@ const LineChart = ({
         }
       }
     },
-    [data, chartId],
+    [data, chartId]
   );
 
   const resetTooltip = useCallback(() => {
@@ -138,13 +133,11 @@ const LineChart = ({
         },
         mouseMove: (event: any, chartContext: any, config: any) => {
           const seriesIndex = config.seriesIndex;
-          const dataPointIndex =
-            config.dataPointIndex === -1 ? 0 : config.dataPointIndex;
+          const dataPointIndex = config.dataPointIndex === -1 ? 0 : config.dataPointIndex;
           const w = chartContext.w;
 
           if (seriesIndex !== -1) {
-            const data =
-              w.globals.initialSeries[seriesIndex].data[dataPointIndex];
+            const data = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
             setTooltipValue({ x: data[1], y: new Date(data[0]) });
           } else {
             resetTooltip();
@@ -173,18 +166,16 @@ const LineChart = ({
     xaxis: {
       type: 'datetime',
       crosshairs: {
-        show: false
+        show: false,
       },
       axisBorder: {
-        show: false
+        show: false,
       },
       axisTicks: {
         show: false,
       },
       min:
-        data[0].data[0] && data[0].data[0].length !== 0
-          ? new Date(data[0].data[0][0]).getTime()
-          : new Date().getTime(),
+        data[0].data[0] && data[0].data[0].length !== 0 ? new Date(data[0].data[0][0]).getTime() : new Date().getTime(),
       tickAmount: 30, // 30 days
       tooltip: {
         enabled: false,
@@ -208,7 +199,7 @@ const LineChart = ({
         lines: {
           show: false,
         },
-      }
+      },
     },
     tooltip: {
       custom: () => '',
@@ -219,26 +210,28 @@ const LineChart = ({
   return (
     <Card paddingRight='0' paddingLeft='0'>
       <Flex justify='space-around'>
-        <Stat flex={0}>
+        <Stat style={{ whiteSpace: 'nowrap' }} flex={0}>
           <StatLabel>{tooltipTitle}</StatLabel>
           <StatNumber>{formatCurrency(tooltipValue.x)}</StatNumber>
           <StatHelpText>{tooltipValue.y.toLocaleDateString()}</StatHelpText>
         </Stat>
-        {canZoom && <Flex justify='center' align='center'>
-          {(
-            [
-              'ALL',
-              'YTD',
-              'ONE_YEAR',
-              'SIX_MONTHS',
-              'ONE_MONTH',
-            ] as ChartTimeline[]
-          ).map((timeline: ChartTimeline) => (
-            <Button onClick={() => updateTimeline(timeline)} size='sm' color={currentTimeline === timeline ? 'navy.300' : 'grey.400'} variant='ghost' key={timeline}>
-              {chartTimelineToString(timeline)}
-            </Button>
-          ))}
-        </Flex>}
+        {canZoom && (
+          <Flex justify='center' align='center'>
+            {(['ALL', 'YTD', 'ONE_YEAR', 'SIX_MONTHS', 'ONE_MONTH'] as ChartTimeline[]).map(
+              (timeline: ChartTimeline) => (
+                <Button
+                  onClick={() => updateTimeline(timeline)}
+                  size='sm'
+                  color={currentTimeline === timeline ? 'navy.300' : 'grey.400'}
+                  variant='ghost'
+                  key={timeline}
+                >
+                  {chartTimelineToString(timeline)}
+                </Button>
+              )
+            )}
+          </Flex>
+        )}
       </Flex>
       <Flex w='100%' flexDirection='row'>
         <Box minW='100%' minH={`${height}px`} mt='auto'>

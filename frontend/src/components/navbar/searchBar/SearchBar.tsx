@@ -1,10 +1,4 @@
-import {
-  IconButton,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { IconButton, Input, InputGroup, InputLeftElement, useColorModeValue } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 
 export function SearchBar(props: {
@@ -15,8 +9,7 @@ export function SearchBar(props: {
   borderRadius?: string | number;
   [x: string]: any;
 }) {
-  const { variant, background, children, placeholder, borderRadius, ...rest } =
-    props;
+  const { variant, background, children, placeholder, borderRadius, ...rest } = props;
   const searchIconColor = useColorModeValue('grey.700', 'white');
   const inputBg = useColorModeValue('secondaryGrey.300', 'navy.900');
   const inputText = useColorModeValue('grey.700', 'grey.100');

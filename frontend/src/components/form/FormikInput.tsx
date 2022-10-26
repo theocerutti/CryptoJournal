@@ -93,12 +93,7 @@ const FormikInput = ({
   const inputContainer =
     type !== 'textarea' && inputLeftElement ? (
       <InputGroup>
-        <InputLeftElement
-          pointerEvents='none'
-          color='grey.300'
-          fontSize='1.2em'
-          children='$'
-        />
+        <InputLeftElement pointerEvents='none' color='grey.300' fontSize='1.2em' children='$' />
         {input}
       </InputGroup>
     ) : (

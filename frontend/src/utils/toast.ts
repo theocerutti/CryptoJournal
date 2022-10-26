@@ -1,8 +1,4 @@
-export const showToast = (
-  toast: any,
-  title: string,
-  status: string = 'success'
-) => {
+export const showToast = (toast: any, title: string, status: string = 'success') => {
   toast({
     title: title,
     status: status,

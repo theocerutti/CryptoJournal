@@ -10,13 +10,7 @@ type PieChartProps = {
   title?: string;
 } & ChartProps;
 
-const PieChart = ({
-                    chartId,
-                    data,
-                    height = 350,
-                    title,
-                    options = {},
-                  }: PieChartProps) => {
+const PieChart = ({ chartId, data, height = 350, title, options = {} }: PieChartProps) => {
   const chartOptions: ApexOptions = {
     chart: {
       type: 'pie',
@@ -33,11 +27,9 @@ const PieChart = ({
   return (
     <Card>
       <Flex w='100%'>
-        <Box minW='92%' minH={`${height}px`} height="100%" mt='auto'>
-          <div id={chartId} style={{ zIndex: 0, height: "100%" }}>
-            <Heading size={'md'}>
-              {title}
-            </Heading>
+        <Box minW='92%' minH={`${height}px`} height='100%' mt='auto'>
+          <div id={chartId} style={{ zIndex: 0, height: '100%' }}>
+            <Heading size={'md'}>{title}</Heading>
             {data && data.length > 0 ? (
               <ReactApexChart
                 options={chartOptions}
@@ -47,7 +39,9 @@ const PieChart = ({
                 height={height}
               />
             ) : (
-              <Flex height="100%" width="100%" justify="center" align="center">No data</Flex>
+              <Flex height='100%' width='100%' justify='center' align='center'>
+                No data
+              </Flex>
             )}
           </div>
         </Box>

@@ -8,9 +8,6 @@ const regexFromAddressType: { [key in CryptoAddressType]: RegExp } = {
   [CryptoAddressType.BTC]: /^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/,
 };
 
-export const isValidCryptoAddress = (
-  address: string,
-  type: CryptoAddressType
-): boolean => {
+export const isValidCryptoAddress = (address: string, type: CryptoAddressType): boolean => {
   return regexFromAddressType[type].test(address);
 };

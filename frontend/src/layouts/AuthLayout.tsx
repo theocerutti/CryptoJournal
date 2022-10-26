@@ -20,16 +20,8 @@ export default function Auth() {
     >
       <Box mx='auto' minH='100vh'>
         <Switch>
-          <Route
-            path='/auth/sign-in'
-            exact
-            render={() => <SignInCentered type='sign-in' />}
-          />
-          <Route
-            path='/auth/sign-up'
-            exact
-            render={() => <SignInCentered type='sign-up' />}
-          />
+          <Route path='/auth/sign-in' exact render={() => <SignInCentered type='sign-in' />} />
+          <Route path='/auth/sign-up' exact render={() => <SignInCentered type='sign-up' />} />
           <Redirect from='/auth' to='/auth/sign-in' />
         </Switch>
       </Box>

@@ -9,19 +9,11 @@ const Investments = () => {
 
   return (
     <>
-      <Flex
-        align={{ sm: 'flex-start', lg: 'center' }}
-        justify='space-between'
-        pb='20px'
-        w='100%'
-      >
+      <Flex align={{ sm: 'flex-start', lg: 'center' }} justify='space-between' pb='20px' w='100%'>
         <Text color={textColor} fontSize='xl' fontWeight='600'>
           Investments History
         </Text>
-        <Button
-          variant='action'
-          onClick={() => history.push('/dashboard/add-investment')}
-        >
+        <Button variant='action' onClick={() => history.push('/dashboard/add-investment')}>
           +
         </Button>
       </Flex>

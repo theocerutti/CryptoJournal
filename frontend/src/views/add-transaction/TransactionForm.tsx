@@ -7,42 +7,26 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useHistory } from 'react-router-dom';
 import { UpdateInvestmentDto } from '@shared/investment';
-import {
-  CreateTransactionDto,
-  GetTransactionDto,
-  UpdateTransactionDto,
-} from '@shared/transaction';
+import { CreateTransactionDto, GetTransactionDto, UpdateTransactionDto } from '@shared/transaction';
 import FormikInput from '../../components/form/FormikInput';
 import { showToast } from '../../utils/toast';
-import {
-  createTransactionMutation,
-  updateTransactionMutation,
-} from '../../queries/transactions';
+import { createTransactionMutation, updateTransactionMutation } from '../../queries/transactions';
 
 const validationSchema = Yup.object().shape({
   date: Yup.date().required('Buy date is required'),
-  amount: Yup.number()
-    .min(0, 'Amount cannot be negative')
-    .required('Amount is required'),
+  amount: Yup.number().min(0, 'Amount cannot be negative').required('Amount is required'),
   fees: Yup.number().min(0, 'Fees cannot be negative').optional(),
   from: Yup.string().required('From is required'),
   to: Yup.string().required('To is required'),
 });
 
-const TransactionForm = ({
-  editTransaction,
-}: {
-  editTransaction: GetTransactionDto | null;
-}) => {
+const TransactionForm = ({ editTransaction }: { editTransaction: GetTransactionDto | null }) => {
   const toast = useToast();
   const history = useHistory();
   const queryClient = useQueryClient();
 
   const showSuccessToast = () => {
-    showToast(
-      toast,
-      `Successfully ${editTransaction ? 'updated' : 'created'} transaction`
-    );
+    showToast(toast, `Successfully ${editTransaction ? 'updated' : 'created'} transaction`);
   };
 
   console.log(editTransaction);
@@ -121,36 +105,15 @@ const TransactionForm = ({
           />
         </HStack>
         <HStack width='50%' spacing='10px'>
-          <FormikInput
-            formik={formik}
-            valueKey='from'
-            label='From'
-            tooltip='From'
-            required
-          />
-          <FormikInput
-            formik={formik}
-            valueKey='to'
-            label='To'
-            tooltip='To'
-            required
-          />
+          <FormikInput formik={formik} valueKey='from' label='From' tooltip='From' required />
+          <FormikInput formik={formik} valueKey='to' label='To' tooltip='To' required />
         </HStack>
 
         <HStack justify='end' w='100%'>
-          <Button
-            onClick={() => history.push('/dashboard')}
-            colorScheme='grey'
-            mr={3}
-          >
+          <Button onClick={() => history.push('/dashboard')} colorScheme='grey' mr={3}>
             Close
           </Button>
-          <Button
-            isLoading={formik.isSubmitting}
-            type='submit'
-            colorScheme='blue'
-            mr={3}
-          >
+          <Button isLoading={formik.isSubmitting} type='submit' colorScheme='blue' mr={3}>
             {editTransaction ? 'Update' : 'Add'}
           </Button>
         </HStack>

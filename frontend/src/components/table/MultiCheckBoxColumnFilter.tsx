@@ -1,12 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-  Checkbox,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-} from '@chakra-ui/react';
+import { Checkbox, IconButton, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { MdFilterAlt } from 'react-icons/md';
 
 export function MultiCheckBoxColumnFilter({
@@ -52,12 +45,7 @@ export function MultiCheckBoxColumnFilter({
 
   return (
     <Menu>
-      <MenuButton
-        as={IconButton}
-        aria-label='Options'
-        icon={<MdFilterAlt />}
-        variant='ghost'
-      />
+      <MenuButton as={IconButton} aria-label='Options' icon={<MdFilterAlt />} variant='ghost' />
       <MenuList>
         <MenuItem>
           <Checkbox
@@ -75,12 +63,7 @@ export function MultiCheckBoxColumnFilter({
         {Object.entries(options).map(([option, count], i) => {
           return (
             <MenuItem key={i}>
-              <Checkbox
-                name={option}
-                id={option}
-                isChecked={checked.includes(option)}
-                onChange={onChange}
-              >
+              <Checkbox name={option} id={option} isChecked={checked.includes(option)} onChange={onChange}>
                 {option}
               </Checkbox>
             </MenuItem>
@@ -91,11 +74,7 @@ export function MultiCheckBoxColumnFilter({
   );
 }
 
-export const multiSelectFilterType = (
-  rows: any,
-  id: string,
-  filterValues: string
-) => {
+export const multiSelectFilterType = (rows: any, id: string, filterValues: string) => {
   if (filterValues.length === 0) return rows;
   return rows.filter((r: any) => filterValues.includes(r.values[id]));
 };

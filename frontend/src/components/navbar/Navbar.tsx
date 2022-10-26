@@ -1,12 +1,4 @@
-import {
-  Box,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Flex,
-  Link,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Flex, Link, useColorModeValue } from '@chakra-ui/react';
 import NavbarLinks from 'components/navbar/NavbarLinks';
 
 export default function Navbar({ brandText }: { brandText: string }) {
@@ -16,10 +8,7 @@ export default function Navbar({ brandText }: { brandText: string }) {
   let navbarFilter = 'none';
   let navbarBackdrop = 'blur(20px)';
   let navbarShadow = 'none';
-  let navbarBg = useColorModeValue(
-    'rgba(244, 247, 254, 0.2)',
-    'rgba(11,20,55,0.5)'
-  );
+  let navbarBg = useColorModeValue('rgba(244, 247, 254, 0.2)', 'rgba(11,20,55,0.5)');
   let navbarBorder = 'transparent';
   let secondaryMargin = '0px';
   let paddingX = '15px';

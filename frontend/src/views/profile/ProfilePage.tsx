@@ -7,11 +7,7 @@ import UserForm from './UserForm';
 import Card from '../../components/card/Card';
 
 const ProfilePage = () => {
-  const { isSuccess, isError, isLoading, data } = useQuery(
-    [GET_USER],
-    getUserQuery,
-    { ...defaultQueryConfig }
-  );
+  const { isSuccess, isError, isLoading, data } = useQuery([GET_USER], getUserQuery, { ...defaultQueryConfig });
 
   const body = () => {
     if (isSuccess)

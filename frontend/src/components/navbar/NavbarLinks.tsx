@@ -17,10 +17,7 @@ import { SidebarResponsive } from 'components/sidebar/Sidebar';
 import React from 'react';
 import { IoMdMoon, IoMdSunny } from 'react-icons/io';
 import routes from 'routes';
-import {
-  deleteRefreshTokenFromStorage,
-  deleteTokenFromStorage,
-} from '../../utils/authStorage';
+import { deleteRefreshTokenFromStorage, deleteTokenFromStorage } from '../../utils/authStorage';
 import { useHistory } from 'react-router-dom';
 import { MdOutlineVolunteerActivism } from 'react-icons/md';
 import TextCopy from '../TextCopy';
@@ -61,14 +58,7 @@ export default function NavbarLinks() {
 
       <Menu>
         <MenuButton p='0px'>
-          <Icon
-            mt='6px'
-            as={MdOutlineVolunteerActivism}
-            color={navbarIcon}
-            w='18px'
-            h='18px'
-            me='10px'
-          />
+          <Icon mt='6px' as={MdOutlineVolunteerActivism} color={navbarIcon} w='18px' h='18px' me='10px' />
         </MenuButton>
         <MenuList
           boxShadow={shadow}
@@ -106,10 +96,7 @@ export default function NavbarLinks() {
                 <Icon mr='5px' as={TbCurrency} />
                 <Text fontWeight='bold'>Nexo Referral:</Text>
               </Flex>
-              <Link
-                href='https://nexo.io/ref/c4ey5fhjuf?src=web-link'
-                isExternal
-              >
+              <Link href='https://nexo.io/ref/c4ey5fhjuf?src=web-link' isExternal>
                 https://nexo.io/ref/c4ey5fhjuf?src=web-link
               </Link>
             </Box>
@@ -118,10 +105,7 @@ export default function NavbarLinks() {
                 <Icon mr='5px' as={SiBinance} />
                 <Text fontWeight='bold'>Binance Referral:</Text>
               </Flex>
-              <Link
-                href='https://accounts.binance.com/en/register?ref=374537611'
-                isExternal
-              >
+              <Link href='https://accounts.binance.com/en/register?ref=374537611' isExternal>
                 https://accounts.binance.com/en/register?ref=374537611
               </Link>
             </Box>
@@ -139,13 +123,7 @@ export default function NavbarLinks() {
         w='max-content'
         onClick={toggleColorMode}
       >
-        <Icon
-          me='10px'
-          h='18px'
-          w='18px'
-          color={navbarIcon}
-          as={colorMode === 'light' ? IoMdMoon : IoMdSunny}
-        />
+        <Icon me='10px' h='18px' w='18px' color={navbarIcon} as={colorMode === 'light' ? IoMdMoon : IoMdSunny} />
       </Button>
       <Menu>
         <MenuButton p='0px'>
@@ -159,14 +137,7 @@ export default function NavbarLinks() {
             h='40px'
           />
         </MenuButton>
-        <MenuList
-          boxShadow={shadow}
-          p='0px'
-          mt='10px'
-          borderRadius='20px'
-          bg={menuBg}
-          border='none'
-        >
+        <MenuList boxShadow={shadow} p='0px' mt='10px' borderRadius='20px' bg={menuBg} border='none'>
           <Flex w='100%' mb='0px'>
             <Text
               ps='20px'

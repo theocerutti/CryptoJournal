@@ -9,7 +9,7 @@ import AlertPriceLoading from '../../components/AlertPriceLoading';
 export default function Dashboard() {
   return (
     <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
-      <AlertPriceLoading/>
+      <AlertPriceLoading />
 
       <GlobalInfo />
 

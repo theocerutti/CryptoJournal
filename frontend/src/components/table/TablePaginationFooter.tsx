@@ -11,12 +11,7 @@ import {
   Text,
   Tooltip,
 } from '@chakra-ui/react';
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from '@chakra-ui/icons';
+import { ArrowLeftIcon, ArrowRightIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
 const TablePaginationFooter = ({
   gotoPage,

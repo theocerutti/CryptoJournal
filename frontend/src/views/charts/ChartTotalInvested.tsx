@@ -1,16 +1,12 @@
 import { Alert } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useQueries } from '@tanstack/react-query';
-import {
-  getInvestmentsGlobalInfoQuery,
-  getInvestmentsQuery,
-  INVESTMENT_GLOBAL_INFO_QUERY_KEY,
-  INVESTMENT_QUERY_KEY,
-} from '../../queries/investments';
+import { getInvestmentsGlobalInfoQuery, INVESTMENT_GLOBAL_INFO_QUERY_KEY } from '../../queries/investments';
 import { defaultQueryConfig } from '../../queries/config';
-import { GetInvestmentDto } from '@shared/investment';
+import { GetTransactionDto } from '@shared/transaction';
 import LineChart from '../../components/charts/LineChart';
 import CenteredSpinner from '../../components/CenteredSpinner';
+import { getTransactionsQuery, TRANSACTION_QUERY_KEY } from '../../queries/transactions';
 
 export default function ChartTotalInvested() {
   const [lineChartData, setData] = useState<{ name: string; data: any[] }[]>([
@@ -25,8 +21,8 @@ export default function ChartTotalInvested() {
   const queries = useQueries({
     queries: [
       {
-        queryKey: [INVESTMENT_QUERY_KEY],
-        queryFn: getInvestmentsQuery,
+        queryKey: [TRANSACTION_QUERY_KEY],
+        queryFn: getTransactionsQuery,
         ...defaultQueryConfig,
       },
       {
@@ -39,31 +35,32 @@ export default function ChartTotalInvested() {
 
   const isSuccess = queries.every((query) => query.isSuccess);
   const isError = queries.find((query) => query.isError);
-  const dataInvestments = queries[0].data;
+  const dataTransactions = queries[0].data;
   const dataGlobalInfo = queries[1].data;
 
   useEffect(() => {
     if (isSuccess) {
       setLoadingCalculation(true);
       let chartData = lineChartData;
-      chartData[0].data = dataInvestments.data
-        .map((investment: GetInvestmentDto) => {
+      chartData[0].data = dataTransactions.data
+        .map((transac: GetTransactionDto) => {
           // @ts-ignore
-          return [Date.parse(new Date(investment.buyDate))];
+          return [Date.parse(new Date(transac.date))];
         })
         .sort((a, b) => a[0] - b[0]);
       let amount = 0;
-      for (let i = 0; i < dataInvestments.data.length; i++) {
-        const investment: GetInvestmentDto = dataInvestments.data[i];
-        amount += investment.investedAmount;
+      for (let i = 0; i < dataTransactions.data.length; i++) {
+        const transaction: GetTransactionDto = dataTransactions.data[i];
+        amount += transaction.amount;
         chartData[0].data[i].push(amount);
       }
+      chartData[0].data.unshift([chartData[0].data[0][0] - 86400000, 0]); // add 0$ dot in the chart
       setData(chartData);
       setLoadingCalculation(false);
     }
-  }, [isSuccess, dataInvestments, lineChartData]);
+  }, [isSuccess, dataTransactions, lineChartData]);
 
-  if (isError) return <Alert status='error'>Can't fetch investments</Alert>;
+  if (isError) return <Alert status='error'>Can't fetch transactions</Alert>;
   if (loadingCalculation) return <CenteredSpinner />;
 
   return (

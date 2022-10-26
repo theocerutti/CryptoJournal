@@ -10,12 +10,9 @@ export default function Dashboard() {
     let activeRoute = 'Default Active Route';
 
     for (let i = 0; i < routes.length; i++) {
-      const routeFullPath =
-        routes[i].layout + (routes[i].path === '/' ? '' : routes[i].path);
+      const routeFullPath = routes[i].layout + (routes[i].path === '/' ? '' : routes[i].path);
       const pathname =
-        window.location.pathname.at(-1) === '/'
-          ? window.location.pathname.slice(0, -1)
-          : window.location.pathname;
+        window.location.pathname.at(-1) === '/' ? window.location.pathname.slice(0, -1) : window.location.pathname;
       if (pathname === routeFullPath) {
         return routes[i].name;
       }
@@ -26,14 +23,7 @@ export default function Dashboard() {
   const getRoutes = (routes: RoutesType[]): any => {
     return routes.map((route: RoutesType, key: any) => {
       if (route.layout === '/dashboard') {
-        return (
-          <Route
-            exact
-            path={route.layout + route.path}
-            component={route.component}
-            key={key}
-          />
-        );
+        return <Route exact path={route.layout + route.path} component={route.component} key={key} />;
       } else {
         return null;
       }
@@ -63,13 +53,7 @@ export default function Dashboard() {
           </Box>
         </Portal>
 
-        <Box
-          mx='auto'
-          p={{ base: '20px', md: '30px' }}
-          pe='20px'
-          minH='100vh'
-          pt='50px'
-        >
+        <Box mx='auto' p={{ base: '20px', md: '30px' }} pe='20px' minH='100vh' pt='50px'>
           <Switch>
             {getRoutes(routes)}
             <Redirect from='/' to='/dashboard' />
