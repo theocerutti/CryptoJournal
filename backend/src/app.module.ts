@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { CurrentUserInterceptor } from './auth/current-user.interceptor';
@@ -12,6 +12,7 @@ import { InvestmentModule } from './investment/investment.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './schedulers/TasksModule';
 import { TransactionModule } from './transaction/transaction.module';
+import { HttpErrorFilter } from './filters/http-error.filter';
 
 @Module({
   imports: [
@@ -50,6 +51,10 @@ import { TransactionModule } from './transaction/transaction.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: CurrentUserInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpErrorFilter,
     },
   ],
 })

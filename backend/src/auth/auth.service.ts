@@ -1,8 +1,9 @@
-import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { User } from '../model/user.entity';
 import { CreateUserDTO } from 'shared/auth';
 import { RefreshTokenService } from './refresh_token.service';
+import HttpErrorException from '../exceptions/HttpError';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +17,7 @@ export class AuthService {
     let user: User = await this.userService.getByEmail(email);
 
     if (!user.checkIfUnencryptedPasswordIsValid(password)) {
-      throw new HttpException('Bad password', HttpStatus.UNAUTHORIZED);
+      throw new HttpErrorException('Bad password', null, HttpStatus.UNAUTHORIZED);
     }
 
     const access_token = await this.refreshTokenService.generateAccessToken(user);
@@ -33,7 +34,7 @@ export class AuthService {
     }
 
     if (user) {
-      throw new HttpException('User already exists with this email!', HttpStatus.BAD_REQUEST);
+      throw new HttpErrorException('User already exists with this email!', null, HttpStatus.BAD_REQUEST);
     }
 
     user = new User();

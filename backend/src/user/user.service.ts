@@ -1,8 +1,9 @@
-import { UserDto, UpdateUserDto } from 'shared/user';
+import { UpdateUserDto, UserDto } from 'shared/user';
 import { User } from 'model/user.entity';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
+import HttpErrorException from '../exceptions/HttpError';
 
 @Injectable()
 export class UserService {
@@ -12,7 +13,7 @@ export class UserService {
     try {
       return await this.UserRepo.find();
     } catch (error) {
-      throw new HttpException(`Can't find all user: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpErrorException("Can't find all user", error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -20,15 +21,7 @@ export class UserService {
     try {
       return await this.UserRepo.findOneOrFail({ where: { id: userID } });
     } catch (error) {
-      throw new HttpException(`Could not find user: ${error.message}`, HttpStatus.NOT_FOUND);
-    }
-  }
-
-  async getByIds(userIds: number[]): Promise<User[]> {
-    try {
-      return await this.UserRepo.findByIds(userIds);
-    } catch (error) {
-      throw new HttpException(`Can't get users: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpErrorException(`Could not find user with id ${userID}`, error, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -38,7 +31,7 @@ export class UserService {
         where: { email: email },
       });
     } catch (error) {
-      throw new HttpException(`Could not find user by email ${error.message}`, HttpStatus.NOT_FOUND);
+      throw new HttpErrorException('Could not find user with this email', error, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -51,7 +44,7 @@ export class UserService {
     try {
       return await this.UserRepo.save(user);
     } catch (error) {
-      throw new HttpException(`Could not create user : ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpErrorException('Could not create user', error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -62,7 +55,7 @@ export class UserService {
     try {
       return await this.UserRepo.save(updated);
     } catch (error) {
-      throw new HttpException(`Could not update user : ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpErrorException('Could not update user', error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -76,7 +69,7 @@ export class UserService {
     try {
       return await this.UserRepo.remove(user);
     } catch (error) {
-      throw new HttpException(`Could not remove user: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpErrorException('Could not remove user', error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

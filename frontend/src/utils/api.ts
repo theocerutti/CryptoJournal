@@ -11,7 +11,7 @@ import {
 const TOKEN_AUTH_RES_HEADER = 'Authorization';
 const SERVER_URL = process.env.REACT_APP_API_URL;
 
-const extractErrMessage = (err: { response: { data: { message: any } }; message: any }) => {
+const extractErrMessage = (err: { response: { data: { message: string } }; message: string }) => {
   if (!err) return 'Unknown error';
   if (err.response && err.response.data && err.response.data.message) return err.response.data.message;
   return err.message;
