@@ -88,6 +88,7 @@ export class Seeder {
           investment.buyPrice = faker.datatype.float({ min: 0.1, max: 2 }) * value.averagePrice; // add/remove between -90% and 100% of the average price
           investment.sellPrice = null;
           investment.buyNote = faker.lorem.lines(3);
+          investment.description = faker.lorem.lines(2);
           investment.sellNote = null;
           investment.name = key;
           investment.fees = faker.datatype.float({

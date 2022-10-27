@@ -3,7 +3,7 @@ import { UserService } from '../user/user.service';
 import { User } from '../../model/user.entity';
 import { CreateUserDTO } from 'shared/auth';
 import { RefreshTokenService } from './refresh_token.service';
-import HttpError from '../../exceptions/http-error.exception';
+import HttpError from '../../exceptions/http.error';
 
 @Injectable()
 export class AuthService {

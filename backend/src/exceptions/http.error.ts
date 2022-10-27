@@ -1,6 +1,6 @@
 import { HttpException } from '@nestjs/common';
 
-class HttpErrorException extends HttpException {
+class HttpError extends HttpException {
   private readonly clientMessage: string;
 
   constructor(clientMessage, err: Error | null, status: number) {
@@ -13,4 +13,4 @@ class HttpErrorException extends HttpException {
   }
 }
 
-export default HttpErrorException;
+export default HttpError;

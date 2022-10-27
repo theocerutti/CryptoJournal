@@ -30,6 +30,10 @@ export class InvestmentDto {
   @IsString()
   name: string;
 
+  @IsString()
+  @IsOptional()
+  description: string;
+
   @IsNumber()
   fees: number;
 

@@ -66,9 +66,9 @@ const TransactionForm = ({ editTransaction }: { editTransaction: GetTransactionD
       if (editTransaction) {
         const v = values as UpdateInvestmentDto;
         v.id = editTransaction.id;
-        mutationUpdate.mutate(v);
+        return mutationUpdate.mutateAsync(v);
       } else {
-        mutationCreate.mutate(values as CreateTransactionDto);
+        return mutationCreate.mutateAsync(values as CreateTransactionDto);
       }
     },
   });

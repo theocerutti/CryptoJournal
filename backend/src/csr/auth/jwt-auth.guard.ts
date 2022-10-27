@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './skip-auth.decorators';
 import { ExpiredJwtToken } from './auth.errors';
-import HttpError from '../../exceptions/http-error.exception';
+import HttpError from '../../exceptions/http.error';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {

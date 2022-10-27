@@ -3,7 +3,7 @@ import { User } from 'model/user.entity';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
-import HttpError from '../../exceptions/http-error.exception';
+import HttpError from '../../exceptions/http.error';
 
 @Injectable()
 export class UserService {

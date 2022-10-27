@@ -13,6 +13,8 @@ import { User } from './user.entity';
 import { ColumnNumericTransformer } from '../utils/transformer';
 import { OrderInvestmentStatus } from '../shared/investment';
 import { InvestmentType } from '../shared/investment/investment';
+import HttpError from '../exceptions/http.error';
+import { HttpStatus } from '@nestjs/common';
 
 @Entity()
 export class Investment {
@@ -74,6 +76,9 @@ export class Investment {
   @Column({ nullable: false })
   name: string;
 
+  @Column({ nullable: true })
+  description: string;
+
   @Column({
     type: 'decimal',
     nullable: false,
@@ -111,15 +116,17 @@ export class Investment {
   @BeforeUpdate()
   checkDate() {
     if (this.buyDate > new Date()) {
-      throw new Error('Buy date cannot be in the future');
+      throw new HttpError('Buy date cannot be in the future', null, HttpStatus.UNPROCESSABLE_ENTITY);
     }
     if (this.sellDate && this.sellDate < this.buyDate) {
-      throw new Error('Sell date cannot be before buy date');
+      throw new HttpError('Sell date cannot be before buy date', null, HttpStatus.UNPROCESSABLE_ENTITY);
     }
-    if (this.investedAmount < 0) throw new Error('Invested amount cannot be negative');
-    if (this.fees < 0) throw new Error('Fees cannot be negative');
-    if (this.buyPrice < 0) throw new Error('Buy price cannot be negative');
-    if (this.sellPrice && this.sellPrice < 0) throw new Error('Sell price cannot be negative');
+    if (this.investedAmount < 0)
+      throw new HttpError('Invested amount cannot be negative', null, HttpStatus.UNPROCESSABLE_ENTITY);
+    if (this.fees < 0) throw new HttpError('Fees cannot be negative', null, HttpStatus.UNPROCESSABLE_ENTITY);
+    if (this.buyPrice < 0) throw new HttpError('Buy price cannot be negative', null, HttpStatus.UNPROCESSABLE_ENTITY);
+    if (this.sellPrice && this.sellPrice < 0)
+      throw new HttpError('Sell price cannot be negative', null, HttpStatus.UNPROCESSABLE_ENTITY);
   }
 
   @BeforeInsert()
@@ -138,7 +145,7 @@ export class Investment {
     }
 
     if (this.investedAmount === 0 && this.type !== InvestmentType.GIFT) {
-      throw new Error('Invested amount cannot be 0 if it is not a gift');
+      throw new HttpError('Invested amount cannot be 0 if it is not a gift', null, HttpStatus.UNPROCESSABLE_ENTITY);
     }
   }
 }

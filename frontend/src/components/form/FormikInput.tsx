@@ -71,7 +71,9 @@ const FormikInput = ({
         variant='filled'
       >
         {selectValues.map((v) => (
-          <option value={v}>{v}</option>
+          <option key={v} value={v}>
+            {v}
+          </option>
         ))}
       </Select>
     );

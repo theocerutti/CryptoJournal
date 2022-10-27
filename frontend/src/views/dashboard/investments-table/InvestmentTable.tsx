@@ -14,13 +14,14 @@ import {
 import Table from 'components/table/Table';
 import React from 'react';
 import { GetInvestmentDto } from '@shared/investment';
-import { MdDelete, MdEdit } from 'react-icons/md';
+import { MdDelete, MdEdit, MdInfo } from 'react-icons/md';
 import { RiCheckboxBlankCircleFill } from 'react-icons/ri';
 import { formatCurrency } from '../../../utils/format';
 import { getSign } from '../../../utils/math';
 import { MultiCheckBoxColumnFilter } from '../../../components/table/MultiCheckBoxColumnFilter';
 import { FaGift } from 'react-icons/fa';
 
+// TODO: must be imported from @shared
 export enum OrderInvestmentStatus {
   OPEN = 'OPEN',
   CLOSED = 'CLOSED',
@@ -155,6 +156,11 @@ const InvestmentTable = ({
       id: 'actions',
       Cell: ({ row }: { row: { original: GetInvestmentDto } }) => (
         <HStack justify={'end'}>
+          <Tooltip label={row.original.description} placement='top'>
+            <Flex width='100%' justify='center'>
+              <Icon as={MdInfo} />
+            </Flex>
+          </Tooltip>
           <Button onClick={() => handleEdit(row.original)} colorScheme='yellow' variant='ghost'>
             <Icon as={MdEdit} />
           </Button>

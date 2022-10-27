@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom';
 import { CreateInvestmentDto, GetInvestmentDto, UpdateInvestmentDto } from '@shared/investment';
 import FormikInput from '../../components/form/FormikInput';
 import { showToast } from '../../utils/toast';
+import { InvestmentType } from '../dashboard/investments-table/InvestmentTable';
 
 const validationSchema = Yup.object().shape({
   buyDate: Yup.date().required('Buy date is required'),
@@ -18,6 +19,7 @@ const validationSchema = Yup.object().shape({
   buyNote: Yup.string().nullable().optional(),
   sellNote: Yup.string().nullable().optional(),
   name: Yup.string().required('Name is required'),
+  description: Yup.string().nullable().optional(),
   fees: Yup.number().min(0, 'Fees cannot be negative').optional(),
   investedAmount: Yup.number().min(0, 'Invested amount cannot be negative').required('Invested amount is required'),
   holdings: Yup.number().min(0).required('Holdings are required'),
@@ -58,13 +60,13 @@ const InvestmentForm = ({ editInvestment }: { editInvestment: GetInvestmentDto |
     initialValues: {
       buyDate: editInvestment ? new Date(editInvestment.buyDate) : new Date(),
       sellDate: editInvestment ? (editInvestment.sellDate === null ? null : new Date(editInvestment.sellDate)) : null,
-      // @ts-ignore
-      type: editInvestment ? editInvestment.type : 'NONE',
+      type: editInvestment ? editInvestment.type : InvestmentType.NONE, // TODO set to
       buyPrice: editInvestment ? editInvestment.buyPrice : 0,
       sellPrice: editInvestment ? editInvestment.sellPrice : null,
       buyNote: editInvestment ? editInvestment.buyNote : null,
       sellNote: editInvestment ? editInvestment.sellNote : null,
       name: editInvestment ? editInvestment.name : 'BTC',
+      description: editInvestment ? editInvestment.description : null,
       fees: editInvestment ? editInvestment.fees : 0,
       investedAmount: editInvestment ? editInvestment.investedAmount : 0,
       holdings: editInvestment ? editInvestment.holdings : 0,
@@ -81,9 +83,9 @@ const InvestmentForm = ({ editInvestment }: { editInvestment: GetInvestmentDto |
       if (editInvestment) {
         const v = values as UpdateInvestmentDto;
         v.id = editInvestment.id;
-        mutationUpdate.mutate(v);
+        return mutationUpdate.mutateAsync(v);
       } else {
-        mutationCreate.mutate(values as CreateInvestmentDto);
+        return mutationCreate.mutateAsync(values as CreateInvestmentDto);
       }
     },
   });
@@ -143,6 +145,15 @@ const InvestmentForm = ({ editInvestment }: { editInvestment: GetInvestmentDto |
             tooltip='Date at which you bought the investment'
             type='date'
             required
+          />
+        </HStack>
+        <HStack width='100%' spacing='10px'>
+          <FormikInput
+            formik={formik}
+            valueKey='description'
+            label='Description'
+            tooltip='Description of the investment'
+            type='textarea'
           />
         </HStack>
         <HStack width='100%' spacing='10px'>
