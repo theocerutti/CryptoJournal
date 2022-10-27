@@ -7,7 +7,6 @@ on a un dropdown avec les noms déjà utilisés (spécifique au user)
 si on veut ajouter un nouveau nom, on peut le faire aussi (dernier choix)
 
 Les tags permet de catégoriser les trades.
-Tous ces trades sont éditables.
 
 Il y aura une page avec toutes les catégories:
 
@@ -23,13 +22,8 @@ si Holdings BTC = 0.00001 alors on va pas faire un .toFixed(2) mais un .toFixed(
 
 mettre des chakras skeleton loaders
 
-refaire les charts comme sur coinbase
 react apex chart to nivo?
 chart donut status to sunburst
-
-mettre une petite alert pour dire qu'il y a un pb avec le totalInvested et ce qu'on a acheté
-
-center all spinners
 
 le form des transactions doit ajouter le FROM/TO avec dropdown (comme les names dans les investments)
 passer en REM (+ mettre les mesures en variables comme sur core-ui)

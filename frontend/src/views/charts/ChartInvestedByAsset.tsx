@@ -34,7 +34,14 @@ const ChartInvestedByAsset = () => {
   if (isError) return <Alert status='error'>Can't fetch investments</Alert>;
   if (loadingCalculation) return <CenteredSpinner />;
 
-  return <PieChart title='Total invested by asset' chartId='pie-chart-invested-by-asset' data={chartData} />;
+  return (
+    <PieChart
+      title='Total invested by asset'
+      chartId='pie-chart-invested-by-asset'
+      shouldFormatCurrency
+      data={chartData}
+    />
+  );
 };
 
 export default ChartInvestedByAsset;
