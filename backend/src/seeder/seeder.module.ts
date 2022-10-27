@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Seeder } from './seeder';
-import { InvestmentModule } from '../investment/investment.module';
-import { UserModule } from '../user/user.module';
+import { InvestmentModule } from '../csr/investment/investment.module';
+import { UserModule } from '../csr/user/user.module';
 import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from '../auth/auth.module';
-import { TransactionModule } from '../transaction/transaction.module';
+import { AuthModule } from '../csr/auth/auth.module';
+import { TransactionModule } from '../csr/transaction/transaction.module';
 
 @Module({
   imports: [

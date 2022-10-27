@@ -1,12 +1,17 @@
 import { Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
-import { CurrentUser } from 'auth/current-user.decorator';
+import { CurrentUser } from 'csr/auth/current-user.decorator';
 import { User } from 'model/user.entity';
 import { InvestmentService } from './investment.service';
 import { Investment } from 'model/investment.entity';
-import { CreateInvestmentDto, InvestmentGlobalInfoDto, OrderInvestmentStatus, UpdateInvestmentDto } from 'shared/investment';
-import { ScrapeDataContainer } from '../schedulers/ScrapeDataContainer';
-import { ScrapeData } from '../shared/investment/scrape';
-import { GetInvestmentDto } from '../shared/investment';
+import {
+  CreateInvestmentDto,
+  InvestmentGlobalInfoDto,
+  OrderInvestmentStatus,
+  UpdateInvestmentDto,
+} from 'shared/investment';
+import { ScrapeDataContainer } from '../../schedulers/ScrapeDataContainer';
+import { ScrapeData } from '../../shared/investment/scrape';
+import { GetInvestmentDto } from '../../shared/investment';
 
 @Controller('investments')
 export class InvestmentController {
@@ -28,7 +33,10 @@ export class InvestmentController {
   }
 
   @Get(':investmentId')
-  public async get(@CurrentUser() user: User, @Param('investmentId', ParseIntPipe) investmentId: number): Promise<GetInvestmentDto> {
+  public async get(
+    @CurrentUser() user: User,
+    @Param('investmentId', ParseIntPipe) investmentId: number
+  ): Promise<GetInvestmentDto> {
     this.logger.log(`Get investmentId=${investmentId}`);
     const investment = await this.investmentService.get(user.id, investmentId);
     return InvestmentService.mapInvestmentToGetDto(investment);
@@ -47,7 +55,10 @@ export class InvestmentController {
   }
 
   @Delete(':investmentId')
-  public async delete(@CurrentUser() user: User, @Param('investmentId', ParseIntPipe) investmentId: number): Promise<Investment> {
+  public async delete(
+    @CurrentUser() user: User,
+    @Param('investmentId', ParseIntPipe) investmentId: number
+  ): Promise<Investment> {
     this.logger.log(`Delete investmentId=${investmentId}`);
     return await this.investmentService.delete(user.id, investmentId);
   }

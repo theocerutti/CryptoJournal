@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Put } from 
 import { User } from 'model/user.entity';
 import { GetUserDto, UpdateUserDto } from 'shared/user';
 import { UserService } from './user.service';
-import { CurrentUser } from 'auth/current-user.decorator';
+import { CurrentUser } from 'csr/auth/current-user.decorator';
 
 @Controller('users')
 export class UserController {

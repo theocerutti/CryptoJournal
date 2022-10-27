@@ -6,10 +6,13 @@ import { InvestmentRepository } from './investment.repository';
 import { InvestmentService } from './investment.service';
 import { UserModule } from '../user/user.module';
 import { TransactionRepository } from '../transaction/transaction.repository';
-import { Transaction } from '../model/transaction.entity';
+import { Transaction } from '../../model/transaction.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Investment, InvestmentRepository, Transaction, TransactionRepository]), forwardRef(() => UserModule)],
+  imports: [
+    TypeOrmModule.forFeature([Investment, InvestmentRepository, Transaction, TransactionRepository]),
+    forwardRef(() => UserModule),
+  ],
   controllers: [InvestmentController],
   providers: [InvestmentService],
   exports: [InvestmentService],

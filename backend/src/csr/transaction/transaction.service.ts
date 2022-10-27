@@ -1,10 +1,10 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionRepository } from './transaction.repository';
-import { Transaction } from '../model/transaction.entity';
-import { User } from '../model/user.entity';
+import { Transaction } from '../../model/transaction.entity';
+import { User } from '../../model/user.entity';
 import { UserService } from '../user/user.service';
-import { CreateTransactionDto, UpdateTransactionDto } from '../shared/transaction';
+import { CreateTransactionDto, UpdateTransactionDto } from '../../shared/transaction';
 
 @Injectable()
 export class TransactionService {

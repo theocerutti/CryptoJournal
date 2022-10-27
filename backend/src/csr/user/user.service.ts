@@ -3,7 +3,7 @@ import { User } from 'model/user.entity';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
-import HttpErrorException from '../exceptions/HttpError';
+import HttpError from '../../exceptions/http-error.exception';
 
 @Injectable()
 export class UserService {
@@ -13,7 +13,7 @@ export class UserService {
     try {
       return await this.UserRepo.find();
     } catch (error) {
-      throw new HttpErrorException("Can't find all user", error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpError("Can't find all user", error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -21,7 +21,7 @@ export class UserService {
     try {
       return await this.UserRepo.findOneOrFail({ where: { id: userID } });
     } catch (error) {
-      throw new HttpErrorException(`Could not find user with id ${userID}`, error, HttpStatus.NOT_FOUND);
+      throw new HttpError(`Could not find user with id ${userID}`, error, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -31,7 +31,7 @@ export class UserService {
         where: { email: email },
       });
     } catch (error) {
-      throw new HttpErrorException('Could not find user with this email', error, HttpStatus.NOT_FOUND);
+      throw new HttpError('Could not find user with this email', error, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -44,7 +44,7 @@ export class UserService {
     try {
       return await this.UserRepo.save(user);
     } catch (error) {
-      throw new HttpErrorException('Could not create user', error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpError('Could not create user', error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -55,7 +55,7 @@ export class UserService {
     try {
       return await this.UserRepo.save(updated);
     } catch (error) {
-      throw new HttpErrorException('Could not update user', error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpError('Could not update user', error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -69,7 +69,7 @@ export class UserService {
     try {
       return await this.UserRepo.remove(user);
     } catch (error) {
-      throw new HttpErrorException('Could not remove user', error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpError('Could not remove user', error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

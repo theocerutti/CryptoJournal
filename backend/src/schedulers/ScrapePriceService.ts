@@ -1,8 +1,8 @@
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { InvestmentService } from '../investment/investment.service';
+import { InvestmentService } from '../csr/investment/investment.service';
 import { scrapePrice } from '../utils/scrape';
-import { scrapeRegex } from '../investment/scrape-table';
+import { scrapeRegex } from '../csr/investment/scrape-table';
 import { ConfigService } from '@nestjs/config';
 import { ScrapeData } from '../shared/investment/scrape';
 import { ScrapeDataContainer } from './ScrapeDataContainer';

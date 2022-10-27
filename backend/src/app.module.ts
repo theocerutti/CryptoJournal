@@ -2,16 +2,16 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './user/user.module';
+import { UserModule } from './csr/user/user.module';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { AuthModule } from './auth/auth.module';
-import { JwtAuthGuard } from './auth/jwt-auth.guard';
-import { CurrentUserInterceptor } from './auth/current-user.interceptor';
+import { AuthModule } from './csr/auth/auth.module';
+import { JwtAuthGuard } from './csr/auth/jwt-auth.guard';
+import { CurrentUserInterceptor } from './csr/auth/current-user.interceptor';
 import { ConfigModule } from '@nestjs/config';
-import { InvestmentModule } from './investment/investment.module';
+import { InvestmentModule } from './csr/investment/investment.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './schedulers/TasksModule';
-import { TransactionModule } from './transaction/transaction.module';
+import { TransactionModule } from './csr/transaction/transaction.module';
 import { HttpErrorFilter } from './filters/http-error.filter';
 
 @Module({

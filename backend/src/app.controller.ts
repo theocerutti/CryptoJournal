@@ -1,5 +1,5 @@
 import { Controller, Get, Logger } from '@nestjs/common';
-import { SkipAuth } from './auth/skip-auth.decorators';
+import { SkipAuth } from './csr/auth/skip-auth.decorators';
 
 @Controller('app')
 export class AppController {

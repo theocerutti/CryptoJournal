@@ -1,7 +1,7 @@
 import { EntityRepository } from 'typeorm';
 import { Investment } from 'model/investment.entity';
-import { User } from '../model/user.entity';
-import { BaseEntityRepository } from '../utils/BaseEntityRepository';
+import { User } from '../../model/user.entity';
+import { BaseEntityRepository } from '../../utils/BaseEntityRepository';
 
 @EntityRepository(Investment)
 export class InvestmentRepository extends BaseEntityRepository<Investment> {

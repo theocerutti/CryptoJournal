@@ -5,7 +5,7 @@ import { SkipAuth } from './skip-auth.decorators';
 import { User } from 'model/user.entity';
 import { RefreshRequest } from './refresh_token.dto';
 import { EXPIRATION_REFRESH_TOKEN, RefreshTokenService } from './refresh_token.service';
-import { TOKEN_AUTH_RES_HEADER } from '../shared/auth';
+import { TOKEN_AUTH_RES_HEADER } from '../../shared/auth';
 
 export interface AuthenticationPayload {
   user: User;

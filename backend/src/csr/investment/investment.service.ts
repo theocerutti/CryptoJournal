@@ -1,20 +1,20 @@
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InvestmentRepository } from './investment.repository';
-import { Investment } from '../model/investment.entity';
+import { Investment } from '../../model/investment.entity';
 import {
   CreateInvestmentDto,
   GetInvestmentDto,
   InvestmentGlobalInfoDto,
   OrderInvestmentStatus,
   UpdateInvestmentDto,
-} from '../shared/investment';
-import { User } from '../model/user.entity';
+} from '../../shared/investment';
+import { User } from '../../model/user.entity';
 import { UserService } from '../user/user.service';
-import { ScrapeDataContainer } from '../schedulers/ScrapeDataContainer';
+import { ScrapeDataContainer } from '../../schedulers/ScrapeDataContainer';
 import { TransactionRepository } from '../transaction/transaction.repository';
-import { InvestmentInfoByNames } from '../shared/investment/investment-global-info.dto';
-import { MyMath } from '../utils/math';
+import { InvestmentInfoByNames } from '../../shared/investment/investment-global-info.dto';
+import { MyMath } from '../../utils/math';
 
 @Injectable()
 export class InvestmentService {
