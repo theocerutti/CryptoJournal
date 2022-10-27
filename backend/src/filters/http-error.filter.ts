@@ -13,6 +13,7 @@ export class HttpErrorFilter implements ExceptionFilter {
       statusCode: status,
       message: exception.getClientMessage(),
       serverMessage: exception.message,
+      id: exception.getId(),
     });
   }
 }

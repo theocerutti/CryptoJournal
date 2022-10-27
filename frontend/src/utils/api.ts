@@ -6,6 +6,7 @@ import {
   getTokenFromStorage,
   setTokenFromStorage,
 } from './authStorage';
+// import { HttpErrorCode } from '@shared/exceptions'; // TODO
 // import { TOKEN_AUTH_RES_HEADER } from '@shared/auth';
 
 const TOKEN_AUTH_RES_HEADER = 'Authorization';
@@ -35,7 +36,7 @@ const api = Axios.create({
 const isJwtExpirationError = (err: { response: { data: any } }) => {
   if (err.response && err.response.data) {
     const data = err.response.data;
-    return data.statusCode === 401 && data.type === 'ExpiredJwtToken';
+    return data.id === /*HttpErrorCode.JWT_ERROR*/ 1; // TODO
   }
   return false;
 };
@@ -52,15 +53,15 @@ export const setupInterceptors = (history: any, toast: (options: any) => void = 
       const originalRequest = err.config;
 
       // if even after refetch an access token on /refresh route we receive a 401 code then go to login
-      if (isJwtExpirationError(err) && originalRequest.url === '/api/auth/refresh') {
+      if (isJwtExpirationError(err) && originalRequest.url === '/auth/refresh') {
         deleteRefreshTokenFromStorage();
         deleteTokenFromStorage();
         history.push('/auth/sign-in', {
           alertMessage: 'Your refresh token is expired. Please sign in again.',
         });
         return Promise.reject(err);
-      } else if (isJwtExpirationError(err) && !originalRequest._retry) {
-        originalRequest._retry = true;
+      } else if (isJwtExpirationError(err) && !originalRequest._retried) {
+        originalRequest._retried = true;
         const refreshToken = getRefreshTokenFromStorage();
         return api.post('/auth/refresh', { refresh_token: refreshToken }).then((res) => {
           const newToken = res.data;

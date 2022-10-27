@@ -37,4 +37,4 @@ faire en sorte qu'on puisse pas retirer de l'argent à notre banque si on a mêm
 l'argent de la balance c'est: totalPositionOrder.price - totalPositionSold.soldPrice
 Est-ce qu'on devrait soustraire les transactions out (toBank)?
 
-update error messages
+mettre les headers de horizon ui pour être légal

@@ -1,13 +1,13 @@
 import { User } from 'model/user.entity';
 import { JwtPayloadAccessToken, JwtPayloadRefreshToken } from './auth.utils';
 import { RefreshToken } from 'model/refresh_token.entity';
-import { forwardRef, Inject, Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { forwardRef, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { TokenExpiredError } from 'jsonwebtoken';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RefreshTokensRepository } from './refresh_token.repository';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'csr/user/user.service';
-import { ExpiredJwtToken } from './auth.errors';
+import HttpError, { HttpErrorCode } from '../../exceptions/http.error';
 
 export const EXPIRATION_REFRESH_TOKEN = 60 * 60 * 24 * 30 * 1000; // 30 days;
 
@@ -62,11 +62,12 @@ export class RefreshTokenService {
     const payload: JwtPayloadRefreshToken = await this.decodeRefreshToken(encoded);
     const token = await this.getStoredTokenFromRefreshTokenPayload(payload);
 
-    if (!token) throw new UnprocessableEntityException('Refresh token not found');
-    if (token.is_revoked) throw new UnprocessableEntityException('Refresh token revoked');
+    if (!token) throw new HttpError('Refresh token not found', null, HttpStatus.UNAUTHORIZED, HttpErrorCode.JWT_ERROR);
+    if (token.is_revoked)
+      throw new HttpError('Refresh token revoked', null, HttpStatus.UNAUTHORIZED, HttpErrorCode.JWT_ERROR);
 
     const user = await this.getUserFromRefreshTokenPayload(payload);
-    if (!user) throw new UnprocessableEntityException('Refresh token malformed');
+    if (!user) throw new HttpError('Refresh token malformed', null, HttpStatus.UNAUTHORIZED, HttpErrorCode.JWT_ERROR);
     return { user, token };
   }
 
@@ -82,22 +83,23 @@ export class RefreshTokenService {
       return await this.jwtService.verifyAsync(token);
     } catch (e) {
       if (e instanceof TokenExpiredError) {
-        throw new ExpiredJwtToken();
+        throw new HttpError('Refresh token expired', e, HttpStatus.UNAUTHORIZED, HttpErrorCode.JWT_ERROR);
       } else {
-        throw new UnprocessableEntityException('Refresh token malformed');
+        throw new HttpError('Refresh token malformed', e, HttpStatus.UNAUTHORIZED, HttpErrorCode.JWT_ERROR);
       }
     }
   }
 
   private async getUserFromRefreshTokenPayload(payload: JwtPayloadRefreshToken): Promise<User> {
     const userId = payload.userId;
-    if (!userId) throw new UnprocessableEntityException('Refresh token malformed');
+    if (!userId) throw new HttpError('Refresh token malformed', null, HttpStatus.UNAUTHORIZED, HttpErrorCode.JWT_ERROR);
     return this.userService.getById(userId);
   }
 
   private async getStoredTokenFromRefreshTokenPayload(payload: JwtPayloadRefreshToken): Promise<RefreshToken | null> {
     const tokenId = payload.refreshTokenId;
-    if (!tokenId) throw new UnprocessableEntityException('Refresh token malformed');
+    if (!tokenId)
+      throw new HttpError('Refresh token malformed', null, HttpStatus.UNAUTHORIZED, HttpErrorCode.JWT_ERROR);
     return this.RefreshTokensRepo.findOne(tokenId);
   }
 }

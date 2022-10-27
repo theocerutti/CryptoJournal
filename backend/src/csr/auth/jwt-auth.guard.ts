@@ -1,9 +1,8 @@
-import { ExecutionContext, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ExecutionContext, HttpStatus, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './skip-auth.decorators';
-import { ExpiredJwtToken } from './auth.errors';
-import HttpError from '../../exceptions/http.error';
+import HttpError, { HttpErrorCode } from '../../exceptions/http.error';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -13,11 +12,12 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   handleRequest(err, user, info) {
     if (err || !user) {
-      if (info.name === 'TokenExpiredError') throw new ExpiredJwtToken();
-      throw new HttpError(`Unauthorized: ${info.message}`, null, HttpStatus.UNAUTHORIZED);
+      if (info.name === 'TokenExpiredError')
+        throw new HttpError('Token expired', err, HttpStatus.UNAUTHORIZED, HttpErrorCode.JWT_ERROR);
+      throw new HttpError(`Unauthorized: ${info.message}`, err, HttpStatus.UNAUTHORIZED, HttpErrorCode.JWT_ERROR);
     }
     if (user) return user;
-    throw new UnauthorizedException();
+    throw new HttpError('Unauthorized', err, HttpStatus.UNAUTHORIZED, HttpErrorCode.NONE);
   }
 
   canActivate(context: ExecutionContext) {
