@@ -5,4 +5,11 @@ import { InvestmentGlobalInfoDto } from './investment-global-info.dto';
 import { GetInvestmentDto } from './get-investment.dto';
 import { OrderInvestmentStatus } from './investment';
 
-export { InvestmentDto, CreateInvestmentDto, UpdateInvestmentDto, InvestmentGlobalInfoDto, GetInvestmentDto, OrderInvestmentStatus };
+export {
+  InvestmentDto,
+  CreateInvestmentDto,
+  UpdateInvestmentDto,
+  InvestmentGlobalInfoDto,
+  GetInvestmentDto,
+  OrderInvestmentStatus,
+};
