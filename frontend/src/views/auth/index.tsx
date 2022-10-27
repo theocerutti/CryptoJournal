@@ -35,7 +35,7 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
   const [show, setShow] = React.useState(false);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const handleClick = () => setShow(!show);
+  const handleShowPassword = () => setShow(!show);
 
   const authenticateMutation = (mutationArgs: LoginUserDTO | CreateUserDTO) => {
     if (type === 'sign-in') {
@@ -140,7 +140,7 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
                   color={textColorSecondary}
                   _hover={{ cursor: 'pointer' }}
                   as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
-                  onClick={handleClick}
+                  onClick={handleShowPassword}
                 />
               </InputRightElement>
             </InputGroup>

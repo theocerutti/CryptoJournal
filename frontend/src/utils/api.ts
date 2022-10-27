@@ -40,7 +40,10 @@ const isJwtExpirationError = (err: { response: { data: any } }) => {
   return false;
 };
 
+let __alreadySetup = false;
 export const setupInterceptors = (history: any, toast: (options: any) => void = null) => {
+  if (__alreadySetup) return;
+  __alreadySetup = true;
   api.interceptors.response.use(
     (res) => {
       return res;
@@ -66,14 +69,17 @@ export const setupInterceptors = (history: any, toast: (options: any) => void = 
           return api(originalRequest);
         });
       }
-      if (err.response && err.response.status !== 403)
+      if (err.response && err.response.status !== 403) {
         // don't notify error of forbidden errors
-        toast({
-          description: extractErrMessage(err),
-          status: 'error',
-          position: 'bottom-right',
-          isClosable: true,
-        });
+        if (toast) {
+          toast({
+            description: extractErrMessage(err),
+            status: 'error',
+            position: 'bottom-right',
+            isClosable: true,
+          });
+        }
+      }
       return Promise.reject(err);
     }
   );
