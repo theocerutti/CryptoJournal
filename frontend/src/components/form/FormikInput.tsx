@@ -1,9 +1,10 @@
-import React, { HTMLInputTypeAttribute } from 'react';
+import React, { HTMLInputTypeAttribute, MouseEventHandler } from 'react';
 import {
   Checkbox,
   FormControl,
   FormErrorMessage,
   FormLabel,
+  HStack,
   Input,
   InputGroup,
   InputLeftElement,
@@ -17,8 +18,11 @@ type MixedInputProps = {
   valueKey: any;
   label: string;
   formik: any;
-  type?: HTMLInputTypeAttribute;
+  type?: HTMLInputTypeAttribute | 'text' | 'select-with-input' | 'textarea';
   selectValues?: string[];
+  selectValue?: string;
+  onSelectChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  formatSelectValue?: (s: string) => string;
   inputLeftElement?: string;
   disabled?: boolean;
   tooltip?: string;
@@ -36,6 +40,9 @@ const FormikInput = ({
   required = false,
   placeholder = null,
   selectValues = null,
+  onSelectChange = null,
+  formatSelectValue = null,
+  selectValue = null,
   formik,
 }: MixedInputProps) => {
   let input: JSX.Element;
@@ -52,6 +59,35 @@ const FormikInput = ({
         onChange={formik.handleChange}
         size='sm'
       />
+    );
+  } else if (type == 'select-with-input') {
+    input = (
+      <HStack width='100%'>
+        <Select
+          onChange={onSelectChange}
+          style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0 }}
+          variant='filled'
+          value={selectValue}
+        >
+          {selectValues.map((v) => (
+            <option key={v} value={v}>
+              {formatSelectValue ? formatSelectValue(v) : v}
+            </option>
+          ))}
+        </Select>
+        <Input
+          id={valueKey}
+          name={valueKey}
+          type={type}
+          variant='filled'
+          placeholder={placeholder}
+          disabled={disabled}
+          style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, marginLeft: 0 }}
+          onChange={formik.handleChange}
+          // @ts-ignore
+          value={value}
+        />
+      </HStack>
     );
   } else if (type === 'checkbox') {
     input = (

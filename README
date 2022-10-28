@@ -38,3 +38,5 @@ l'argent de la balance c'est: totalPositionOrder.price - totalPositionSold.soldP
 Est-ce qu'on devrait soustraire les transactions out (toBank)?
 
 mettre les headers de horizon ui pour être légal
+
+fix InvaliDate -> pb de perf

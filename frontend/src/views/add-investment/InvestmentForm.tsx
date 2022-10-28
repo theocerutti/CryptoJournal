@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { Button, HStack, useToast, VStack } from '@chakra-ui/react';
 import * as Yup from 'yup';
@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom';
 import { CreateInvestmentDto, GetInvestmentDto, UpdateInvestmentDto } from '@shared/investment';
 import FormikInput from '../../components/form/FormikInput';
 import { showToast } from '../../utils/toast';
+import { isUrl } from '../../utils/url';
 import { InvestmentType } from '../dashboard/investments-table/InvestmentTable';
 
 const validationSchema = Yup.object().shape({
@@ -26,13 +27,22 @@ const validationSchema = Yup.object().shape({
   locationName: Yup.string().nullable().optional(),
   primaryTag: Yup.string().nullable().optional(),
   secondaryTag: Yup.string().nullable().optional(),
-  priceLink: Yup.string().url("This link doesn't seems to be an url").required('Price link is required'),
+  priceLink: Yup.string().required('Price link is required'),
 });
+
+export enum ScrapeSite {
+  CoinMarketCap = 'coinmarketcap.com',
+  Investing = 'investing.com',
+  JustEtf = 'justetf.com', // TODO: import
+}
 
 const InvestmentForm = ({ editInvestment }: { editInvestment: GetInvestmentDto | null }) => {
   const toast = useToast();
   const history = useHistory();
   const queryClient = useQueryClient();
+  const [priceLinkHostname, setPriceLinkHostname] = useState(
+    editInvestment ? new URL(editInvestment.priceLink).hostname : ScrapeSite.CoinMarketCap
+  );
 
   const showSuccessToast = () => {
     showToast(toast, `Successfully ${editInvestment ? 'updated' : 'created'} investment`);
@@ -73,12 +83,15 @@ const InvestmentForm = ({ editInvestment }: { editInvestment: GetInvestmentDto |
       locationName: editInvestment ? editInvestment.locationName : 'Binance',
       primaryTag: editInvestment ? editInvestment.primaryTag : 'Crypto',
       secondaryTag: editInvestment ? editInvestment.secondaryTag : 'Bitcoin',
-      priceLink: editInvestment ? editInvestment.priceLink : 'https://coinmarketcap.com/currencies/bitcoin/',
+      priceLink: editInvestment ? editInvestment.priceLink : '/currencies/bitcoin/',
     },
     validationSchema: validationSchema,
     onSubmit: (values: CreateInvestmentDto | UpdateInvestmentDto) => {
       values.buyDate = dayjs(values.buyDate).toDate();
       values.sellDate = dayjs(values.sellDate).toDate();
+      values.priceLink = priceLinkHostname + values.priceLink;
+
+      if (!isUrl(values.priceLink)) formik.setErrors({ priceLink: 'Price link is not a valid URL' });
 
       if (editInvestment) {
         const v = values as UpdateInvestmentDto;
@@ -194,14 +207,19 @@ const InvestmentForm = ({ editInvestment }: { editInvestment: GetInvestmentDto |
           />
         </HStack>
         <HStack width='100%' spacing='10px'>
-          <FormikInput
-            formik={formik}
-            valueKey='priceLink'
-            label='Price link'
-            tooltip='Link to the price of the investment'
-            type='url'
-            required
-          />
+          <HStack width='100%'>
+            <FormikInput
+              formik={formik}
+              valueKey='priceLink'
+              label='Price link'
+              tooltip='Link to the price of the investment'
+              type='select-with-input'
+              selectValues={Object.values(ScrapeSite).map((site) => `https://${site}`)}
+              selectValue={priceLinkHostname}
+              onSelectChange={(e) => setPriceLinkHostname(e.target.value)}
+              required
+            />
+          </HStack>
           <FormikInput
             formik={formik}
             valueKey='locationName'
