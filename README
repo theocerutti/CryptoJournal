@@ -1,3 +1,7 @@
+SQLDBM:
+https://app.sqldbm.com/PostgreSQL/Edit/p237733/
+
+
 Objectifs:
 
 Ajout d'investment:
@@ -40,3 +44,5 @@ Est-ce qu'on devrait soustraire les transactions out (toBank)?
 mettre les headers de horizon ui pour être légal
 
 fix InvaliDate -> pb de perf
+
+faire un système de vérification d'email
