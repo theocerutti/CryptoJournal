@@ -5,7 +5,7 @@ import { defaultQueryConfig } from '../../queries/config';
 import { Alert, Flex, Heading, Table, TableContainer, Tbody, Td, Text, Thead, Tr } from '@chakra-ui/react';
 import Card from '../../components/card/Card';
 import { formatCurrency } from 'utils/format';
-import { getSign } from '../../utils/math';
+import { getSign, toSpecialPrecision } from '../../utils/math';
 import { getGrowthColor } from '../../utils/colors';
 import CenteredSpinner from '../../components/CenteredSpinner';
 
@@ -60,7 +60,7 @@ const TableInvestmentInfoByAsset = () => {
                         <Text color={getGrowthColor(info.pnl)} fontSize='xs' fontWeight='700' me='5px'>
                           {getSign(info.pnl)}
                           {formatCurrency(Math.abs(info.pnl))}{' '}
-                          {info.pnlPercent !== null && `(${info.pnlPercent.toFixed(2)}%)`}
+                          {info.pnlPercent !== null && `(${toSpecialPrecision(info.pnlPercent)}%)`}
                         </Text>
                       </Td>
                       <Td>{formatCurrency(info.averageBuyPrice)}</Td>

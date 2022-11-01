@@ -1,6 +1,6 @@
 import { Flex, Stat, StatLabel, StatNumber, Text, useColorModeValue } from '@chakra-ui/react';
 import Card from 'components/card/Card';
-import { getSign } from '../../utils/math';
+import { getSign, toSpecialPrecision } from '../../utils/math';
 import { formatCurrency } from '../../utils/format';
 import { getGrowthColor } from '../../utils/colors';
 
@@ -43,7 +43,7 @@ export default function MiniStatistics(props: {
             <Flex align='center'>
               <Text color={getGrowthColor(growth)} fontSize='xs' fontWeight='700' me='5px'>
                 {getSign(growth)}
-                {formatCurrency(Math.abs(growth))} {growthPercent !== null && `(${growthPercent.toFixed(2)}%)`}
+                {formatCurrency(Math.abs(growth))} {growthPercent !== null && `(${toSpecialPrecision(growthPercent)}%)`}
               </Text>
             </Flex>
           ) : null}

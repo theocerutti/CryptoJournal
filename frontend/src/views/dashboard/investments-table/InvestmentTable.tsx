@@ -17,7 +17,7 @@ import { GetInvestmentDto } from '@shared/investment';
 import { MdDelete, MdEdit, MdInfo } from 'react-icons/md';
 import { RiCheckboxBlankCircleFill } from 'react-icons/ri';
 import { formatCurrency } from '../../../utils/format';
-import { getSign } from '../../../utils/math';
+import { getSign, toSpecialPrecision } from '../../../utils/math';
 import { MultiCheckBoxColumnFilter } from '../../../components/table/MultiCheckBoxColumnFilter';
 import { FaGift } from 'react-icons/fa';
 
@@ -110,7 +110,7 @@ const InvestmentTable = ({
         <Flex align='center'>
           <Text color={getGrowthColor(value)} fontSize='xs' fontWeight='700' me='5px'>
             {getSign(value)}
-            {formatCurrency(Math.abs(value))} ({row.original.pnlPercent?.toFixed(2)}%)
+            {formatCurrency(Math.abs(value))} ({toSpecialPrecision(row.original.pnlPercent)}%)
           </Text>
         </Flex>
       ),
@@ -118,7 +118,7 @@ const InvestmentTable = ({
     {
       Header: 'HOLDINGS',
       accessor: 'holdings',
-      Cell: ({ value }: { value: number }) => value.toFixed(3),
+      Cell: ({ value }: { value: number }) => toSpecialPrecision(value),
     },
     {
       Header: 'BUY PRICE',

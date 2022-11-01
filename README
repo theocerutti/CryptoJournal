@@ -20,10 +20,6 @@ Ces "cards" afficheront le montant investis + le montant gain/loss
 On clique sur la card pour afficher une liste de trades (catégorisé) par secondaryTag (dropdown)
 Tous les dropdown affiche le montant investit + le montant gain/loss
 
-format intelligent: example:
-si Holdings BTC = 0.00001 alors on va pas faire un .toFixed(2) mais un .toFixed(5)
--> mais de base si on a 12.32318723 alors la on fait applique le toFixed par default .toFixed(2)
-
 mettre des chakras skeleton loaders
 
 react apex chart to nivo?
@@ -46,3 +42,8 @@ mettre les headers de horizon ui pour être légal
 fix InvaliDate -> pb de perf
 
 faire un système de vérification d'email
+
+
+Faire en sorte de pouvoir "transferer" des "investments" sur d'autres plateforme ou sur du stacking par ex.
+-> reproduire le même comportement que je fais quand j'investis
+En gros ce que j'ai en vrai doit refléter exactement ce que j'ai sur l'app.

@@ -4,7 +4,7 @@ import { getRepository, Repository } from 'typeorm';
 import * as faker from 'faker';
 import { Investment } from '../model/investment.entity';
 import { Transaction } from '../model/transaction.entity';
-import { InvestmentType } from '../shared/investment/investment';
+import { InvestmentType } from '../shared/investment';
 
 const SEED_USER = 5;
 const SEED_INVESTMENT_BY_USER = 100;
@@ -28,6 +28,10 @@ const investmentsDatas: {
   HBAR: {
     averagePrice: 0.07,
     priceLink: 'https://coinmarketcap.com/currencies/hedera/',
+  },
+  MATIC: {
+    averagePrice: 0.89,
+    priceLink: 'https://coinmarketcap.com/currencies/polygon/',
   },
 };
 
@@ -94,7 +98,6 @@ export class Seeder {
           investment.fees = faker.datatype.float({
             min: 0,
             max: 10,
-            precision: 2,
           });
           investment.investedAmount = faker.datatype.float({
             min: 50,
@@ -149,12 +152,10 @@ export class Seeder {
         transaction.amount = faker.datatype.float({
           min: 0,
           max: 1000,
-          precision: 2,
         });
         transaction.fees = faker.datatype.float({
           min: 0,
           max: 10,
-          precision: 2,
         });
         transaction.from = locationNames[faker.datatype.number(locationNames.length - 1)];
         transaction.to = locationNames[faker.datatype.number(locationNames.length - 1)];
