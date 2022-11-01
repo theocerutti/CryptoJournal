@@ -202,7 +202,7 @@ const LineChart = ({
       },
     },
     tooltip: {
-      custom: () => '',
+      cssClass: 'line-chart-tooltip',
     },
     ...options,
   };
