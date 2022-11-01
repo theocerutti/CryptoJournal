@@ -115,7 +115,7 @@ const FormikInput = ({
     );
   } else {
     if (type === 'date') {
-      value = dayjs(value).format('YYYY-MM-DD');
+      if (value instanceof Date) value = dayjs(value).format('YYYY-MM-DD');
     }
 
     input = (

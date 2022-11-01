@@ -31,9 +31,9 @@ const validationSchema = Yup.object().shape({
 });
 
 export enum ScrapeSite {
-  CoinMarketCap = 'coinmarketcap.com',
-  Investing = 'investing.com',
-  JustEtf = 'justetf.com', // TODO: import
+  CoinMarketCap = 'https://coinmarketcap.com',
+  Investing = 'https://investing.com',
+  JustEtf = 'https://justetf.com', // TODO: import
 }
 
 const InvestmentForm = ({ editInvestment }: { editInvestment: GetInvestmentDto | null }) => {
@@ -93,6 +93,7 @@ const InvestmentForm = ({ editInvestment }: { editInvestment: GetInvestmentDto |
 
       if (!isUrl(values.priceLink)) formik.setErrors({ priceLink: 'Price link is not a valid URL' });
 
+      console.log(values, priceLinkHostname);
       if (editInvestment) {
         const v = values as UpdateInvestmentDto;
         v.id = editInvestment.id;
@@ -214,7 +215,7 @@ const InvestmentForm = ({ editInvestment }: { editInvestment: GetInvestmentDto |
               label='Price link'
               tooltip='Link to the price of the investment'
               type='select-with-input'
-              selectValues={Object.values(ScrapeSite).map((site) => `https://${site}`)}
+              selectValues={Object.values(ScrapeSite)}
               selectValue={priceLinkHostname}
               onSelectChange={(e) => setPriceLinkHostname(e.target.value)}
               required
