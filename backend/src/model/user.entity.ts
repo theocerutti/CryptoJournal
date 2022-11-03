@@ -5,6 +5,7 @@ import { IsNotEmpty, Length } from 'class-validator';
 import { RefreshToken } from './refresh_token.entity';
 import { Investment } from './investment.entity';
 import { Transaction } from './transaction.entity';
+import { Portfolio } from './portfolio.entity';
 
 @Entity()
 export class User {
@@ -30,6 +31,11 @@ export class User {
     onDelete: 'CASCADE',
   })
   investments: Investment[];
+
+  @OneToMany(() => Portfolio, (portfolio) => portfolio.user, {
+    onDelete: 'CASCADE',
+  })
+  portfolios: Portfolio[];
 
   @OneToMany(() => Transaction, (transaction) => transaction.user, {
     onDelete: 'CASCADE',
