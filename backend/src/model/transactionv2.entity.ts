@@ -1,18 +1,18 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Portfolio } from './portfolio.entity';
 import { TransactionInfo } from './transaction-info.entity';
 import { ColumnNumericTransformer } from '../utils/transformer';
+import { User } from './user.entity';
 
 @Entity()
 export class TransactionV2 {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Portfolio, (portfolio) => portfolio.transactions, {
+  @ManyToOne(() => User, (user) => user.transactionsV2, {
     onDelete: 'CASCADE',
   })
   @JoinColumn()
-  portfolio: Portfolio;
+  user: User;
 
   @OneToOne(() => TransactionInfo)
   @JoinColumn()

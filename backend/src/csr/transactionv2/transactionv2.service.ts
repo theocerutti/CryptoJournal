@@ -35,7 +35,7 @@ export class TransactionV2Service {
   async create(user: User, transactionDto: CreateTransactionV2Dto): Promise<TransactionV2> {
     const transaction = new TransactionV2();
     Object.assign(transaction, transactionDto);
-    transaction.portfolio = await this.portfolioService.get(user.id, transactionDto.portfolioId);
+    transaction.user = user;
     return await this.TransactionRepo.save(transaction);
   }
 

@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ColumnNumericTransformer } from '../utils/transformer';
+import { Portfolio } from './portfolio.entity';
 
 @Entity()
 export class TransactionInfo {
@@ -11,6 +12,10 @@ export class TransactionInfo {
 
   @Column()
   priceLink: string;
+
+  @OneToOne(() => Portfolio, { createForeignKeyConstraints: false, onUpdate: 'NO ACTION', onDelete: 'NO ACTION' })
+  @JoinColumn()
+  portfolio: Portfolio;
 
   @Column({
     type: 'decimal',

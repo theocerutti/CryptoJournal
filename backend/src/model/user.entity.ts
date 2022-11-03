@@ -6,6 +6,7 @@ import { RefreshToken } from './refresh_token.entity';
 import { Investment } from './investment.entity';
 import { Transaction } from './transaction.entity';
 import { Portfolio } from './portfolio.entity';
+import { TransactionV2 } from './transactionv2.entity';
 
 @Entity()
 export class User {
@@ -31,6 +32,11 @@ export class User {
     onDelete: 'CASCADE',
   })
   investments: Investment[];
+
+  @OneToMany(() => TransactionV2, (transactionV2) => transactionV2.user, {
+    onDelete: 'CASCADE',
+  })
+  transactionsV2: TransactionV2[];
 
   @OneToMany(() => Portfolio, (portfolio) => portfolio.user, {
     onDelete: 'CASCADE',

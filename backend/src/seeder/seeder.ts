@@ -1,14 +1,16 @@
 import { User } from '../model/user.entity';
 import { Injectable, Logger } from '@nestjs/common';
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, Not, Repository } from 'typeorm';
 import * as faker from 'faker';
-import { Investment } from '../model/investment.entity';
-import { Transaction } from '../model/transaction.entity';
-import { InvestmentType } from '../shared/investment';
+import { Portfolio } from '../model/portfolio.entity';
+import { TransactionV2 } from '../model/transactionv2.entity';
+import { TransactionInfo } from '../model/transaction-info.entity';
 
 const SEED_USER = 5;
-const SEED_INVESTMENT_BY_USER = 100;
-const SEED_TRANSACTIONS_BY_USER = 10;
+const SEED_TRANSACTIONS_BY_USER = 100;
+
+const portfolioNames = ['My Bank', 'Binance', 'Ledger', 'Bybit', 'RealT'];
+const feesCurrency = ['EUR', 'USD'];
 
 const investmentsDatas: {
   [key: string]: { averagePrice: number; priceLink: string };
@@ -35,27 +37,29 @@ const investmentsDatas: {
   },
 };
 
-const locationNames = ['Kraken', 'Binance', 'Coinbase', 'Bitstamp', 'Bitfinex', 'BourseDirect', 'TradeRepublic'];
-
 @Injectable()
 export class Seeder {
   private readonly logger = new Logger(Seeder.name);
 
   userRepo: Repository<User>;
-  investmentRepo: Repository<Investment>;
-  transactionRepo: Repository<Transaction>;
+  transactionV2Repo: Repository<TransactionV2>;
+  transactionInfoRepo: Repository<TransactionInfo>;
+  portfolioRepo: Repository<Portfolio>;
 
   buildSeeder() {
     this.logger.log('Getting repositories...');
     this.userRepo = getRepository(User);
-    this.investmentRepo = getRepository(Investment);
-    this.transactionRepo = getRepository(Transaction);
+    this.transactionV2Repo = getRepository(TransactionV2);
+    this.transactionInfoRepo = getRepository(TransactionInfo);
+    this.portfolioRepo = getRepository(Portfolio);
   }
 
   async cleanDatabase() {
     this.logger.log('Clean database...');
     await this.userRepo.delete({});
-    await this.investmentRepo.delete({});
+    await this.transactionV2Repo.delete({});
+    await this.transactionInfoRepo.delete({});
+    await this.portfolioRepo.delete({});
   }
 
   async seedUsers(): Promise<User[]> {
@@ -79,96 +83,72 @@ export class Seeder {
     return await this.userRepo.save(users);
   }
 
-  async seedInvestments(users: User[]) {
-    const yearAgo = new Date();
-    yearAgo.setFullYear(yearAgo.getFullYear() - 1);
+  async seedPortfolio(users: User[]) {
+    this.logger.log('Seed portfolio...');
+
     for (const user of users) {
-      for (let i = 0; i < SEED_INVESTMENT_BY_USER; i++) {
-        for (const [key, value] of Object.entries(investmentsDatas)) {
-          const investment = new Investment();
-          investment.user = user;
-          investment.buyDate = faker.date.between(yearAgo, new Date());
-          investment.sellDate = null;
-          investment.buyPrice = faker.datatype.float({ min: 0.1, max: 2 }) * value.averagePrice; // add/remove between -90% and 100% of the average price
-          investment.sellPrice = null;
-          investment.buyNote = faker.lorem.lines(3);
-          investment.description = faker.lorem.lines(2);
-          investment.sellNote = null;
-          investment.name = key;
-          investment.fees = faker.datatype.float({
-            min: 0,
-            max: 10,
-          });
-          investment.investedAmount = faker.datatype.float({
-            min: 50,
-            max: 1000,
-          });
-          investment.holdings = investment.investedAmount / investment.buyPrice;
-          investment.locationName = locationNames[faker.datatype.number(locationNames.length - 1)];
-          investment.primaryTag = key;
-          investment.secondaryTag = 'Crypto';
-          investment.priceLink = value.priceLink;
-
-          if (i % 8 === 0) {
-            investment.type = InvestmentType.GIFT;
-            investment.investedAmount = 0;
-          }
-
-          // add sell investments
-          if (i % 2 === 0) {
-            investment.sellDate = faker.date.future(faker.datatype.number({ min: 1, max: 365 }), investment.buyDate);
-            investment.sellNote = faker.lorem.lines(3);
-            // win investment
-            if (i % 3 === 0) {
-              investment.sellPrice = faker.datatype.number({
-                min: investment.buyPrice,
-                max: investment.buyPrice + (value.averagePrice / 5) * faker.datatype.float({ min: 0.1, max: 2 }),
-              });
-            }
-            // loose investment
-            else {
-              const minPrice =
-                investment.buyPrice - (value.averagePrice / 5) * faker.datatype.float({ min: 0.1, max: 2 });
-              investment.sellPrice = faker.datatype.number({
-                min: minPrice < 0 ? 1 : minPrice,
-                max: investment.buyPrice,
-              });
-            }
-          }
-          await this.investmentRepo.save(investment);
-        }
+      for (const portfolioName of portfolioNames) {
+        const portfolio = new Portfolio();
+        portfolio.user = user;
+        portfolio.name = portfolioName;
+        portfolio.description = faker.lorem.lines(1);
+        await this.portfolioRepo.save(portfolio);
       }
     }
   }
 
-  async seedTransactions(users: User[]) {
+  async getRandomPortfolio(user: User, expectPortfolioId: number = -1) {
+    const portfolios = await this.portfolioRepo.find({
+      where: { user: { id: user.id }, id: Not(expectPortfolioId) },
+    });
+    return faker.random.arrayElement(portfolios);
+  }
+
+  async seedTransactionsV2(users: User[]) {
+    this.logger.log('Seed transactions v2...');
+
     for (const user of users) {
       for (let i = 0; i < SEED_TRANSACTIONS_BY_USER; i++) {
-        const transaction = new Transaction();
-        transaction.fromBank = false;
-        transaction.toBank = false;
+        const fromPortfolio = await this.getRandomPortfolio(user);
+        const toPortfolio = await this.getRandomPortfolio(user, fromPortfolio.id);
+
+        const fromCurrency = faker.random.arrayElement(Object.keys(investmentsDatas));
+        // get toCurrency different from fromCurrency
+        const toCurrency = faker.random.arrayElement(
+          Object.keys(investmentsDatas).slice(Object.keys(investmentsDatas).indexOf(fromCurrency))
+        );
+        const fromData = investmentsDatas[fromCurrency];
+        const toData = investmentsDatas[toCurrency];
+
+        const transactionInfoFrom = new TransactionInfo();
+        transactionInfoFrom.amount = faker.datatype.float({ min: 0.1, max: 2 }) * fromData.averagePrice;
+        transactionInfoFrom.priceLink = fromData.priceLink;
+        transactionInfoFrom.portfolio = fromPortfolio;
+        transactionInfoFrom.currency = fromCurrency;
+
+        const transactionInfoTo = new TransactionInfo();
+        transactionInfoTo.amount = faker.datatype.float({ min: 0.1, max: 2 }) * toData.averagePrice;
+        transactionInfoTo.priceLink = toData.priceLink;
+        transactionInfoTo.portfolio = toPortfolio;
+        transactionInfoTo.currency = toCurrency;
+
+        const [transactionInfoFromSaved, transactionInfoToSaved] = await this.transactionInfoRepo.save([
+          transactionInfoFrom,
+          transactionInfoTo,
+        ]);
+
+        const transaction = new TransactionV2();
+        transaction.to = transactionInfoToSaved;
+        transaction.from = transactionInfoFromSaved;
+        transaction.note = faker.lorem.lines(3);
         transaction.user = user;
         transaction.date = faker.date.past();
-        transaction.amount = faker.datatype.float({
-          min: 0,
-          max: 1000,
-        });
         transaction.fees = faker.datatype.float({
           min: 0,
-          max: 10,
+          max: 30,
         });
-        transaction.from = locationNames[faker.datatype.number(locationNames.length - 1)];
-        transaction.to = locationNames[faker.datatype.number(locationNames.length - 1)];
-
-        if (i % 4 === 0) {
-          transaction.toBank = true;
-          transaction.to = 'Bank';
-        } else if (i % 3 === 0) {
-          transaction.fromBank = true;
-          transaction.from = 'Bank';
-        }
-
-        await this.transactionRepo.save(transaction);
+        transaction.feesCurrency = faker.random.arrayElement(feesCurrency);
+        await this.transactionV2Repo.save(transaction);
       }
     }
   }
@@ -182,7 +162,7 @@ export class Seeder {
 
     // seeds
     const seededUsers = await this.seedUsers();
-    await this.seedInvestments(seededUsers);
-    await this.seedTransactions(seededUsers);
+    await this.seedPortfolio(seededUsers);
+    await this.seedTransactionsV2(seededUsers);
   }
 }

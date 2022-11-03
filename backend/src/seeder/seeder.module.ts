@@ -6,6 +6,8 @@ import { UserModule } from '../csr/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../csr/auth/auth.module';
 import { TransactionModule } from '../csr/transaction/transaction.module';
+import { PortfolioModule } from '../csr/portfolio/portfolio.module';
+import { TransactionV2Module } from '../csr/transactionv2/transactionv2.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { TransactionModule } from '../csr/transaction/transaction.module';
     }),
     UserModule,
     AuthModule,
+    TransactionV2Module,
+    PortfolioModule,
     TransactionModule,
     InvestmentModule,
   ],
