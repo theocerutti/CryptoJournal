@@ -16,7 +16,7 @@ import {
 import { SidebarResponsive } from 'components/sidebar/Sidebar';
 import React from 'react';
 import { IoMdMoon, IoMdSunny } from 'react-icons/io';
-import routes from 'routes';
+import routes from 'routes/routes';
 import { deleteRefreshTokenFromStorage, deleteTokenFromStorage } from '../../utils/authStorage';
 import { useHistory } from 'react-router-dom';
 import { MdOutlineVolunteerActivism } from 'react-icons/md';

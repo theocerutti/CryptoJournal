@@ -3,10 +3,10 @@ import Footer from 'components/Footer';
 import Navbar from 'components/navbar/Navbar';
 import Sidebar from 'components/sidebar/Sidebar';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import routes from 'routes';
+import routes from 'routes/routes';
 
 export default function Dashboard() {
-  const getActiveRoute = (routes: RoutesType[]): string => {
+  const getActiveRouteName = (routes: RouteType[]): string => {
     let activeRoute = 'Default Active Route';
 
     for (let i = 0; i < routes.length; i++) {
@@ -20,8 +20,8 @@ export default function Dashboard() {
     return activeRoute;
   };
 
-  const getRoutes = (routes: RoutesType[]): any => {
-    return routes.map((route: RoutesType, key: any) => {
+  const getRoutes = (routes: RouteType[]): any => {
+    return routes.map((route: RouteType, key: any) => {
       if (route.layout === '/dashboard') {
         return <Route exact path={route.layout + route.path} component={route.component} key={key} />;
       } else {
@@ -49,7 +49,7 @@ export default function Dashboard() {
       >
         <Portal>
           <Box>
-            <Navbar brandText={getActiveRoute(routes)} />
+            <Navbar brandText={getActiveRouteName(routes)} />
           </Box>
         </Portal>
 

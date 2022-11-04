@@ -16,7 +16,7 @@ import { renderThumb, renderTrack, renderView } from 'components/Scrollbar';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { IoMenuOutline } from 'react-icons/io5';
 
-function Sidebar(props: { routes: RoutesType[]; [x: string]: any }) {
+function Sidebar(props: { routes: RouteType[]; [x: string]: any }) {
   const { routes } = props;
 
   let variantChange = '0.2s linear';
@@ -49,7 +49,7 @@ function Sidebar(props: { routes: RoutesType[]; [x: string]: any }) {
   );
 }
 
-export function SidebarResponsive(props: { routes: RoutesType[] }) {
+export function SidebarResponsive(props: { routes: RouteType[] }) {
   let sidebarBackgroundColor = useColorModeValue('white', 'navy.800');
   let menuColor = useColorModeValue('grey.400', 'white');
   const { isOpen, onOpen, onClose } = useDisclosure();

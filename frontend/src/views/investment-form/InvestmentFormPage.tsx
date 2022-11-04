@@ -7,7 +7,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { Button, HStack } from '@chakra-ui/react';
 import { GetInvestmentDto } from '@shared/investment';
 
-const AddInvestmentPage = () => {
+const InvestmentFormPage = () => {
   const history = useHistory();
   const location = useLocation();
   // @ts-ignore
@@ -31,4 +31,4 @@ const AddInvestmentPage = () => {
   );
 };
 
-export default AddInvestmentPage;
+export default InvestmentFormPage;

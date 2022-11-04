@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Box, Button, HStack } from '@chakra-ui/react';
 import { BsArrowLeft } from 'react-icons/bs';
 import Card from '../../components/card/Card';
-import { GetTransactionDto } from '@shared/transaction';
-import TransactionForm from './TransactionForm';
+import { GetPortfolioDto } from '@shared/portfolio';
+import PortfolioForm from './PortfolioForm';
 
-const AddTransactionPage = () => {
+const PortfolioFormPage = () => {
   const history = useHistory();
   const location = useLocation();
+
   // @ts-ignore
-  const editTransaction = !!location.state?.transaction
+  const editPortfolio = !!location.state?.portfolio
     ? // @ts-ignore
-      (location.state.transaction as GetTransactionDto)
+      (location.state.portfolio as GetPortfolioDto)
     : null;
 
   return (
@@ -24,10 +25,10 @@ const AddTransactionPage = () => {
         </HStack>
       </Button>
       <Card my='20px'>
-        <TransactionForm editTransaction={editTransaction} />
+        <PortfolioForm editPortfolio={editPortfolio} />
       </Card>
     </Box>
   );
 };
 
-export default AddTransactionPage;
+export default PortfolioFormPage;

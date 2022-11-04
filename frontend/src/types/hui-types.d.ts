@@ -1,16 +1,14 @@
 export {};
 
 declare global {
-  /**
-   * Now declare things that go in the global namespace,
-   * or augment existing declarations in the global namespace.
-   */
-  interface RoutesType {
+  interface RouteType {
     name: string;
     layout: string;
     component: () => JSX.Element;
-    icon?: JSX.Element | string;
+    icon?: JSX.Element;
     showNavbar?: boolean;
+    buttonComponent?: (isActive: boolean, route: RouteType) => JSX.Element;
     path: string;
+    activeOnPath?: string[];
   }
 }

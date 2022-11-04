@@ -47,3 +47,5 @@ faire un système de vérification d'email
 Faire en sorte de pouvoir "transferer" des "investments" sur d'autres plateforme ou sur du stacking par ex.
 -> reproduire le même comportement que je fais quand j'investis
 En gros ce que j'ai en vrai doit refléter exactement ce que j'ai sur l'app.
+
+make sure that portfolio doesn't have same name SQL restriction

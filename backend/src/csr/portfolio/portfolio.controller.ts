@@ -37,13 +37,4 @@ export class PortfolioController {
     this.logger.log(`Update ${portfolioDTO}`);
     return await this.portfolioService.update(user.id, portfolioDTO);
   }
-
-  @Delete(':portfolioId')
-  public async delete(
-    @CurrentUser() user: User,
-    @Param('portfolioId', ParseIntPipe) portfolioId: number
-  ): Promise<Portfolio> {
-    this.logger.log(`Delete portfolioId=${portfolioId}`);
-    return await this.portfolioService.delete(user.id, portfolioId);
-  }
 }

@@ -2,7 +2,7 @@ import { Box, Flex, Stack } from '@chakra-ui/react';
 import SidebarBrand from 'components/sidebar/SidebarBrand';
 import SidebarLinks from 'components/sidebar/SidebarLinks';
 
-function SidebarContent(props: { routes: RoutesType[] }) {
+function SidebarContent(props: { routes: RouteType[] }) {
   const { routes } = props;
 
   return (

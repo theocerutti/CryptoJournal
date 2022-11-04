@@ -38,3 +38,24 @@ option {
 .line-chart-tooltip {
   display: none !important;
 }
+
+.chakra-accordion.accordion-sidebar {
+  .chakra-accordion__item {
+    border: none;
+  }
+
+  .chakra-accordion__button {
+    display: flex;
+    padding-left: 10px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    align-items: center;
+
+    ::before {
+      height: 36px;
+      width: 4px;
+      border-radius: 5px;
+      background: #7551FF;
+    }
+  }
+}
