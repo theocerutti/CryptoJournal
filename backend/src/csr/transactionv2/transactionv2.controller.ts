@@ -17,7 +17,7 @@ export class TransactionV2Controller {
     return await this.transactionService.getAll(user.id);
   }
 
-  @Get(':portfolioId/:transactionId')
+  @Get(':transactionId')
   public async get(
     @CurrentUser() user: User,
     @Param('transactionId', ParseIntPipe) transaction: number
@@ -44,7 +44,7 @@ export class TransactionV2Controller {
     return await this.transactionService.update(user.id, transactionDTO);
   }
 
-  @Delete(':portfolioId/:transactionId')
+  @Delete(':transactionId')
   public async delete(
     @CurrentUser() user: User,
     @Param('transactionId', ParseIntPipe) transaction: number

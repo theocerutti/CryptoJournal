@@ -13,9 +13,10 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
+import { getObjectValueFromDot } from '../../utils/object';
 
 type MixedInputProps = {
-  valueKey: any;
+  valueKey: string;
   label: string;
   formik: any;
   type?: HTMLInputTypeAttribute | 'text' | 'select-with-input' | 'textarea';
@@ -46,7 +47,8 @@ const FormikInput = ({
   formik,
 }: MixedInputProps) => {
   let input: JSX.Element;
-  let value = formik.values[valueKey] === null ? '' : formik.values[valueKey];
+  let value = getObjectValueFromDot(formik.values, valueKey);
+  value = value === undefined ? '' : value;
 
   if (type === 'textarea') {
     input = (
@@ -133,7 +135,9 @@ const FormikInput = ({
     );
   }
 
-  const isError: boolean = !!formik.errors[valueKey];
+  console.log(formik.errors);
+  const error = getObjectValueFromDot(formik.errors, valueKey);
+  const isError: boolean = !!error;
 
   const inputContainer =
     type !== 'textarea' && inputLeftElement ? (
@@ -159,7 +163,7 @@ const FormikInput = ({
       {isError && (
         <FormErrorMessage>
           {/* @ts-ignore */}
-          {formik.errors[valueKey] || 'Error'}
+          {error || 'Error'}
         </FormErrorMessage>
       )}
     </FormControl>

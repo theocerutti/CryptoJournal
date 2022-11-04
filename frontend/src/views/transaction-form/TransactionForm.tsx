@@ -128,7 +128,7 @@ const TransactionForm = ({ editTransaction }: { editTransaction: GetTransactionD
         </HStack>
 
         <HStack justify='end' w='100%'>
-          <Button onClick={() => history.push('/dashboard')} colorScheme='grey' mr={3}>
+          <Button onClick={() => history.push('/dashboard')} colorScheme='gray' mr={3}>
             Close
           </Button>
           <Button isLoading={formik.isSubmitting} type='submit' colorScheme='blue' mr={3}>

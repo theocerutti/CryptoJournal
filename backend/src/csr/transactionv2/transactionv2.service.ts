@@ -6,12 +6,15 @@ import { UserService } from '../user/user.service';
 import { TransactionV2 } from '../../model/transactionv2.entity';
 import { PortfolioService } from '../portfolio/portfolio.service';
 import { CreateTransactionV2Dto, UpdateTransactionV2Dto } from '../../shared/transactionv2';
+import { TransactionInfoRepository } from './transaction-info.repository';
 
 @Injectable()
 export class TransactionV2Service {
   constructor(
     @InjectRepository(TransactionV2Repository)
     private readonly TransactionRepo: TransactionV2Repository,
+    @InjectRepository(TransactionInfoRepository)
+    private readonly TransactionInfoRepo: TransactionV2Repository,
     @Inject(forwardRef(() => UserService)) private userService: UserService,
     @Inject(forwardRef(() => PortfolioService)) private portfolioService: PortfolioService
   ) {}
@@ -36,6 +39,14 @@ export class TransactionV2Service {
     const transaction = new TransactionV2();
     Object.assign(transaction, transactionDto);
     transaction.user = user;
+
+    // TODO: what happen if this success but the next one fail? -> need transaction and rollback
+    const [transactionInfoFromSaved, transactionInfoToSaved] = await this.TransactionInfoRepo.save([
+      transaction.from,
+      transaction.to,
+    ]);
+    transaction.from = transactionInfoFromSaved;
+    transaction.to = transactionInfoToSaved;
     return await this.TransactionRepo.save(transaction);
   }
 

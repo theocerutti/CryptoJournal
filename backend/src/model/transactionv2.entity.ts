@@ -27,13 +27,13 @@ export class TransactionV2 {
 
   @Column({
     type: 'decimal',
-    nullable: false,
+    nullable: true,
     transformer: new ColumnNumericTransformer(),
   })
-  fees: number;
+  fees: number; // TODO: MUST not be null if feesCurrency is not null
 
-  @Column()
-  feesCurrency: string;
+  @Column({ nullable: true })
+  feesCurrency: string; // TODO: MUST not be null if fees is not null
 
   @Column({ type: 'timestamp' })
   date: Date;

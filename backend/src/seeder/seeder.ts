@@ -121,16 +121,18 @@ export class Seeder {
         const toData = investmentsDatas[toCurrency];
 
         const transactionInfoFrom = new TransactionInfo();
-        transactionInfoFrom.amount = faker.datatype.float({ min: 0.1, max: 2 }) * fromData.averagePrice;
+        transactionInfoFrom.price = faker.datatype.float({ min: 0.1, max: 2 }) * fromData.averagePrice;
         transactionInfoFrom.priceLink = fromData.priceLink;
         transactionInfoFrom.portfolio = fromPortfolio;
-        transactionInfoFrom.currency = fromCurrency;
+        transactionInfoFrom.asset = fromCurrency;
+        transactionInfoFrom.amount = faker.datatype.float({ min: 0.1, max: 2 });
 
         const transactionInfoTo = new TransactionInfo();
-        transactionInfoTo.amount = faker.datatype.float({ min: 0.1, max: 2 }) * toData.averagePrice;
+        transactionInfoTo.price = faker.datatype.float({ min: 0.1, max: 2 });
         transactionInfoTo.priceLink = toData.priceLink;
         transactionInfoTo.portfolio = toPortfolio;
-        transactionInfoTo.currency = toCurrency;
+        transactionInfoTo.asset = toCurrency;
+        transactionInfoTo.amount = transactionInfoTo.amount / transactionInfoTo.price;
 
         const [transactionInfoFromSaved, transactionInfoToSaved] = await this.transactionInfoRepo.save([
           transactionInfoFrom,

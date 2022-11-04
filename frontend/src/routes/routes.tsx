@@ -14,6 +14,7 @@ import ChartsPage from '../views/charts';
 import ProfilePage from '../views/profile/ProfilePage';
 import PortfolioFormPage from '../views/portfolio-form/PortfolioFormPage';
 import PortfolioDropdownRouteButton from './PortfolioDropdownRouteButton';
+import TransactionV2FormPage from 'views/transactionv2-form/TransactionV2FormPage';
 
 export const activeSpecificRoute = (layout: string, path: string, location: any) => {
   const fullRoutePath = buildFullRoutePath(layout, path);
@@ -67,6 +68,20 @@ const routes: RouteType[] = [
     path: '/edit-transaction',
     showNavbar: false,
     component: TransactionFormPage,
+  },
+  {
+    name: 'Add transactions',
+    layout: '/dashboard',
+    path: '/add-transactionv2',
+    icon: <Icon as={MdOutlineRepeat} width='20px' height='20px' color='inherit' />,
+    component: TransactionV2FormPage,
+  },
+  {
+    name: 'Edit transaction',
+    layout: '/dashboard',
+    path: '/edit-transactionv2',
+    showNavbar: false,
+    component: TransactionV2FormPage,
   },
   {
     name: 'Portfolios',

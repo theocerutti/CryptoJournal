@@ -5,7 +5,7 @@ export class TransactionInfoDto {
   id: number;
 
   @IsString()
-  currency: string;
+  asset: string;
 
   @IsString()
   @IsUrl()
@@ -13,4 +13,7 @@ export class TransactionInfoDto {
 
   @IsNumber()
   amount: number;
+
+  @IsNumber()
+  price: number;
 }

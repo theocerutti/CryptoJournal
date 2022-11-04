@@ -8,7 +8,7 @@ export class TransactionInfo {
   id: number;
 
   @Column()
-  currency: string;
+  asset: string;
 
   @Column()
   priceLink: string;
@@ -23,4 +23,11 @@ export class TransactionInfo {
     transformer: new ColumnNumericTransformer(),
   })
   amount: number;
+
+  @Column({
+    type: 'decimal',
+    nullable: false,
+    transformer: new ColumnNumericTransformer(),
+  })
+  price: number;
 }
