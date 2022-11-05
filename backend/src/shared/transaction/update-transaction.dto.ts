@@ -2,7 +2,7 @@ import { OmitType } from '@nestjs/swagger';
 import { TransactionDto } from './transaction.dto';
 import { IsObject } from 'class-validator';
 
-export class UpdateTransactionDto extends OmitType(TransactionDto, ['to', 'from', 'feesCurrency'] as const) {
+export class UpdateTransactionDto extends OmitType(TransactionDto, ['to', 'from', 'feeAsset'] as const) {
   @IsObject()
   from: UpdateTransactionDto;
 
@@ -10,5 +10,5 @@ export class UpdateTransactionDto extends OmitType(TransactionDto, ['to', 'from'
   to: UpdateTransactionDto;
 
   @IsObject()
-  feesCurrency: UpdateTransactionDto;
+  feeAsset: UpdateTransactionDto;
 }

@@ -16,13 +16,13 @@ export class TransactionDto {
   note: string;
 
   @IsNumber()
-  feesPrice: number;
+  feePrice: number;
 
   @IsNumber()
-  feesAmount: number;
+  feeAmount: number;
 
   @IsObject()
-  feesCurrency: AssetDto;
+  feeAsset: AssetDto;
 
   @IsDateString()
   date: Date;

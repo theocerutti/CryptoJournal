@@ -174,12 +174,12 @@ export class Seeder {
         transaction.note = faker.lorem.lines(3);
         transaction.user = user;
         transaction.date = faker.date.past();
-        transaction.feesPrice = 1;
-        transaction.feesAmount = faker.datatype.float({
+        transaction.feePrice = 1;
+        transaction.feeAmount = faker.datatype.float({
           min: 0,
           max: 30,
         });
-        transaction.feesCurrency = feeAsset;
+        transaction.feeAsset = feeAsset;
         await this.transactionRepo.save(transaction);
       }
     }

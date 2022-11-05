@@ -4,7 +4,7 @@ import { IsObject } from 'class-validator';
 import { CreateTransactionInfoDto } from '../transaction-info';
 import { CreateAssetDto } from '../asset';
 
-export class CreateTransactionDto extends OmitType(TransactionDto, ['id', 'from', 'to', 'feesCurrency'] as const) {
+export class CreateTransactionDto extends OmitType(TransactionDto, ['id', 'from', 'to', 'feeAsset'] as const) {
   @IsObject()
   from: CreateTransactionInfoDto;
 
@@ -12,5 +12,5 @@ export class CreateTransactionDto extends OmitType(TransactionDto, ['id', 'from'
   to: CreateTransactionInfoDto;
 
   @IsObject()
-  feesCurrency: CreateAssetDto;
+  feeAsset: CreateAssetDto;
 }

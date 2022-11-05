@@ -31,18 +31,18 @@ export class Transaction {
     nullable: false,
     transformer: new ColumnNumericTransformer(),
   })
-  feesAmount: number;
+  feeAmount: number;
 
   @Column({
     type: 'decimal',
     nullable: false,
     transformer: new ColumnNumericTransformer(),
   })
-  feesPrice: number;
+  feePrice: number;
 
   @OneToOne(() => Asset, { createForeignKeyConstraints: false, onUpdate: 'NO ACTION', onDelete: 'NO ACTION' })
   @JoinColumn()
-  feesCurrency: Asset;
+  feeAsset: Asset;
 
   @Column({ type: 'timestamp' })
   date: Date;
