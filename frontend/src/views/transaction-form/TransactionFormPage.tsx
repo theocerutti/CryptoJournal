@@ -12,7 +12,7 @@ const TransactionFormPage = () => {
   // @ts-ignore
   const editTransaction = !!location.state?.transaction
     ? // @ts-ignore
-      (location.state.transaction as GetTransactionDto)
+      (location.state.transaction as GetTransactionV2Dto)
     : null;
 
   return (

@@ -1,20 +1,11 @@
 import { Icon } from '@chakra-ui/react';
-import {
-  MdAccountBalanceWallet,
-  MdBarChart,
-  MdHome,
-  MdOutlinePlaylistAdd,
-  MdOutlineRepeat,
-  MdPerson,
-} from 'react-icons/md';
+import { MdAccountBalanceWallet, MdBarChart, MdHome, MdOutlineRepeat, MdPerson } from 'react-icons/md';
 import MainDashboard from 'views/dashboard';
-import InvestmentFormPage from '../views/investment-form/InvestmentFormPage';
 import TransactionFormPage from '../views/transaction-form/TransactionFormPage';
 import ChartsPage from '../views/charts';
 import ProfilePage from '../views/profile/ProfilePage';
 import PortfolioFormPage from '../views/portfolio-form/PortfolioFormPage';
 import PortfolioDropdownRouteButton from './PortfolioDropdownRouteButton';
-import TransactionV2FormPage from 'views/transactionv2-form/TransactionV2FormPage';
 
 export const activeSpecificRoute = (layout: string, path: string, location: any) => {
   const fullRoutePath = buildFullRoutePath(layout, path);
@@ -42,20 +33,6 @@ const routes: RouteType[] = [
     component: MainDashboard,
   },
   {
-    name: 'Add investment',
-    layout: '/dashboard',
-    path: '/add-investment',
-    icon: <Icon as={MdOutlinePlaylistAdd} width='20px' height='20px' color='inherit' />,
-    component: InvestmentFormPage,
-  },
-  {
-    name: 'Edit investment',
-    layout: '/dashboard',
-    path: '/edit-investment',
-    showNavbar: false,
-    component: InvestmentFormPage,
-  },
-  {
     name: 'Add transactions',
     layout: '/dashboard',
     path: '/add-transaction',
@@ -68,20 +45,6 @@ const routes: RouteType[] = [
     path: '/edit-transaction',
     showNavbar: false,
     component: TransactionFormPage,
-  },
-  {
-    name: 'Add transactions',
-    layout: '/dashboard',
-    path: '/add-transactionv2',
-    icon: <Icon as={MdOutlineRepeat} width='20px' height='20px' color='inherit' />,
-    component: TransactionV2FormPage,
-  },
-  {
-    name: 'Edit transaction',
-    layout: '/dashboard',
-    path: '/edit-transactionv2',
-    showNavbar: false,
-    component: TransactionV2FormPage,
   },
   {
     name: 'Portfolios',

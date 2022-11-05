@@ -14,9 +14,8 @@ import {
 import SidebarText from './SidebarText';
 import { useHistory } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { INVESTMENT_QUERY_KEY } from '../queries/investments';
 import { defaultQueryConfig } from '../queries/config';
-import { getPortfoliosQuery } from '../queries/portfolio';
+import { getPortfoliosQuery, PORTFOLIO_QUERY_KEY } from '../queries/portfolio';
 import CenteredSpinner from '../components/CenteredSpinner';
 import { MdAdd } from 'react-icons/md';
 
@@ -25,7 +24,7 @@ const PortfolioDropdownRouteButton = (isActive: boolean, route: RouteType) => {
   const activeIcon = useColorModeValue('brand.500', 'white');
   const textColor = useColorModeValue('secondaryGrey.500', 'white');
 
-  const { data, isLoading } = useQuery([INVESTMENT_QUERY_KEY], getPortfoliosQuery, {
+  const { data, isLoading } = useQuery([PORTFOLIO_QUERY_KEY], getPortfoliosQuery, {
     ...defaultQueryConfig,
   });
 
