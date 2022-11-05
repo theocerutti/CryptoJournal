@@ -1,11 +1,10 @@
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { InvestmentService } from '../csr/investment/investment.service';
 import { scrapePrice } from '../utils/scrape';
-import { scrapeRegex } from '../csr/investment/scrape-table';
 import { ConfigService } from '@nestjs/config';
-import { ScrapeData } from '../shared/investment/scrape';
 import { ScrapeDataContainer } from './ScrapeDataContainer';
+import { AssetService } from '../csr/asset/asset.service';
+import { ScrapeData, scrapeRegex } from '../shared/scrape';
 
 @Injectable()
 export class ScrapePriceService {
@@ -13,8 +12,8 @@ export class ScrapePriceService {
 
   constructor(
     private configService: ConfigService,
-    @Inject(forwardRef(() => InvestmentService))
-    private investmentService: InvestmentService
+    @Inject(forwardRef(() => AssetService))
+    private assetService: AssetService
   ) {}
 
   @Cron(CronExpression.EVERY_10_MINUTES, {
@@ -22,7 +21,7 @@ export class ScrapePriceService {
   })
   async scrapePrices() {
     const prices: ScrapeData = {};
-    const links = await this.investmentService.getDistinctPriceLinks();
+    const links = await this.assetService.getDistinctPriceTrackerUrls();
 
     for (const link of links) {
       const url = new URL(link);

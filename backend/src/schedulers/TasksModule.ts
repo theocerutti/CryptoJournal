@@ -1,10 +1,10 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { ScrapePriceService } from './ScrapePriceService';
-import { InvestmentModule } from '../csr/investment/investment.module';
 import { ConfigModule } from '@nestjs/config';
+import { AssetModule } from '../csr/asset/asset.module';
 
 @Module({
-  imports: [forwardRef(() => InvestmentModule), ConfigModule],
+  imports: [forwardRef(() => AssetModule), ConfigModule],
   providers: [ScrapePriceService],
   exports: [ScrapePriceService],
 })

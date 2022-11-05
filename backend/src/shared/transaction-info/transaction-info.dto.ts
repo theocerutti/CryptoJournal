@@ -1,15 +1,12 @@
-import { IsNumber, IsString, IsUrl } from 'class-validator';
+import { IsNumber, IsObject, IsString, IsUrl } from 'class-validator';
+import { AssetDto } from '../asset';
 
 export class TransactionInfoDto {
   @IsNumber()
   id: number;
 
-  @IsString()
-  asset: string;
-
-  @IsString()
-  @IsUrl()
-  priceLink: string;
+  @IsObject()
+  asset: AssetDto;
 
   @IsNumber()
   amount: number;

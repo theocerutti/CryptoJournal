@@ -1,58 +1,49 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import { User } from './user.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { TransactionInfo } from './transaction-info.entity';
 import { ColumnNumericTransformer } from '../utils/transformer';
+import { User } from './user.entity';
+import { Asset } from './asset.entity';
 
 @Entity()
 export class Transaction {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
   @ManyToOne(() => User, (user) => user.transactions, {
-    onDelete: 'CASCADE',
+    onDelete: 'RESTRICT',
   })
   @JoinColumn()
   user: User;
 
-  @Column()
-  from: string;
+  @OneToOne(() => TransactionInfo, { onDelete: 'CASCADE' })
+  @JoinColumn()
+  to: TransactionInfo;
 
-  @Column()
-  to: string;
+  @OneToOne(() => TransactionInfo, { onDelete: 'CASCADE' })
+  @JoinColumn()
+  from: TransactionInfo;
+
+  @Column({ nullable: true })
+  note: string;
 
   @Column({
     type: 'decimal',
     nullable: false,
     transformer: new ColumnNumericTransformer(),
   })
-  amount: number;
+  feesAmount: number;
 
-  @Column({ type: 'timestamp', nullable: false })
+  @Column({
+    type: 'decimal',
+    nullable: false,
+    transformer: new ColumnNumericTransformer(),
+  })
+  feesPrice: number;
+
+  @OneToOne(() => Asset, { createForeignKeyConstraints: false, onUpdate: 'NO ACTION', onDelete: 'NO ACTION' })
+  @JoinColumn()
+  feesCurrency: Asset;
+
+  @Column({ type: 'timestamp' })
   date: Date;
-
-  @Column({
-    type: 'decimal',
-    nullable: false,
-    transformer: new ColumnNumericTransformer(),
-  })
-  fees: number;
-
-  @Column('boolean', { default: false })
-  fromBank: boolean = false;
-
-  @Column('boolean', { default: false })
-  toBank: boolean = false;
 }

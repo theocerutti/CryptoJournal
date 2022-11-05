@@ -1,17 +1,22 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionRepository } from './transaction.repository';
-import { Transaction } from '../../model/transaction.entity';
 import { User } from '../../model/user.entity';
 import { UserService } from '../user/user.service';
+import { Transaction } from '../../model/transaction.entity';
+import { PortfolioService } from '../portfolio/portfolio.service';
 import { CreateTransactionDto, UpdateTransactionDto } from '../../shared/transaction';
+import { TransactionInfoRepository } from './transaction-info.repository';
 
 @Injectable()
 export class TransactionService {
   constructor(
     @InjectRepository(TransactionRepository)
     private readonly TransactionRepo: TransactionRepository,
-    @Inject(forwardRef(() => UserService)) private userService: UserService
+    @InjectRepository(TransactionInfoRepository)
+    private readonly TransactionInfoRepo: TransactionRepository,
+    @Inject(forwardRef(() => UserService)) private userService: UserService,
+    @Inject(forwardRef(() => PortfolioService)) private portfolioService: PortfolioService
   ) {}
 
   async getAll(userId: number): Promise<Transaction[]> {
@@ -31,6 +36,14 @@ export class TransactionService {
     const transaction = new Transaction();
     Object.assign(transaction, transactionDto);
     transaction.user = user;
+
+    // TODO: what happen if this success but the next one fail? -> need transaction and rollback
+    const [transactionInfoFromSaved, transactionInfoToSaved] = await this.TransactionInfoRepo.save([
+      transaction.from,
+      transaction.to,
+    ]);
+    transaction.from = transactionInfoFromSaved;
+    transaction.to = transactionInfoToSaved;
     return await this.TransactionRepo.save(transaction);
   }
 

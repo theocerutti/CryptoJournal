@@ -8,13 +8,12 @@ import { AuthModule } from './csr/auth/auth.module';
 import { JwtAuthGuard } from './csr/auth/jwt-auth.guard';
 import { CurrentUserInterceptor } from './csr/auth/current-user.interceptor';
 import { ConfigModule } from '@nestjs/config';
-import { InvestmentModule } from './csr/investment/investment.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './schedulers/TasksModule';
-import { TransactionModule } from './csr/transaction/transaction.module';
 import { HttpErrorFilter } from './filters/http-error.filter';
 import { PortfolioModule } from './csr/portfolio/portfolio.module';
-import { TransactionV2Module } from './csr/transactionv2/transactionv2.module';
+import { TransactionModule } from './csr/transaction/transaction.module';
+import { AssetModule } from './csr/asset/asset.module';
 
 @Module({
   imports: [
@@ -37,9 +36,8 @@ import { TransactionV2Module } from './csr/transactionv2/transactionv2.module';
       migrationsRun: true,
     }),
     TasksModule,
-    InvestmentModule,
+    AssetModule,
     TransactionModule,
-    TransactionV2Module,
     PortfolioModule,
     UserModule,
     AuthModule,

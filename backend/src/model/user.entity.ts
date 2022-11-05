@@ -3,10 +3,9 @@ import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { IsNotEmpty, Length } from 'class-validator';
 import { RefreshToken } from './refresh_token.entity';
-import { Investment } from './investment.entity';
-import { Transaction } from './transaction.entity';
 import { Portfolio } from './portfolio.entity';
-import { TransactionV2 } from './transactionv2.entity';
+import { Transaction } from './transaction.entity';
+import { Asset } from './asset.entity';
 
 @Entity()
 export class User {
@@ -28,25 +27,20 @@ export class User {
   })
   refresh_token: RefreshToken;
 
-  @OneToMany(() => Investment, (investment) => investment.user, {
+  @OneToMany(() => Transaction, (transaction) => transaction.user, {
     onDelete: 'CASCADE',
   })
-  investments: Investment[];
+  transactions: Transaction[];
 
-  @OneToMany(() => TransactionV2, (transactionV2) => transactionV2.user, {
+  @OneToMany(() => Asset, (asset) => asset.user, {
     onDelete: 'CASCADE',
   })
-  transactionsV2: TransactionV2[];
+  assets: Asset[];
 
   @OneToMany(() => Portfolio, (portfolio) => portfolio.user, {
     onDelete: 'CASCADE',
   })
   portfolios: Portfolio[];
-
-  @OneToMany(() => Transaction, (transaction) => transaction.user, {
-    onDelete: 'CASCADE',
-  })
-  transactions: Transaction[];
 
   @Column({ nullable: true })
   erc20Address: string;

@@ -1,4 +1,4 @@
-import { ScrapeData } from '../shared/investment/scrape';
+import { ScrapeData } from '../shared/scrape';
 
 export class ScrapeDataContainer {
   private data: ScrapeData = {};

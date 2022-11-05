@@ -1,13 +1,21 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { forwardRef, Module } from '@nestjs/common';
-import { TransactionController } from './transaction.controller';
-import { TransactionRepository } from './transaction.repository';
-import { TransactionService } from './transaction.service';
 import { UserModule } from '../user/user.module';
 import { Transaction } from '../../model/transaction.entity';
+import { TransactionController } from './transaction.controller';
+import { TransactionService } from './transaction.service';
+import { TransactionRepository } from './transaction.repository';
+import { TransactionInfo } from '../../model/transaction-info.entity';
+import { TransactionInfoRepository } from './transaction-info.repository';
+import { PortfolioModule } from '../portfolio/portfolio.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Transaction, TransactionRepository]), forwardRef(() => UserModule)],
+  imports: [
+    TypeOrmModule.forFeature([Transaction, TransactionRepository]),
+    TypeOrmModule.forFeature([TransactionInfo, TransactionInfoRepository]),
+    forwardRef(() => UserModule),
+    forwardRef(() => PortfolioModule),
+  ],
   controllers: [TransactionController],
   providers: [TransactionService],
   exports: [TransactionService],
