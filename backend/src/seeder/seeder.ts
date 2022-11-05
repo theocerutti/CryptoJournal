@@ -100,9 +100,13 @@ export class Seeder {
     for (const user of users) {
       for (const portfolioName of portfolioNames) {
         const portfolio = new Portfolio();
+        portfolio.isMyBank = false;
         portfolio.user = user;
         portfolio.name = portfolioName;
         portfolio.description = faker.lorem.lines(1);
+        if (portfolioName === 'My Bank') {
+          portfolio.isMyBank = true;
+        }
         await this.portfolioRepo.save(portfolio);
       }
     }

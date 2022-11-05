@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsString } from 'class-validator';
 
 export class PortfolioDto {
   @IsNumber()
@@ -9,4 +9,7 @@ export class PortfolioDto {
 
   @IsString()
   description: string;
+
+  @IsBoolean()
+  isMyBank: boolean;
 }

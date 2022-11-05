@@ -10,7 +10,7 @@ export class Transaction {
   id: number;
 
   @ManyToOne(() => User, (user) => user.transactions, {
-    onDelete: 'RESTRICT',
+    onDelete: 'CASCADE',
   })
   @JoinColumn()
   user: User;

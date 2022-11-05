@@ -27,6 +27,7 @@ type MixedInputProps = {
   inputLeftElement?: string;
   disabled?: boolean;
   tooltip?: string;
+  checkboxLabel?: string;
   required?: boolean;
   placeholder?: string;
 };
@@ -44,6 +45,7 @@ const FormikInput = ({
   onSelectChange = null,
   formatSelectValue = null,
   selectValue = null,
+  checkboxLabel = null,
   formik,
 }: MixedInputProps) => {
   let input: JSX.Element;
@@ -93,8 +95,8 @@ const FormikInput = ({
     );
   } else if (type === 'checkbox') {
     input = (
-      <Checkbox id={valueKey} name={valueKey} isDisabled={disabled} onChange={formik.handleChange} value={value}>
-        {label}
+      <Checkbox id={valueKey} name={valueKey} isDisabled={disabled} onChange={formik.handleChange} isChecked={value}>
+        {checkboxLabel || label}
       </Checkbox>
     );
   } else if (type === 'select') {
@@ -135,7 +137,6 @@ const FormikInput = ({
     );
   }
 
-  console.log(formik.errors);
   const error = getObjectValueFromDot(formik.errors, valueKey);
   const isError: boolean = !!error;
 

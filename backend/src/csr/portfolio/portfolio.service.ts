@@ -1,10 +1,11 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PortfolioRepository } from './portfolio.repository';
 import { Portfolio } from '../../model/portfolio.entity';
 import { User } from '../../model/user.entity';
 import { UserService } from '../user/user.service';
 import { CreatePortfolioDto, UpdatePortfolioDto } from '../../shared/portfolio';
+import HttpError from '../../exceptions/http.error';
 
 @Injectable()
 export class PortfolioService {
@@ -27,16 +28,29 @@ export class PortfolioService {
     });
   }
 
+  async validatePortfolio(portfolio: Portfolio, userId: number): Promise<void> {
+    if (portfolio.isMyBank) {
+      const hasBank = await this.PortfolioRepo.hasBankPortfolio(userId);
+      if (hasBank) {
+        throw new HttpError('You already have a bank portfolio', null, HttpStatus.UNPROCESSABLE_ENTITY);
+      }
+    }
+  }
+
   async create(user: User, portfolioDto: CreatePortfolioDto): Promise<Portfolio> {
     const portfolio = new Portfolio();
     Object.assign(portfolio, portfolioDto);
     portfolio.user = user;
+
+    await this.validatePortfolio(portfolio, user.id);
     return await this.PortfolioRepo.save(portfolio);
   }
 
   async update(userId: number, portfolioDto: UpdatePortfolioDto): Promise<Portfolio> {
     const portfolio = await this.get(userId, portfolioDto.id);
     const updated = Object.assign(portfolio, portfolioDto);
+
+    await this.validatePortfolio(portfolio, userId);
     return await this.PortfolioRepo.save(updated);
   }
 

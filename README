@@ -51,3 +51,4 @@ En gros ce que j'ai en vrai doit refléter exactement ce que j'ai sur l'app.
 make sure that portfolio doesn't have same name SQL restriction
 
 make sure that scrape price are in USD
+checker les delete entre entities CASCADE ou pas?

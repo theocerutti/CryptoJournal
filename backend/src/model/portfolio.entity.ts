@@ -17,4 +17,7 @@ export class Portfolio {
 
   @Column({ nullable: true })
   description: string;
+
+  @Column({ default: false })
+  isMyBank: boolean = false;
 }
