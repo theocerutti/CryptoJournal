@@ -7,6 +7,7 @@ export class Portfolio {
   id: number;
 
   @ManyToOne(() => User, (user) => user.portfolios, {
+    nullable: false,
     onDelete: 'CASCADE',
   })
   @JoinColumn()

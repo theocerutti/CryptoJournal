@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { User } from 'model/user.entity';
 import { AssetService } from './asset.service';
 import { CurrentUser } from 'csr/auth/current-user.decorator';
@@ -33,5 +33,11 @@ export class AssetController {
   public async update(@CurrentUser() user: User, @Body() assetDTO: UpdateAssetDto): Promise<Asset> {
     this.logger.log(`Update ${assetDTO}`);
     return await this.assetService.update(user.id, assetDTO);
+  }
+
+  @Delete(':assetId')
+  public async delete(@CurrentUser() user: User, @Param('assetId', ParseIntPipe) assetId: number): Promise<Asset> {
+    this.logger.log(`Delete ${assetId}`);
+    return await this.assetService.delete(user.id, assetId);
   }
 }

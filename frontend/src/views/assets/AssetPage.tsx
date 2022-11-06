@@ -1,17 +1,19 @@
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Box, Button, HStack } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack, Link, useColorModeValue } from '@chakra-ui/react';
 import { BsArrowLeft } from 'react-icons/bs';
 import Card from '../../components/card/Card';
-import TransactionForm from './TransactionForm';
+import AssetForm from './AssetForm';
+import { GetAssetDto } from '@shared/asset';
+import AssetTableContainer from './AssetTableContainer';
 
-const TransactionFormPage = () => {
+const AssetPage = () => {
   const history = useHistory();
   const location = useLocation();
   // @ts-ignore
-  const editTransaction = !!location.state?.transaction
+  const editAsset = !!location.state?.asset
     ? // @ts-ignore
-      (location.state.transaction as GetTransactionV2Dto)
+      (location.state.asset as GetAssetDto)
     : null;
 
   return (
@@ -23,10 +25,15 @@ const TransactionFormPage = () => {
         </HStack>
       </Button>
       <Card my='20px'>
-        <TransactionForm editTransaction={editTransaction} />
+        <AssetForm editAsset={editAsset} />
       </Card>
+      {!editAsset && (
+        <Card my='20px'>
+          <AssetTableContainer />
+        </Card>
+      )}
     </Box>
   );
 };
 
-export default TransactionFormPage;
+export default AssetPage;

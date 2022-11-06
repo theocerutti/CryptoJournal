@@ -36,14 +36,6 @@ export class TransactionService {
     const transaction = new Transaction();
     Object.assign(transaction, transactionDto);
     transaction.user = user;
-
-    // TODO: what happen if this success but the next one fail? -> need transaction and rollback
-    const [transactionInfoFromSaved, transactionInfoToSaved] = await this.TransactionInfoRepo.save([
-      transaction.from,
-      transaction.to,
-    ]);
-    transaction.from = transactionInfoFromSaved;
-    transaction.to = transactionInfoToSaved;
     return await this.TransactionRepo.save(transaction);
   }
 

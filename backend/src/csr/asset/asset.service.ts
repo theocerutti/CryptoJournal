@@ -1,9 +1,10 @@
 import { User } from 'model/user.entity';
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AssetRepository } from './asset.repository';
 import { Asset } from '../../model/asset.entity';
 import { CreateAssetDto, UpdateAssetDto } from '../../shared/asset';
+import HttpError from '../../exceptions/http.error';
 
 @Injectable()
 export class AssetService {
@@ -30,6 +31,10 @@ export class AssetService {
     const asset = new Asset();
     Object.assign(asset, assetDto);
     asset.user = user;
+
+    // TODO: is it possible to make this constraint in the DB?
+    if ((await this.AssetRepo.findOne({ where: { name: asset.name, user: { id: user.id } } })) !== undefined)
+      throw new HttpError("Asset with name '" + asset.name + "' already exists", null, HttpStatus.UNPROCESSABLE_ENTITY);
     return await this.AssetRepo.save(asset);
   }
 

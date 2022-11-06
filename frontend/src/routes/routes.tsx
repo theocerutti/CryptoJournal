@@ -1,11 +1,19 @@
 import { Icon } from '@chakra-ui/react';
-import { MdAccountBalanceWallet, MdBarChart, MdHome, MdOutlineRepeat, MdPerson } from 'react-icons/md';
+import {
+  MdAccountBalanceWallet,
+  MdBarChart,
+  MdGeneratingTokens,
+  MdHome,
+  MdOutlineRepeat,
+  MdPerson,
+} from 'react-icons/md';
 import MainDashboard from 'views/dashboard';
 import TransactionFormPage from '../views/transaction-form/TransactionFormPage';
 import ChartsPage from '../views/charts';
 import ProfilePage from '../views/profile/ProfilePage';
 import PortfolioFormPage from '../views/portfolio-form/PortfolioFormPage';
 import PortfolioDropdownRouteButton from './PortfolioDropdownRouteButton';
+import AssetPage from '../views/assets/AssetPage';
 
 export const activeSpecificRoute = (layout: string, path: string, location: any) => {
   const fullRoutePath = buildFullRoutePath(layout, path);
@@ -45,6 +53,20 @@ const routes: RouteType[] = [
     path: '/edit-transaction',
     showNavbar: false,
     component: TransactionFormPage,
+  },
+  {
+    name: 'Assets',
+    layout: '/dashboard',
+    path: '/assets',
+    icon: <Icon as={MdGeneratingTokens} width='20px' height='20px' color='inherit' />,
+    component: AssetPage,
+  },
+  {
+    name: 'Edit Asset',
+    layout: '/dashboard',
+    path: '/edit-asset',
+    showNavbar: false,
+    component: AssetPage,
   },
   {
     name: 'Portfolios',

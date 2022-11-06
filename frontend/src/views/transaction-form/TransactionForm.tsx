@@ -108,8 +108,6 @@ const TransactionForm = ({ editTransaction }: { editTransaction: GetTransactionD
     onSubmit: (values: CreateTransactionDto | UpdateTransactionDto) => {
       values.date = dayjs(values.date).toDate();
 
-      console.log('LA?');
-
       if (editTransaction) {
         const v = values as UpdateTransactionDto;
         v.id = editTransaction.id;

@@ -7,6 +7,7 @@ export class Asset {
   id: number;
 
   @ManyToOne(() => User, (user) => user.assets, {
+    nullable: false,
     onDelete: 'CASCADE',
   })
   @JoinColumn()

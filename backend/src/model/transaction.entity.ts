@@ -10,17 +10,22 @@ export class Transaction {
   id: number;
 
   @ManyToOne(() => User, (user) => user.transactions, {
+    nullable: false,
     onDelete: 'CASCADE',
   })
   @JoinColumn()
   user: User;
 
-  @OneToOne(() => TransactionInfo, { onDelete: 'CASCADE' })
-  @JoinColumn()
+  @OneToOne(() => TransactionInfo, (info) => info.transactionTo, {
+    nullable: false,
+    cascade: true,
+  })
   to: TransactionInfo;
 
-  @OneToOne(() => TransactionInfo, { onDelete: 'CASCADE' })
-  @JoinColumn()
+  @OneToOne(() => TransactionInfo, (info) => info.transactionFrom, {
+    nullable: false,
+    cascade: true,
+  })
   from: TransactionInfo;
 
   @Column({ nullable: true })
@@ -40,7 +45,12 @@ export class Transaction {
   })
   feePrice: number;
 
-  @OneToOne(() => Asset, { createForeignKeyConstraints: false, onUpdate: 'NO ACTION', onDelete: 'NO ACTION' })
+  @OneToOne(() => Asset, {
+    nullable: false,
+    createForeignKeyConstraints: false,
+    onUpdate: 'NO ACTION',
+    onDelete: 'RESTRICT',
+  })
   @JoinColumn()
   feeAsset: Asset;
 

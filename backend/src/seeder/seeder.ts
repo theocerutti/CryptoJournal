@@ -7,7 +7,7 @@ import { Transaction } from '../model/transaction.entity';
 import { TransactionInfo } from '../model/transaction-info.entity';
 import { Asset } from '../model/asset.entity';
 
-const SEED_USER = 5;
+const SEED_USER = 0;
 const SEED_TRANSACTIONS_BY_USER = 100;
 
 const portfolioNames = ['My Bank', 'Binance', 'Ledger', 'Bybit', 'RealT'];
@@ -120,6 +120,7 @@ export class Seeder {
         const asset = new Asset();
         asset.name = assetName;
         asset.priceTrackerUrl = assetDatas[assetName].priceTrackerUrl;
+        asset.user = user;
         await this.assetRepo.save(asset);
       }
     }
@@ -167,14 +168,9 @@ export class Seeder {
           max: 30,
         });
 
-        const [transactionInfoFromSaved, transactionInfoToSaved] = await this.transactionInfoRepo.save([
-          transactionInfoFrom,
-          transactionInfoTo,
-        ]);
-
         const transaction = new Transaction();
-        transaction.to = transactionInfoToSaved;
-        transaction.from = transactionInfoFromSaved;
+        transaction.to = transactionInfoTo;
+        transaction.from = transactionInfoFrom;
         transaction.note = faker.lorem.lines(3);
         transaction.user = user;
         transaction.date = faker.date.past();

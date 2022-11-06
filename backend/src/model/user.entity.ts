@@ -22,24 +22,16 @@ export class User {
   email: string;
 
   @Exclude()
-  @OneToOne(() => RefreshToken, (refresh) => refresh.user, {
-    onDelete: 'CASCADE',
-  })
+  @OneToOne(() => RefreshToken, (refresh) => refresh.user)
   refresh_token: RefreshToken;
 
-  @OneToMany(() => Transaction, (transaction) => transaction.user, {
-    onDelete: 'CASCADE',
-  })
+  @OneToMany(() => Transaction, (transaction) => transaction.user)
   transactions: Transaction[];
 
-  @OneToMany(() => Asset, (asset) => asset.user, {
-    onDelete: 'CASCADE',
-  })
+  @OneToMany(() => Asset, (asset) => asset.user)
   assets: Asset[];
 
-  @OneToMany(() => Portfolio, (portfolio) => portfolio.user, {
-    onDelete: 'CASCADE',
-  })
+  @OneToMany(() => Portfolio, (portfolio) => portfolio.user)
   portfolios: Portfolio[];
 
   @Column({ nullable: true })
