@@ -26,6 +26,12 @@ export class TransactionController {
     return await this.transactionService.get(user.id, transaction);
   }
 
+  @Get('infos')
+  public async getAllTransactionInfo(@CurrentUser() user: User) {
+    this.logger.log(`GetAllTransactionInfo with userId=${user.id}`);
+    return await this.transactionService.getAllTransactionInfo(user.id);
+  }
+
   @Post()
   public async create(@CurrentUser() user: User, @Body() transactionDTO: CreateTransactionDto): Promise<Transaction> {
     this.logger.log(`Create ${transactionDTO}`);
