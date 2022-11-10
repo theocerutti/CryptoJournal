@@ -1,4 +1,4 @@
-import React, { HTMLInputTypeAttribute, MouseEventHandler } from 'react';
+import React, { HTMLInputTypeAttribute } from 'react';
 import {
   Checkbox,
   FormControl,
@@ -21,6 +21,8 @@ type MixedInputProps = {
   formik: any;
   type?: HTMLInputTypeAttribute | 'text' | 'select-with-input' | 'textarea';
   selectValues?: string[];
+  onChange?: any;
+  setValue?: any;
   selectValue?: string;
   onSelectChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   formatSelectValue?: (s: string) => string;
@@ -42,6 +44,8 @@ const FormikInput = ({
   required = false,
   placeholder = null,
   selectValues = null,
+  onChange = null,
+  setValue = null,
   onSelectChange = null,
   formatSelectValue = null,
   selectValue = null,
@@ -105,8 +109,8 @@ const FormikInput = ({
         id={valueKey}
         name={valueKey}
         disabled={disabled}
-        onChange={formik.handleChange}
-        value={value}
+        onChange={onChange || formik.handleChange}
+        value={setValue ? setValue(value) : value}
         placeholder={placeholder}
         variant='filled'
       >
@@ -161,7 +165,7 @@ const FormikInput = ({
         inputContainer
       )}
 
-      {isError && (
+      {isError && typeof error !== 'object' && (
         <FormErrorMessage>
           {/* @ts-ignore */}
           {error || 'Error'}
