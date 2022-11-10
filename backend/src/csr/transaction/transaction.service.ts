@@ -49,4 +49,13 @@ export class TransactionService {
     const transaction = await this.get(userId, transactionId);
     return await this.TransactionRepo.remove(transaction);
   }
+
+  async getAllTransactionInfo(userId: number) {
+    return this.TransactionInfoRepo.createQueryBuilder('transaction_info')
+      .addFrom(Transaction, 'transaction')
+      .where('transaction.userId = :userId', { userId })
+      .andWhere('transaction_info.id = transaction.from')
+      .orWhere('transaction_info.id = transaction.to')
+      .getMany();
+  }
 }
