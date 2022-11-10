@@ -10,8 +10,8 @@ import HttpError from '../../exceptions/http.error';
 export class AssetService {
   constructor(@InjectRepository(AssetRepository) private readonly AssetRepo: AssetRepository) {}
 
-  async getDistinctPriceTrackerUrls(): Promise<string[]> {
-    return await this.AssetRepo.getDistinct('priceTrackerUrl');
+  async getDistinctAssetFromName(): Promise<Asset[]> {
+    return await this.AssetRepo.getEntityDistinct('name');
   }
 
   async getAll(userId: number): Promise<Asset[]> {

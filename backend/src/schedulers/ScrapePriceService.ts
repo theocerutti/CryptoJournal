@@ -16,20 +16,21 @@ export class ScrapePriceService {
     private assetService: AssetService
   ) {}
 
-  @Cron(CronExpression.EVERY_10_MINUTES, {
+  @Cron(CronExpression.EVERY_10_SECONDS, {
     name: 'scrapePrice',
   })
   async scrapePrices() {
     const prices: ScrapeData = {};
-    const links = await this.assetService.getDistinctPriceTrackerUrls();
+    const assets = await this.assetService.getDistinctAssetFromName();
 
-    for (const link of links) {
-      const url = new URL(link);
+    for (const asset of assets) {
+      const priceTrackerUrl = asset.priceTrackerUrl;
+      const url = new URL(priceTrackerUrl);
       const regex = scrapeRegex[url.hostname];
       if (regex) {
-        prices[link] = await scrapePrice(link, regex);
+        prices[asset.name] = await scrapePrice(priceTrackerUrl, regex);
       } else {
-        this.logger.error('No regex found for ' + link);
+        this.logger.error('No regex found for ' + priceTrackerUrl);
       }
     }
     ScrapeDataContainer.getInstance().setData(prices);

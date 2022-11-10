@@ -18,8 +18,8 @@ export class ScrapeDataContainer {
     this.data = data;
   }
 
-  public getPrice(link: string): number | null {
-    return this.data[link] ? this.data[link] : null;
+  public getPrice(assetName: string): number | null {
+    return this.data[assetName] ? this.data[assetName] : null;
   }
 
   public getData(): ScrapeData {

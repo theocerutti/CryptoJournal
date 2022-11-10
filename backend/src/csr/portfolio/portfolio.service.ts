@@ -15,6 +15,10 @@ export class PortfolioService {
     @Inject(forwardRef(() => UserService)) private userService: UserService
   ) {}
 
+  async getBankPortfolios(userId: number): Promise<Portfolio[]> {
+    return this.PortfolioRepo.getBankPortfolios(userId);
+  }
+
   async getAll(userId: number): Promise<Portfolio[]> {
     return this.PortfolioRepo.find({
       where: { user: { id: userId } },

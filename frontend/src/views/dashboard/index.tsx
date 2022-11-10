@@ -1,11 +1,13 @@
 import { Box } from '@chakra-ui/react';
+import AlertPriceLoading from '../../components/AlertPriceLoading';
+import GlobalInfo from './GlobalInfo';
 
 export default function Dashboard() {
   return (
     <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
-      {/*<AlertPriceLoading />*/}
+      <AlertPriceLoading />
 
-      {/*<GlobalInfo />*/}
+      <GlobalInfo />
 
       {/*<SimpleGrid gap='20px' mb='20px'>*/}
       {/*  <ChartBalance />*/}

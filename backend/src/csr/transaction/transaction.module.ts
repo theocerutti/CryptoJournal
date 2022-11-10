@@ -8,6 +8,7 @@ import { TransactionRepository } from './transaction.repository';
 import { TransactionInfo } from '../../model/transaction-info.entity';
 import { TransactionInfoRepository } from './transaction-info.repository';
 import { PortfolioModule } from '../portfolio/portfolio.module';
+import { AssetModule } from '../asset/asset.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { PortfolioModule } from '../portfolio/portfolio.module';
     TypeOrmModule.forFeature([TransactionInfo, TransactionInfoRepository]),
     forwardRef(() => UserModule),
     forwardRef(() => PortfolioModule),
+    forwardRef(() => AssetModule),
   ],
   controllers: [TransactionController],
   providers: [TransactionService],

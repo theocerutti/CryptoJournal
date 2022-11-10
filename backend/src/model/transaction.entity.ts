@@ -16,16 +16,18 @@ export class Transaction {
   @JoinColumn()
   user: User;
 
-  @OneToOne(() => TransactionInfo, (info) => info.transactionTo, {
+  @OneToOne(() => TransactionInfo, {
     nullable: false,
     cascade: true,
   })
+  @JoinColumn()
   to: TransactionInfo;
 
-  @OneToOne(() => TransactionInfo, (info) => info.transactionFrom, {
+  @OneToOne(() => TransactionInfo, {
     nullable: false,
     cascade: true,
   })
+  @JoinColumn()
   from: TransactionInfo;
 
   @Column({ nullable: true })

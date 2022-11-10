@@ -11,10 +11,18 @@ export class BaseEntityRepository<T> extends Repository<T> {
     return parseFloat(sum);
   }
 
+  async getEntityDistinct(column: string): Promise<T[]> {
+    const entities = await this.find();
+    return entities.reduce((acc, entity) => {
+      if (!acc.includes(entity)) {
+        acc.push(entity);
+      }
+      return acc;
+    }, []);
+  }
+
   async getDistinct(column: string): Promise<string[]> {
-    const res = await this.createQueryBuilder('investment')
-      .select(`DISTINCT(investment.${column})`, 'distinct')
-      .getRawMany();
+    const res = await this.createQueryBuilder('entity').select(`DISTINCT(entity.${column})`, 'distinct').getRawMany();
     return res.map((item) => item.distinct);
   }
 }

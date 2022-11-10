@@ -9,18 +9,6 @@ export class TransactionInfo {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // TODO: ugly to make the CASCADE work, makes column to be null 1/2
-  @OneToOne(() => Transaction, (transaction) => transaction.to, {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn()
-  transactionTo: Transaction;
-  @OneToOne(() => Transaction, (transaction) => transaction.from, {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn()
-  transactionFrom: Transaction;
-
   @OneToOne(() => Asset, {
     nullable: false,
     createForeignKeyConstraints: false,

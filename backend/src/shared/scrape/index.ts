@@ -7,7 +7,7 @@ export enum ScrapeSite {
 export type ScrapeRegex = string;
 
 export type ScrapeData = {
-  [link in string]: number;
+  [assetName in string]: number;
 };
 
 export const scrapeRegex: Record<ScrapeSite, ScrapeRegex> = {

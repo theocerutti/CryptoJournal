@@ -53,3 +53,5 @@ make sure that portfolio doesn't have same name SQL restriction
 make sure that scrape price are in USD
 
 sql: restrict delete of asset if there is a transaction... check for all entities
++ check que si on delete le user alors ca delete toutes les autres tables
++ check que si on delete le transation alors ca delete les transaction infos..

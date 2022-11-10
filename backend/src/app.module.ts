@@ -14,6 +14,7 @@ import { HttpErrorFilter } from './filters/http-error.filter';
 import { PortfolioModule } from './csr/portfolio/portfolio.module';
 import { TransactionModule } from './csr/transaction/transaction.module';
 import { AssetModule } from './csr/asset/asset.module';
+import { GlobalInfoModule } from './csr/global-info/global-info.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { AssetModule } from './csr/asset/asset.module';
       migrationsRun: true,
     }),
     TasksModule,
+    GlobalInfoModule,
     AssetModule,
     TransactionModule,
     PortfolioModule,

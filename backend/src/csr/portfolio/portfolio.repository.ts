@@ -5,9 +5,13 @@ import { Portfolio } from '../../model/portfolio.entity';
 @EntityRepository(Portfolio)
 export class PortfolioRepository extends BaseEntityRepository<Portfolio> {
   async hasBankPortfolio(userId: number): Promise<boolean> {
-    const portfolio = await this.findOne({
+    const portfolios = await this.getBankPortfolios(userId);
+    return portfolios.length > 0;
+  }
+
+  async getBankPortfolios(userId: number): Promise<Portfolio[]> {
+    return await this.find({
       where: { user: { id: userId }, isMyBank: true },
     });
-    return portfolio !== undefined;
   }
 }
