@@ -11,7 +11,7 @@ export class TransactionController {
 
   constructor(private transactionService: TransactionService) {}
 
-  @Get(':portfolioId')
+  @Get()
   public async getAll(@CurrentUser() user: User): Promise<GetTransactionDto[]> {
     this.logger.log(`GetAll with userId=${user.id}`);
     return await this.transactionService.getAll(user.id);

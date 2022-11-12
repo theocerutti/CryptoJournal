@@ -1,7 +1,6 @@
 import { EntityRepository } from 'typeorm';
 import { BaseEntityRepository } from '../../utils/BaseEntityRepository';
 import { Transaction } from '../../model/transaction.entity';
-import { Portfolio } from '../../model/portfolio.entity';
 import { Asset } from '../../model/asset.entity';
 
 @EntityRepository(Transaction)
@@ -25,14 +24,24 @@ export class TransactionRepository extends BaseEntityRepository<Transaction> {
       .leftJoinAndSelect('transaction.to', 'to')
       .leftJoinAndSelect('from.asset', 'fromAsset')
       .leftJoinAndSelect('to.asset', 'toAsset')
+      .leftJoinAndSelect('from.portfolio', 'fromPortfolio')
+      .leftJoinAndSelect('to.portfolio', 'toPortfolio')
+      .leftJoinAndSelect('transaction.feeAsset', 'feeAsset')
       .where('transaction.user = :userId', { userId })
       .andWhere('from.assetId = :assetId OR to.assetId = :assetId', { assetId: asset.id })
       .getMany();
   }
 
   async getUserTransactions(userId: number): Promise<Transaction[]> {
-    return this.find({
-      where: { user: { id: userId } },
-    });
+    return this.createQueryBuilder('transaction')
+      .leftJoinAndSelect('transaction.from', 'from')
+      .leftJoinAndSelect('transaction.to', 'to')
+      .leftJoinAndSelect('from.asset', 'fromAsset')
+      .leftJoinAndSelect('to.asset', 'toAsset')
+      .leftJoinAndSelect('from.portfolio', 'fromPortfolio')
+      .leftJoinAndSelect('to.portfolio', 'toPortfolio')
+      .leftJoinAndSelect('transaction.feeAsset', 'feeAsset')
+      .where('transaction.user = :userId', { userId })
+      .getMany();
   }
 }

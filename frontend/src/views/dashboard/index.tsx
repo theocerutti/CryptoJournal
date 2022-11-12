@@ -1,6 +1,8 @@
-import { Box } from '@chakra-ui/react';
+import { Box, SimpleGrid } from '@chakra-ui/react';
 import AlertPriceLoading from '../../components/AlertPriceLoading';
 import GlobalInfo from './GlobalInfo';
+import Card from '../../components/card/Card';
+import Transactions from './transaction-table/Transactions';
 
 export default function Dashboard() {
   return (
@@ -13,17 +15,11 @@ export default function Dashboard() {
       {/*  <ChartBalance />*/}
       {/*</SimpleGrid>*/}
 
-      {/*<SimpleGrid gap='20px' mb='20px'>*/}
-      {/*  <Card>*/}
-      {/*    <Investments />*/}
-      {/*  </Card>*/}
-      {/*</SimpleGrid>*/}
-
-      {/*<SimpleGrid gap='20px' mb='20px'>*/}
-      {/*  <Card>*/}
-      {/*    <Transactions />*/}
-      {/*  </Card>*/}
-      {/*</SimpleGrid>*/}
+      <SimpleGrid gap='20px' mb='20px'>
+        <Card>
+          <Transactions />
+        </Card>
+      </SimpleGrid>
     </Box>
   );
 }

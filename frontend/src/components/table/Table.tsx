@@ -6,7 +6,7 @@ import Card from 'components/card/Card';
 import { multiSelectFilterType } from 'components/table/MultiCheckBoxColumnFilter';
 import TablePaginationFooter from 'components/table/TablePaginationFooter';
 
-const Table = ({ columns, data }: { columns: any; data: any }) => {
+const Table = ({ columns, data, initialState = {} }: { columns: any; data: any; initialState?: any }) => {
   const filterTypes = React.useMemo(
     () => ({
       multiSelect: multiSelectFilterType,
@@ -34,7 +34,7 @@ const Table = ({ columns, data }: { columns: any; data: any }) => {
       // @ts-ignore
       columns,
       data,
-      initialState: { pageIndex: 0, pageSize: 5 },
+      initialState: { pageIndex: 0, pageSize: 5, ...initialState },
       // @ts-ignore
       filterTypes,
     },

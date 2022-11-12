@@ -1,57 +1,23 @@
-SQLDBM:
-https://app.sqldbm.com/PostgreSQL/Edit/p237962/
+Features:
+* Avoir la liste des transactions (FROM OU TO) par portfolios
+* Avoir la liste des transactions (FROM OU TO) par asset
+* Avoir la chart total invested par portfolios
+* Avoir la chart total invested par assets
+* Avoir la chart total invested
+* Avoir la amount total par assets
+* Avoir les fees total par portfolios
+* Avoir les fees total par assets
+* Avoir les fees total
+* Avoir les gains/loss total par portfolios
+* Mettre les headers de horizon ui dans le code pour la légalité
+* Les Scraped Prices doivent être en USD ou convertit en USD
+* Dans le frontend on doit pouvoir choisir sur quel currency on voit les prix
+* Passer en REM
+* Convertir certains Spinner en ChakraSkeleton Loader
 
-
-Objectifs:
-
-Ajout d'investment:
-* priceLink: restreindre à coinmarketcap, justetf..
-Lorsqu'on choisit le nom:
-on a un dropdown avec les noms déjà utilisés (spécifique au user)
-si on veut ajouter un nouveau nom, on peut le faire aussi (dernier choix)
-
-Les tags permet de catégoriser les trades.
-
-Il y aura une page avec toutes les catégories:
-
-Crypto, Immobilier, Actions/ETF, ...
-Ces "cards" afficheront le montant investis + le montant gain/loss
-
-On clique sur la card pour afficher une liste de trades (catégorisé) par secondaryTag (dropdown)
-Tous les dropdown affiche le montant investit + le montant gain/loss
-
-mettre des chakras skeleton loaders
-
-react apex chart to nivo?
-chart donut status to sunburst
-
-le form des transactions doit ajouter le FROM/TO avec dropdown (comme les names dans les investments)
-passer en REM (+ mettre les mesures en variables comme sur core-ui)
-
-le total des frais doivent ajouter aussi les frais de transactions (transactions + investments)
-
-PB de conception dans l'app: qu'est ce que je dois faire lorsque je veux sell la moitié d'un investment?
-
-faire en sorte qu'on puisse pas retirer de l'argent à notre banque si on a même pas de transaction.
-
-l'argent de la balance c'est: totalPositionOrder.price - totalPositionSold.soldPrice
-Est-ce qu'on devrait soustraire les transactions out (toBank)?
-
-mettre les headers de horizon ui pour être légal
-
-fix InvaliDate -> pb de perf
-
-faire un système de vérification d'email
-
-
-Faire en sorte de pouvoir "transferer" des "investments" sur d'autres plateforme ou sur du stacking par ex.
--> reproduire le même comportement que je fais quand j'investis
-En gros ce que j'ai en vrai doit refléter exactement ce que j'ai sur l'app.
-
-make sure that portfolio doesn't have same name SQL restriction
-
-make sure that scrape price are in USD
-
-sql: restrict delete of asset if there is a transaction... check for all entities
-+ check que si on delete le user alors ca delete toutes les autres tables
-+ check que si on delete le transation alors ca delete les transaction infos..
+Fix/Update:
+* Fix les TODOs
+* Rework les tables SQL
+-> si on delete la table user alors on delete toutes les autres tables
+-> si on delete la table transaction alors on delete toutes les transactions-infos
+-> restreindre certaines actions par SQL: ex il ne peut y avoir qu'un seul portfolio avec 'isMyBank === true' par user
