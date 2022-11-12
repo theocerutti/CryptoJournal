@@ -40,7 +40,7 @@ export function SearchBar(props: {
         bg={background ? background : inputBg}
         color={inputText}
         fontWeight='500'
-        _placeholder={{ color: 'grey.400', fontSize: '14px' }}
+        _placeholder={{ color: 'grey.500', fontSize: '14px' }}
         borderRadius={borderRadius ? borderRadius : '30px'}
         placeholder={placeholder ? placeholder : 'Search...'}
       />

@@ -222,7 +222,7 @@ const LineChart = ({
                 <Button
                   onClick={() => updateTimeline(timeline)}
                   size='sm'
-                  color={currentTimeline === timeline ? 'navy.300' : 'grey.400'}
+                  color={currentTimeline === timeline ? 'navy.300' : 'grey.500'}
                   variant='ghost'
                   key={timeline}
                 >

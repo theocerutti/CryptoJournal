@@ -22,7 +22,7 @@ const NumberChart = ({ title, value, logo }: ChartNumberProps) => {
             <IconBox w='48px' h='48px' bg={boxBg} icon={<Icon w='24px' h='24px' as={logo} color={brandColor} />} />
           </span>
         )}
-        <Highlight query={value} styles={{ paddingLeft: '4px', fontSize: '20px', color: 'grey.400' }}>
+        <Highlight query={value} styles={{ paddingLeft: '4px', fontSize: '20px', color: 'grey.500' }}>
           {`${title}: ${value}`}
         </Highlight>
       </Flex>

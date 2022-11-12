@@ -27,7 +27,7 @@ import { TbCurrency } from 'react-icons/tb';
 export default function NavbarLinks() {
   const history = useHistory();
   const { colorMode, toggleColorMode } = useColorMode();
-  const navbarIcon = useColorModeValue('grey.400', 'white');
+  const navbarIcon = useColorModeValue('grey.500', 'white');
   let menuBg = useColorModeValue('white', 'navy.800');
   const textColor = useColorModeValue('secondaryGrey.900', 'white');
   const borderColor = useColorModeValue('#E6ECFA', 'rgba(135, 140, 189, 0.3)');

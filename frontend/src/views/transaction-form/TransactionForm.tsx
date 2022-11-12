@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useFormik } from 'formik';
 import { Button, Heading, HStack, Icon, useToast, VStack } from '@chakra-ui/react';
 import * as Yup from 'yup';
@@ -10,26 +10,27 @@ import { CreateTransactionDto, GetTransactionDto, UpdateTransactionDto } from '@
 import FormikInput from '../../components/form/FormikInput';
 import { showToast } from '../../utils/toast';
 import { MdArrowRightAlt } from 'react-icons/md';
-
-export enum ScrapeSite {
-  CoinMarketCap = 'coinmarketcap.com',
-  Investing = 'investing.com',
-  JustEtf = 'justetf.com', // TODO: scrape price in EUR.. need to convert to USD
-}
+import { GetAssetDto } from '@shared/asset';
+import FormikSelect from '../../components/form/FormikSelect';
+import { GetPortfolioDto } from '@shared/portfolio';
 
 const validationSchema = Yup.object().shape({
   from: Yup.object({
     asset: Yup.object({
-      name: Yup.string().required('Required'),
-      priceTrackerUrl: Yup.string().required('Required'),
+      id: Yup.number().required(),
+    }),
+    portfolio: Yup.object({
+      id: Yup.number().required(),
     }),
     amount: Yup.number().required('Amount is required'),
     price: Yup.number().required('Price is required'),
   }),
   to: Yup.object({
     asset: Yup.object({
-      name: Yup.string().required('Required'),
-      priceTrackerUrl: Yup.string().required('Required'),
+      id: Yup.number().required(),
+    }),
+    portfolio: Yup.object({
+      id: Yup.number().required(),
     }),
     amount: Yup.number().required('Amount is required'),
     price: Yup.number().required('Price is required'),
@@ -38,22 +39,23 @@ const validationSchema = Yup.object().shape({
   feeAmount: Yup.number().min(0, 'Fees cannot be negative').optional(),
   feePrice: Yup.number().min(0, 'Fees cannot be negative').optional(),
   feeAsset: Yup.object({
-    name: Yup.string().required('Required'),
-    priceTrackerUrl: Yup.string().required('Required'),
+    id: Yup.number().required(),
   }),
   date: Yup.date().required('Buy date is required'),
 });
 
-const TransactionForm = ({ editTransaction }: { editTransaction: GetTransactionDto | null }) => {
+const TransactionForm = ({
+  editTransaction,
+  assets,
+  portfolios,
+}: {
+  editTransaction: GetTransactionDto | null;
+  assets: GetAssetDto[];
+  portfolios: GetPortfolioDto[];
+}) => {
   const toast = useToast();
   const history = useHistory();
   const queryClient = useQueryClient();
-  const [priceLinkToHostname, setPriceLinkToHostname] = useState(
-    editTransaction ? new URL(editTransaction.to.asset.priceTrackerUrl).hostname : ScrapeSite.CoinMarketCap
-  );
-  const [priceLinkFromHostname, setPriceLinkFromHostname] = useState(
-    editTransaction ? new URL(editTransaction.from.asset.priceTrackerUrl).hostname : ScrapeSite.CoinMarketCap
-  );
 
   const showSuccessToast = () => {
     showToast(toast, `Successfully ${editTransaction ? 'updated' : 'created'} transaction`);
@@ -80,26 +82,33 @@ const TransactionForm = ({ editTransaction }: { editTransaction: GetTransactionD
   const formik = useFormik({
     initialValues: {
       from: {
+        // TODO: remove ts-ignore: we must have dto that accept only asset id and portfolio id
+        // @ts-ignore
         asset: {
-          name: editTransaction ? editTransaction.from.asset.name : '',
-          priceTrackerUrl: editTransaction ? editTransaction.from.asset.priceTrackerUrl : '/currencies/bitcoin/',
+          id: editTransaction?.from.asset.id || -1,
+        },
+        portfolio: {
+          id: editTransaction?.from.portfolio.id || -1,
         },
         amount: editTransaction ? editTransaction.from.amount : 0,
         price: editTransaction ? editTransaction.from.price : 0,
       },
       to: {
+        // @ts-ignore
         asset: {
-          name: editTransaction ? editTransaction.to.asset.name : '',
-          priceTrackerUrl: editTransaction ? editTransaction.to.asset.priceTrackerUrl : '/currencies/ethereum/',
+          id: editTransaction?.to.asset.id || -1,
+        },
+        portfolio: {
+          id: editTransaction?.to.portfolio.id || -1,
         },
         amount: editTransaction ? editTransaction.to.amount : 0,
         price: editTransaction ? editTransaction.to.price : 0,
       },
       feeAmount: editTransaction ? editTransaction.feeAmount : 0,
       feePrice: editTransaction ? editTransaction.feePrice : 1,
+      // @ts-ignore
       feeAsset: {
-        name: editTransaction ? editTransaction.feeAsset.name : 'USD',
-        priceTrackerUrl: editTransaction ? editTransaction.feeAsset.priceTrackerUrl : '/currencies/tether/',
+        id: editTransaction?.feeAsset.id || -1,
       },
       note: editTransaction ? editTransaction.note : '',
       date: editTransaction ? new Date(editTransaction.date) : new Date(),
@@ -118,6 +127,9 @@ const TransactionForm = ({ editTransaction }: { editTransaction: GetTransactionD
     },
   });
 
+  const mappedAssetsForSelect = assets.map((a) => ({ value: a.id, label: a.name, obj: a }));
+  const mappedPortfolioForSelect = portfolios.map((a) => ({ value: a.id, label: a.name, obj: a }));
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <VStack spacing={4} align='flex-start'>
@@ -127,12 +139,22 @@ const TransactionForm = ({ editTransaction }: { editTransaction: GetTransactionD
               <HStack width='100%'>
                 <Heading size='lg'>From</Heading>
               </HStack>
-              <FormikInput
+              <FormikSelect
                 formik={formik}
-                valueKey='from.asset.name'
+                mapValue={(v) => v.id}
+                valueKey='from.portfolio'
+                label='Portfolio'
+                tooltip='Portfolio to transfer'
+                options={mappedPortfolioForSelect}
+                required
+              />
+              <FormikSelect
+                formik={formik}
+                mapValue={(v) => v.id}
+                valueKey='from.asset'
                 label='Asset'
                 tooltip='Name of the asset'
-                type='text'
+                options={mappedAssetsForSelect}
                 required
               />
               <FormikInput
@@ -146,21 +168,10 @@ const TransactionForm = ({ editTransaction }: { editTransaction: GetTransactionD
               <FormikInput
                 formik={formik}
                 valueKey='from.price'
-                label='Price'
+                label='Asset Price'
                 tooltip='Price of the asset when you converted it (in USD)'
                 type='number'
                 inputLeftElement='$'
-                required
-              />
-              <FormikInput
-                formik={formik}
-                valueKey='from.asset.priceTrackerUrl'
-                label='Price Tracker Url'
-                tooltip='Link to the price of the asset'
-                type='select-with-input'
-                selectValues={Object.values(ScrapeSite).map((v) => `https://${v}`)}
-                selectValue={priceLinkToHostname}
-                onSelectChange={(e) => setPriceLinkToHostname(e.target.value)}
                 required
               />
             </VStack>
@@ -173,12 +184,22 @@ const TransactionForm = ({ editTransaction }: { editTransaction: GetTransactionD
               <HStack width='100%'>
                 <Heading size='lg'>To</Heading>
               </HStack>
-              <FormikInput
+              <FormikSelect
                 formik={formik}
-                valueKey='to.asset.name'
+                mapValue={(v) => v.id}
+                valueKey='to.portfolio'
+                label='Portfolio'
+                tooltip='Portfolio to transfer'
+                options={mappedPortfolioForSelect}
+                required
+              />
+              <FormikSelect
+                formik={formik}
+                mapValue={(v) => v.id}
+                valueKey='to.asset'
                 label='Asset'
                 tooltip='Name of the asset'
-                type='text'
+                options={mappedAssetsForSelect}
                 required
               />
               <FormikInput
@@ -192,21 +213,10 @@ const TransactionForm = ({ editTransaction }: { editTransaction: GetTransactionD
               <FormikInput
                 formik={formik}
                 valueKey='to.price'
-                label='Price'
+                label='Asset Price'
                 tooltip='Price of the asset (in USD)'
                 type='number'
                 inputLeftElement='$'
-                required
-              />
-              <FormikInput
-                formik={formik}
-                valueKey='to.asset.priceTrackerUrl'
-                label='Price Tracker Url'
-                tooltip='Link to the price of the asset'
-                type='select-with-input'
-                selectValues={Object.values(ScrapeSite).map((v) => `https://${v}`)}
-                selectValue={priceLinkFromHostname}
-                onSelectChange={(e) => setPriceLinkFromHostname(e.target.value)}
                 required
               />
             </VStack>
@@ -222,12 +232,13 @@ const TransactionForm = ({ editTransaction }: { editTransaction: GetTransactionD
               type='number'
               required
             />
-            <FormikInput
+            <FormikSelect
               formik={formik}
-              valueKey='feeAsset.name'
+              mapValue={(v) => v.id}
+              valueKey='feeAsset'
               label='Fee Asset Name'
               tooltip='Asset in which you paid the fees'
-              type='text'
+              options={mappedAssetsForSelect}
               required
             />
             <FormikInput
@@ -253,7 +264,6 @@ const TransactionForm = ({ editTransaction }: { editTransaction: GetTransactionD
               label='Note'
               tooltip='Note about the transaction'
               type='textarea'
-              required
             />
           </VStack>
           <HStack justify='end' w='100%'>

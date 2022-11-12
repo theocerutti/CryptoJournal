@@ -1,9 +1,13 @@
 import { OmitType } from '@nestjs/swagger';
 import { TransactionInfoDto } from './transaction-info.dto';
 import { IsObject } from 'class-validator';
-import { CreateAssetDto } from '../asset/create-asset.dto';
+import { GetAssetDto } from '../asset';
+import { GetPortfolioDto } from '../portfolio';
 
-export class UpdateTransactionInfoDto extends OmitType(TransactionInfoDto, ['asset'] as const) {
+export class UpdateTransactionInfoDto extends OmitType(TransactionInfoDto, ['asset', 'portfolio'] as const) {
   @IsObject()
-  asset: CreateAssetDto;
+  asset: GetAssetDto;
+
+  @IsObject()
+  portfolio: GetPortfolioDto;
 }

@@ -65,7 +65,7 @@ const Table = ({ columns, data }: { columns: any; data: any }) => {
                     key={index}
                     borderColor={borderColor}
                   >
-                    <Flex justify='space-between' align='center' fontSize={{ sm: '10px', lg: '12px' }} color='grey.400'>
+                    <Flex justify='space-between' align='center' fontSize={{ sm: '10px', lg: '12px' }} color='grey.500'>
                       {column.render('Header')}
 
                       <div>

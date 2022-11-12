@@ -28,7 +28,7 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
   const location = useLocation();
   const history = useHistory();
   const textColor = useColorModeValue('navy.700', 'white');
-  const textColorSecondary = 'grey.400';
+  const textColorSecondary = 'grey.500';
   const textColorDetails = useColorModeValue('navy.700', 'secondaryGrey.600');
   const textColorBrand = useColorModeValue('brand.500', 'white');
   const brandStars = useColorModeValue('brand.500', 'brand.400');

@@ -1,4 +1,4 @@
-import React, { HTMLInputTypeAttribute, MouseEventHandler } from 'react';
+import React, { HTMLInputTypeAttribute } from 'react';
 import {
   Checkbox,
   FormControl,
@@ -99,24 +99,6 @@ const FormikInput = ({
         {checkboxLabel || label}
       </Checkbox>
     );
-  } else if (type === 'select') {
-    input = (
-      <Select
-        id={valueKey}
-        name={valueKey}
-        disabled={disabled}
-        onChange={formik.handleChange}
-        value={value}
-        placeholder={placeholder}
-        variant='filled'
-      >
-        {selectValues.map((v) => (
-          <option key={v} value={v}>
-            {v}
-          </option>
-        ))}
-      </Select>
-    );
   } else {
     if (type === 'date') {
       if (value instanceof Date) value = dayjs(value).format('YYYY-MM-DD');
@@ -143,7 +125,7 @@ const FormikInput = ({
   const inputContainer =
     type !== 'textarea' && inputLeftElement ? (
       <InputGroup>
-        <InputLeftElement pointerEvents='none' color='grey.300' fontSize='1.2em' children='$' />
+        <InputLeftElement pointerEvents='none' fontSize='1.2em' children={inputLeftElement} />
         {input}
       </InputGroup>
     ) : (

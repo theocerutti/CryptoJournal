@@ -7,8 +7,13 @@ import { useHistory } from 'react-router-dom';
 import { CreateAssetDto, GetAssetDto, UpdateAssetDto } from '@shared/asset';
 import FormikInput from '../../components/form/FormikInput';
 import { showToast } from '../../utils/toast';
-import { ScrapeSite } from '../transaction-form/TransactionForm';
 import { ASSET_QUERY_KEY, createAssetMutation, updateAssetMutation } from '../../queries/asset';
+
+export enum ScrapeSite {
+  CoinMarketCap = 'coinmarketcap.com',
+  Investing = 'investing.com',
+  JustEtf = 'justetf.com', // TODO: scrape price in EUR.. need to convert to USD
+}
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name of the asset is required'),
