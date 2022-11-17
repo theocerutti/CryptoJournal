@@ -40,6 +40,7 @@ export class GlobalInfoService {
     assetInfo.pnlPercent = await this.transactionService.getPNLPercentAsset(userId, asset);
     assetInfo.totalBalance = await this.transactionService.getTotalBalanceAsset(userId, asset);
     assetInfo.price = ScrapeDataContainer.getInstance().getPrice(asset.name);
+    assetInfo.assetLogoURL = ScrapeDataContainer.getInstance().getLogoURL(asset.name);
     return assetInfo;
   }
 }

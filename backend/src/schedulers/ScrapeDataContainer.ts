@@ -1,7 +1,7 @@
-import { ScrapeData } from '../shared/scrape';
+import { ScrapeData, ScrapeDatas } from '../shared/scrape';
 
 export class ScrapeDataContainer {
-  private data: ScrapeData = {};
+  private data: ScrapeDatas = {};
   private _hasScrapedPrices: boolean = false;
   private static instance: ScrapeDataContainer;
 
@@ -13,16 +13,24 @@ export class ScrapeDataContainer {
     return ScrapeDataContainer.instance;
   }
 
-  public setData(data: ScrapeData): void {
+  public setData(data: ScrapeDatas): void {
     this._hasScrapedPrices = data && Object.keys(data).length > 0;
     this.data = data;
   }
 
-  public getPrice(assetName: string): number | null {
-    return this.data[assetName] ? this.data[assetName] : null;
+  private get<T>(assetName, key: keyof ScrapeData): string | number {
+    return this.data[assetName]?.[key] ? this.data[assetName]?.[key] : null;
   }
 
-  public getData(): ScrapeData {
+  public getPrice(assetName: string): number | null {
+    return this.get(assetName, 'price') as number;
+  }
+
+  public getLogoURL(assetName: string): string | null {
+    return this.get(assetName, 'logoUrl') as string;
+  }
+
+  public getData(): ScrapeDatas {
     return this.data;
   }
 

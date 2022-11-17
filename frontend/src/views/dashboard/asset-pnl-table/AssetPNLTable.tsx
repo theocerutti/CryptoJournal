@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { defaultQueryConfig } from '../../../queries/config';
-import { Alert, Flex, Link, Stat, StatHelpText, StatLabel, Text } from '@chakra-ui/react';
+import { Alert, Flex, Link, Stat, StatHelpText, StatLabel, Text, Image, Icon } from '@chakra-ui/react';
 import CenteredSpinner from '../../../components/CenteredSpinner';
 import NoDataTable from '../../../components/NoDataTable';
 import { getGlobalInfoQuery, GLOBAL_INFO_QUERY_KEY } from '../../../queries/global-info';
@@ -11,6 +11,7 @@ import { getGrowthColor } from '../../../utils/colors';
 import { getSign, toSpecialPrecision } from '../../../utils/math';
 import Table from '../../../components/table/Table';
 import { GlobalInfoAssetDto } from '@shared/global-info';
+import { BsQuestionCircle } from 'react-icons/bs';
 
 const AssetPNLTable = () => {
   const { data, isError, isLoading, isSuccess } = useQuery([GLOBAL_INFO_QUERY_KEY], getGlobalInfoQuery, {
@@ -25,6 +26,11 @@ const AssetPNLTable = () => {
     if (data.data?.globalInfoAssets.length === 0) return <NoDataTable>No Data</NoDataTable>;
 
     const columns = [
+      {
+        Header: 'LOGO',
+        accessor: 'assetLogoURL',
+        Cell: ({ value }: { value: string }) => (value ? <Image src={value} /> : <Icon as={BsQuestionCircle} />),
+      },
       {
         Header: 'NAME',
         accessor: 'asset.name',

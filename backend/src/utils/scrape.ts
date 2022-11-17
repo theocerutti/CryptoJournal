@@ -18,7 +18,12 @@ const htmlEntities: Record<string, string> = {
   apos: "'",
 };
 
-export const scrapePrice = async (url: string, regexInput: string, retry = 0): Promise<number> => {
+export const scrape = async (
+  url: string,
+  regexInput: string,
+  retry = 0,
+  convertNum = true
+): Promise<number | string> => {
   if (isNaN(retry)) {
     retry = 0;
   }
@@ -38,12 +43,12 @@ export const scrapePrice = async (url: string, regexInput: string, retry = 0): P
       console.error('importRegex() yielded an error: ' + e);
 
       if (retry < 3) {
-        return scrapePrice(url, regexInput, retry + 1);
+        return scrape(url, regexInput, retry + 1, convertNum);
       }
     }
   }
 
-  return toReadableNumber(unescapeHTML(output));
+  return convertNum ? toReadableNumber(unescapeHTML(output)) : unescapeHTML(output);
 };
 
 const toReadableNumber = (numString: string): number => {
@@ -52,7 +57,7 @@ const toReadableNumber = (numString: string): number => {
   return parseFloat(s.replace(',', ''));
 };
 
-const unescapeHTML = (str: string) => {
+const unescapeHTML = (str: string): string => {
   if (str != null) {
     if (typeof str != 'string') {
       str = String(str);

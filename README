@@ -15,6 +15,7 @@ Features:
 * Passer en REM
 * Convertir certains Spinner en ChakraSkeleton Loader
 * Ajouter les images des cryptos (en utilisant ScrapePrice, mettre un regex)
+* Enlever le Scraping, et utiliser une API
 
 Fix/Update:
 * Fix les TODOs

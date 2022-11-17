@@ -1,9 +1,12 @@
-import { IsBoolean, IsNumber, IsObject } from 'class-validator';
+import { IsBoolean, IsNumber, IsObject, IsUrl } from 'class-validator';
 import { GetAssetDto } from '../asset';
 
 export class GlobalInfoAssetDto {
   @IsObject()
   asset: GetAssetDto;
+
+  @IsUrl()
+  assetLogoURL: string;
 
   @IsNumber()
   price: number;

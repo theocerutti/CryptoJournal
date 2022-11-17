@@ -1,10 +1,10 @@
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { scrapePrice } from '../utils/scrape';
+import { scrape } from '../utils/scrape';
 import { ConfigService } from '@nestjs/config';
 import { ScrapeDataContainer } from './ScrapeDataContainer';
 import { AssetService } from '../csr/asset/asset.service';
-import { ScrapeData, scrapeRegex } from '../shared/scrape';
+import { ScrapeDatas, scrapeRegex, ScrapeSite } from '../shared/scrape';
 
 @Injectable()
 export class ScrapePriceService {
@@ -17,22 +17,36 @@ export class ScrapePriceService {
   ) {}
 
   @Cron(CronExpression.EVERY_10_SECONDS, {
-    name: 'scrapePrice',
+    name: 'scrapeDatas',
   })
-  async scrapePrices() {
-    const prices: ScrapeData = {};
+  async scrapesData() {
+    const data: ScrapeDatas = {};
     const assets = await this.assetService.getDistinctAssetFromName();
 
     for (const asset of assets) {
       const priceTrackerUrl = asset.priceTrackerUrl;
       const url = new URL(priceTrackerUrl);
-      const regex = scrapeRegex[url.hostname];
-      if (regex) {
-        prices[asset.name] = await scrapePrice(priceTrackerUrl, regex);
+      const priceRegex = scrapeRegex[url.hostname as ScrapeSite].price;
+
+      let price = 0;
+      let logoUrl = ScrapeDataContainer.getInstance().getLogoURL(asset.name);
+
+      if (priceRegex) {
+        price = (await scrape(priceTrackerUrl, priceRegex)) as number;
       } else {
         this.logger.error('No regex found for ' + priceTrackerUrl);
       }
+
+      const logoURLRegex = scrapeRegex[url.hostname as ScrapeSite].logoURL;
+      if (logoURLRegex && !logoUrl) {
+        logoUrl = (await scrape(priceTrackerUrl, logoURLRegex, 0, false)) as string;
+      }
+
+      data[asset.name] = {
+        price,
+        logoUrl,
+      };
     }
-    ScrapeDataContainer.getInstance().setData(prices);
+    ScrapeDataContainer.getInstance().setData(data);
   }
 }
