@@ -32,7 +32,7 @@ const AssetPNLTable = () => {
           <Flex alignItems='center' flexDirection='row'>
             <Stat>
               <StatLabel>
-                <Link href={row.original.priceLink}>{value}</Link>
+                <Link href={row.original.asset.priceTrackerUrl}>{value}</Link>
               </StatLabel>
               <StatHelpText fontSize='12px'>{formatCurrency(row.original.price)}</StatHelpText>
             </Stat>
@@ -72,7 +72,15 @@ const AssetPNLTable = () => {
       },
     ];
 
-    return <Table data={data.data?.globalInfoAssets} columns={columns} />;
+    return (
+      <Table
+        data={data.data?.globalInfoAssets}
+        columns={columns}
+        initialState={{
+          sortBy: [{ id: 'totalBalance', desc: true }],
+        }}
+      />
+    );
   }
 };
 

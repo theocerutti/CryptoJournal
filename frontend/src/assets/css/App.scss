@@ -59,3 +59,8 @@ option {
     }
   }
 }
+
+table.chakra-table tbody tr td {
+  padding-top: var(--chakra-space-2) !important;
+  padding-bottom: var(--chakra-space-2) !important;
+}
