@@ -39,7 +39,8 @@ const AssetsContainer = () => {
   if (isLoading) return <CenteredSpinner />;
 
   if (isSuccess) {
-    if (data.data.length === 0) return <NoDataTable message="You don't have any assets yet. Add one to get started." />;
+    if (data.data.length === 0)
+      return <NoDataTable>You don't have any assets yet. Add one to get started.</NoDataTable>;
 
     const columns = [
       {

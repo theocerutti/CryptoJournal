@@ -78,7 +78,7 @@ const TransactionTable = ({
               {toSpecialPrecision(row.original.feeAmount)} {row.original.feeAsset.name}
             </StatNumber>
             <StatHelpText style={{ fontSize: '12px' }}>
-              (1 USD = {toSpecialPrecision(row.original.feePrice)} {row.original.feeAsset.name})
+              (={toSpecialPrecision(row.original.feeAmount * row.original.feePrice)} USD)
             </StatHelpText>
           </Stat>
         </Flex>

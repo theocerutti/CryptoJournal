@@ -14,6 +14,7 @@ Features:
 * Dans le frontend on doit pouvoir choisir sur quel currency on voit les prix
 * Passer en REM
 * Convertir certains Spinner en ChakraSkeleton Loader
+* Ajouter les images des cryptos (en utilisant ScrapePrice, mettre un regex)
 
 Fix/Update:
 * Fix les TODOs

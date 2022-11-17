@@ -1,6 +1,13 @@
 import { IsBoolean, IsNumber, IsObject } from 'class-validator';
+import { GetAssetDto } from '../asset';
 
 export class GlobalInfoAssetDto {
+  @IsObject()
+  asset: GetAssetDto;
+
+  @IsNumber()
+  price: number;
+
   @IsNumber()
   amount: number;
 
@@ -37,5 +44,5 @@ export class GlobalInfoDto {
   totalFees: number;
 
   @IsObject()
-  globalInfoAssets: { [assetName: string]: GlobalInfoAssetDto };
+  globalInfoAssets: GlobalInfoAssetDto[];
 }

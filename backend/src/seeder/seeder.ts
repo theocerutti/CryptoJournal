@@ -159,6 +159,7 @@ export class Seeder {
         const feeAsset = await this.getRandomAsset(user);
         const fromData = assetDatas[fromAsset.name];
         const toData = assetDatas[toAsset.name];
+        const feeData = assetDatas[feeAsset.name];
 
         const transactionInfoFrom = new TransactionInfo();
         transactionInfoFrom.price = faker.datatype.float({ min: 0.1, max: 2 }) * fromData.averagePrice;
@@ -181,7 +182,7 @@ export class Seeder {
         transaction.note = faker.lorem.lines(3);
         transaction.user = user;
         transaction.date = faker.date.past();
-        transaction.feePrice = 1;
+        transaction.feePrice = feeData.averagePrice;
         transaction.feeAmount = faker.datatype.float({
           min: 0,
           max: 30,

@@ -6,9 +6,9 @@ import { defaultQueryConfig } from '../../../queries/config';
 import { Alert, useToast } from '@chakra-ui/react';
 import { GetTransactionDto } from '@shared/transaction';
 import CenteredSpinner from '../../../components/CenteredSpinner';
-import NoTransactions from './NoTransactions';
 import TransactionTable from './TransactionTable';
 import { showToast } from '../../../utils/toast';
+import NoDataTable from '../../../components/NoDataTable';
 
 const TransactionsContainer = () => {
   const history = useHistory();
@@ -38,7 +38,8 @@ const TransactionsContainer = () => {
   if (isLoading) return <CenteredSpinner />;
 
   if (isSuccess) {
-    if (data.data.length === 0) return <NoTransactions />;
+    if (data.data.length === 0)
+      return <NoDataTable>You don't have any transactions yet. Add one to get started.</NoDataTable>;
 
     return <TransactionTable transactions={data.data} handleDelete={handleDelete} handleEdit={handleEdit} />;
   }

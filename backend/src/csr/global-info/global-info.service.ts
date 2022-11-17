@@ -3,7 +3,7 @@ import { GlobalInfoDto } from '../../shared/global-info';
 import { ScrapeDataContainer } from '../../schedulers/ScrapeDataContainer';
 import { TransactionService } from '../transaction/transaction.service';
 import { AssetService } from '../asset/asset.service';
-import { GlobalInfoAssetDto } from '../../shared/global-info/global-info.dto';
+import { GlobalInfoAssetDto } from '../../shared/global-info';
 import { Asset } from '../../model/asset.entity';
 
 @Injectable()
@@ -25,19 +25,21 @@ export class GlobalInfoService {
     globalInfo.totalBalance = await this.transactionService.getTotalBalance(userId);
     globalInfo.totalFees = await this.transactionService.getTotalFees(userId);
     globalInfo.totalInvested = await this.transactionService.getTotalInvested(userId);
-    globalInfo.globalInfoAssets = {};
+    globalInfo.globalInfoAssets = [];
 
-    for (const asset of assets) globalInfo.globalInfoAssets[asset.name] = await this.buildAssetInfo(userId, asset);
+    for (const asset of assets) globalInfo.globalInfoAssets.push(await this.buildAssetInfo(userId, asset));
     return globalInfo;
   }
 
   async buildAssetInfo(userId: number, asset: Asset): Promise<GlobalInfoAssetDto> {
     const assetInfo = new GlobalInfoAssetDto();
+    assetInfo.asset = asset;
     assetInfo.amount = await this.transactionService.getTotalAmountAsset(userId, asset);
     assetInfo.fees = await this.transactionService.getTotalFeesAsset(userId, asset);
     assetInfo.pnl = await this.transactionService.getPNLAsset(userId, asset);
     assetInfo.pnlPercent = await this.transactionService.getPNLPercentAsset(userId, asset);
     assetInfo.totalBalance = await this.transactionService.getTotalBalanceAsset(userId, asset);
+    assetInfo.price = ScrapeDataContainer.getInstance().getPrice(asset.name);
     return assetInfo;
   }
 }

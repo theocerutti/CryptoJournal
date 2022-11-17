@@ -1,8 +1,8 @@
 import React from 'react';
 import { Alert } from '@chakra-ui/react';
 
-const NoDataTable = ({ message }: { message: string }) => {
-  return <Alert status='warning'>{message}</Alert>;
+const NoDataTable = ({ children }: { children: React.ReactNode }) => {
+  return <Alert status='warning'>{children}</Alert>;
 };
 
 export default NoDataTable;

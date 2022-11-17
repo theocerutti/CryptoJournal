@@ -3,6 +3,7 @@ import AlertPriceLoading from '../../components/AlertPriceLoading';
 import GlobalInfo from './GlobalInfo';
 import Card from '../../components/card/Card';
 import Transactions from './transaction-table/Transactions';
+import AssetPNL from './asset-pnl-table/AssetPNL';
 
 export default function Dashboard() {
   return (
@@ -14,6 +15,12 @@ export default function Dashboard() {
       {/*<SimpleGrid gap='20px' mb='20px'>*/}
       {/*  <ChartBalance />*/}
       {/*</SimpleGrid>*/}
+
+      <SimpleGrid gap='20px' mb='20px'>
+        <Card>
+          <AssetPNL />
+        </Card>
+      </SimpleGrid>
 
       <SimpleGrid gap='20px' mb='20px'>
         <Card>
