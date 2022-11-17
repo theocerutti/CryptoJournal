@@ -91,6 +91,13 @@ export class Seeder {
     user.erc20Address = faker.finance.ethereumAddress();
     user.btcAddress = faker.finance.bitcoinAddress();
     users.push(user);
+
+    const emptyUser = new User();
+    emptyUser.email = 'emptyuser@gmail.com';
+    emptyUser.password = 'password';
+    emptyUser.erc20Address = faker.finance.ethereumAddress();
+    emptyUser.btcAddress = faker.finance.bitcoinAddress();
+    await this.userRepo.save(emptyUser);
     return await this.userRepo.save(users);
   }
 
