@@ -9,12 +9,11 @@ import { JwtAuthGuard } from './csr/auth/jwt-auth.guard';
 import { CurrentUserInterceptor } from './csr/auth/current-user.interceptor';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
-import { TasksModule } from './schedulers/TasksModule';
 import { HttpErrorFilter } from './filters/http-error.filter';
 import { PortfolioModule } from './csr/portfolio/portfolio.module';
 import { TransactionModule } from './csr/transaction/transaction.module';
-import { AssetModule } from './csr/asset/asset.module';
 import { GlobalInfoModule } from './csr/global-info/global-info.module';
+import { CoinMarketCapModule } from './csr/coinmarketcap/coinmarketcap.module';
 
 @Module({
   imports: [
@@ -36,9 +35,8 @@ import { GlobalInfoModule } from './csr/global-info/global-info.module';
       migrationsTableName: 'migrations_typeorm',
       migrationsRun: true,
     }),
-    TasksModule,
+    CoinMarketCapModule,
     GlobalInfoModule,
-    AssetModule,
     TransactionModule,
     PortfolioModule,
     UserModule,

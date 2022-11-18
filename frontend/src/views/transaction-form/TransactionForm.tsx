@@ -10,27 +10,23 @@ import { CreateTransactionDto, GetTransactionDto, UpdateTransactionDto } from '@
 import FormikInput from '../../components/form/FormikInput';
 import { showToast } from '../../utils/toast';
 import { MdArrowRightAlt } from 'react-icons/md';
-import { GetAssetDto } from '@shared/asset';
 import FormikSelect from '../../components/form/FormikSelect';
+import { CMCCryptoBasicInfo, CMCCryptoBasicInfos } from '@shared/coinmarketcap';
 import { GetPortfolioDto } from '@shared/portfolio';
 
 const validationSchema = Yup.object().shape({
   from: Yup.object({
-    asset: Yup.object({
-      id: Yup.number().required(),
-    }),
+    assetId: Yup.number().required('Asset is required'),
     portfolio: Yup.object({
-      id: Yup.number().required(),
+      id: Yup.number().required('Portfolio is required'),
     }),
     amount: Yup.number().required('Amount is required'),
     price: Yup.number().required('Price is required'),
   }),
   to: Yup.object({
-    asset: Yup.object({
-      id: Yup.number().required(),
-    }),
+    assetId: Yup.number().required('Asset is required'),
     portfolio: Yup.object({
-      id: Yup.number().required(),
+      id: Yup.number().required('Portfolio is required'),
     }),
     amount: Yup.number().required('Amount is required'),
     price: Yup.number().required('Price is required'),
@@ -38,19 +34,17 @@ const validationSchema = Yup.object().shape({
   note: Yup.string().nullable().optional(),
   feeAmount: Yup.number().min(0, 'Fees cannot be negative').optional(),
   feePrice: Yup.number().min(0, 'Fees cannot be negative').optional(),
-  feeAsset: Yup.object({
-    id: Yup.number().required(),
-  }),
+  feeAssetId: Yup.number().required(),
   date: Yup.date().required('Buy date is required'),
 });
 
 const TransactionForm = ({
   editTransaction,
-  assets,
+  cryptoInfos,
   portfolios,
 }: {
   editTransaction: GetTransactionDto | null;
-  assets: GetAssetDto[];
+  cryptoInfos: CMCCryptoBasicInfos;
   portfolios: GetPortfolioDto[];
 }) => {
   const toast = useToast();
@@ -82,11 +76,7 @@ const TransactionForm = ({
   const formik = useFormik({
     initialValues: {
       from: {
-        // TODO: remove ts-ignore: we must have dto that accept only asset id and portfolio id
-        // @ts-ignore
-        asset: {
-          id: editTransaction?.from.asset.id || -1,
-        },
+        assetId: editTransaction?.from.assetId || -1,
         portfolio: {
           id: editTransaction?.from.portfolio.id || -1,
         },
@@ -94,10 +84,7 @@ const TransactionForm = ({
         price: editTransaction ? editTransaction.from.price : 0,
       },
       to: {
-        // @ts-ignore
-        asset: {
-          id: editTransaction?.to.asset.id || -1,
-        },
+        assetId: editTransaction?.to.assetId || -1,
         portfolio: {
           id: editTransaction?.to.portfolio.id || -1,
         },
@@ -106,10 +93,7 @@ const TransactionForm = ({
       },
       feeAmount: editTransaction ? editTransaction.feeAmount : 0,
       feePrice: editTransaction ? editTransaction.feePrice : 1,
-      // @ts-ignore
-      feeAsset: {
-        id: editTransaction?.feeAsset.id || -1,
-      },
+      feeAssetId: editTransaction?.feeAssetId || -1,
       note: editTransaction ? editTransaction.note : '',
       date: editTransaction ? new Date(editTransaction.date) : new Date(),
     },
@@ -127,7 +111,16 @@ const TransactionForm = ({
     },
   });
 
-  const mappedAssetsForSelect = assets.map((a) => ({ value: a.id, label: a.name, obj: a }));
+  const mappedAssetsForSelect = Object.keys(cryptoInfos).map((cryptoId) => {
+    const crypto: CMCCryptoBasicInfo = cryptoInfos[cryptoId];
+    return {
+      value: crypto.id,
+      label: crypto.symbol,
+      iconUrl: crypto.logo,
+      description: crypto.name,
+      obj: crypto,
+    };
+  });
   const mappedPortfolioForSelect = portfolios.map((a) => ({ value: a.id, label: a.name, obj: a }));
 
   return (
@@ -141,7 +134,7 @@ const TransactionForm = ({
               </HStack>
               <FormikSelect
                 formik={formik}
-                mapValue={(v) => v.id}
+                mapValue={(v) => v?.id}
                 valueKey='from.portfolio'
                 label='Portfolio'
                 tooltip='Portfolio to transfer'
@@ -150,8 +143,8 @@ const TransactionForm = ({
               />
               <FormikSelect
                 formik={formik}
-                mapValue={(v) => v.id}
-                valueKey='from.asset'
+                mapValueFormikOnChange={(v) => v?.id}
+                valueKey='from.assetId'
                 label='Asset'
                 tooltip='Name of the asset'
                 options={mappedAssetsForSelect}
@@ -186,7 +179,7 @@ const TransactionForm = ({
               </HStack>
               <FormikSelect
                 formik={formik}
-                mapValue={(v) => v.id}
+                mapValue={(v) => v?.id}
                 valueKey='to.portfolio'
                 label='Portfolio'
                 tooltip='Portfolio to transfer'
@@ -195,8 +188,8 @@ const TransactionForm = ({
               />
               <FormikSelect
                 formik={formik}
-                mapValue={(v) => v.id}
-                valueKey='to.asset'
+                mapValueFormikOnChange={(v) => v?.id}
+                valueKey='to.assetId'
                 label='Asset'
                 tooltip='Name of the asset'
                 options={mappedAssetsForSelect}
@@ -234,8 +227,8 @@ const TransactionForm = ({
             />
             <FormikSelect
               formik={formik}
-              mapValue={(v) => v.id}
-              valueKey='feeAsset'
+              mapValueFormikOnChange={(v) => v?.id}
+              valueKey='feeAssetId'
               label='Fee Asset Name'
               tooltip='Asset in which you paid the fees'
               options={mappedAssetsForSelect}

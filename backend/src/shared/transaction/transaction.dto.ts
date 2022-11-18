@@ -1,6 +1,5 @@
 import { IsDateString, IsNumber, IsObject, IsString } from 'class-validator';
 import { TransactionInfoDto } from '../transaction-info';
-import { AssetDto } from '../asset';
 
 export class TransactionDto {
   @IsNumber()
@@ -21,8 +20,8 @@ export class TransactionDto {
   @IsNumber()
   feeAmount: number;
 
-  @IsObject()
-  feeAsset: AssetDto;
+  @IsNumber()
+  feeAssetId: number;
 
   @IsDateString()
   date: Date;

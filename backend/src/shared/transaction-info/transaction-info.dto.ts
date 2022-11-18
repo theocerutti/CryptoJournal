@@ -1,13 +1,12 @@
-import { IsNumber, IsObject, IsString, IsUrl } from 'class-validator';
-import { AssetDto } from '../asset';
+import { IsNumber, IsObject } from 'class-validator';
 import { PortfolioDto } from '../portfolio';
 
 export class TransactionInfoDto {
   @IsNumber()
   id: number;
 
-  @IsObject()
-  asset: AssetDto;
+  @IsNumber()
+  assetId: number;
 
   @IsObject()
   portfolio: PortfolioDto;

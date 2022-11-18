@@ -1,22 +1,14 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ColumnNumericTransformer } from '../utils/transformer';
 import { Portfolio } from './portfolio.entity';
-import { Asset } from './asset.entity';
-import { Transaction } from './transaction.entity';
 
 @Entity()
 export class TransactionInfo {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Asset, {
-    nullable: false,
-    createForeignKeyConstraints: false,
-    onUpdate: 'NO ACTION',
-    onDelete: 'NO ACTION',
-  })
-  @JoinColumn()
-  asset: Asset;
+  @Column()
+  assetId: number;
 
   @OneToOne(() => Portfolio, {
     nullable: false,

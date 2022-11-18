@@ -1,12 +1,17 @@
-import { IsBoolean, IsNumber, IsObject, IsUrl } from 'class-validator';
-import { GetAssetDto } from '../asset';
+import { IsNumber, IsObject, IsString, IsUrl } from 'class-validator';
 
 export class GlobalInfoAssetDto {
-  @IsObject()
-  asset: GetAssetDto;
+  @IsNumber()
+  id: number;
+
+  @IsString()
+  name: string;
+
+  @IsString()
+  symbol: string;
 
   @IsUrl()
-  assetLogoURL: string;
+  logo: string;
 
   @IsNumber()
   price: number;
@@ -28,9 +33,6 @@ export class GlobalInfoAssetDto {
 }
 
 export class GlobalInfoDto {
-  @IsBoolean()
-  hasScrapedPrices: boolean;
-
   @IsNumber()
   pnl: number;
 

@@ -8,7 +8,7 @@ import { TransactionRepository } from './transaction.repository';
 import { TransactionInfo } from '../../model/transaction-info.entity';
 import { TransactionInfoRepository } from './transaction-info.repository';
 import { PortfolioModule } from '../portfolio/portfolio.module';
-import { AssetModule } from '../asset/asset.module';
+import { CoinMarketCapModule } from '../coinmarketcap/coinmarketcap.module';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import { AssetModule } from '../asset/asset.module';
     TypeOrmModule.forFeature([TransactionInfo, TransactionInfoRepository]),
     forwardRef(() => UserModule),
     forwardRef(() => PortfolioModule),
-    forwardRef(() => AssetModule),
+    forwardRef(() => CoinMarketCapModule),
   ],
   controllers: [TransactionController],
   providers: [TransactionService],

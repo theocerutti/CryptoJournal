@@ -5,7 +5,6 @@ import { IsNotEmpty, Length } from 'class-validator';
 import { RefreshToken } from './refresh_token.entity';
 import { Portfolio } from './portfolio.entity';
 import { Transaction } from './transaction.entity';
-import { Asset } from './asset.entity';
 
 @Entity()
 export class User {
@@ -27,9 +26,6 @@ export class User {
 
   @OneToMany(() => Transaction, (transaction) => transaction.user)
   transactions: Transaction[];
-
-  @OneToMany(() => Asset, (asset) => asset.user)
-  assets: Asset[];
 
   @OneToMany(() => Portfolio, (portfolio) => portfolio.user)
   portfolios: Portfolio[];

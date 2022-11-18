@@ -1,5 +1,5 @@
 export const defaultQueryConfig = {
   refetchOnWindowFocus: false,
   refetchIntervalInBackground: true,
-  refetchInterval: 1 * 60 * 1000,
+  refetchInterval: 5 * 60 * 1000, // 5 minutes
 };

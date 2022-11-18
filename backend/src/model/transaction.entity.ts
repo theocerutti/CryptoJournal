@@ -2,7 +2,6 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn
 import { TransactionInfo } from './transaction-info.entity';
 import { ColumnNumericTransformer } from '../utils/transformer';
 import { User } from './user.entity';
-import { Asset } from './asset.entity';
 
 @Entity()
 export class Transaction {
@@ -47,14 +46,8 @@ export class Transaction {
   })
   feePrice: number;
 
-  @OneToOne(() => Asset, {
-    nullable: false,
-    createForeignKeyConstraints: false,
-    onUpdate: 'NO ACTION',
-    onDelete: 'RESTRICT',
-  })
-  @JoinColumn()
-  feeAsset: Asset;
+  @Column()
+  feeAssetId: number;
 
   @Column({ type: 'timestamp' })
   date: Date;

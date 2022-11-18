@@ -8,9 +8,8 @@ import { PortfolioService } from '../portfolio/portfolio.service';
 import { CreateTransactionDto, UpdateTransactionDto } from '../../shared/transaction';
 import { TransactionInfoRepository } from './transaction-info.repository';
 import { Portfolio } from '../../model/portfolio.entity';
-import { Asset } from '../../model/asset.entity';
-import { AssetService } from '../asset/asset.service';
-import { ScrapeDataContainer } from '../../schedulers/ScrapeDataContainer';
+import { CoinMarketCapService } from '../coinmarketcap/coinmarketcap.service';
+import { CMCQuoteLatestData } from '../../shared/coinmarketcap';
 
 @Injectable()
 export class TransactionService {
@@ -19,20 +18,24 @@ export class TransactionService {
     private readonly TransactionRepo: TransactionRepository,
     @InjectRepository(TransactionInfoRepository)
     private readonly TransactionInfoRepo: TransactionRepository,
-    @Inject(forwardRef(() => AssetService)) private assetService: AssetService,
+    @Inject(forwardRef(() => CoinMarketCapService)) private coinMarketCapService: CoinMarketCapService,
     @Inject(forwardRef(() => UserService)) private userService: UserService,
     @Inject(forwardRef(() => PortfolioService)) private portfolioService: PortfolioService
   ) {}
 
+  async getAllAssetId(userId: number): Promise<number[]> {
+    return await this.TransactionRepo.getAllAssetId(userId);
+  }
+
   // TODO: Every get functions must be rethinked
-  async getPNL(userId: number): Promise<number> {
-    const totalBalance = await this.getTotalBalance(userId);
+  async getPNL(userId: number, assetQuotes: CMCQuoteLatestData): Promise<number> {
+    const totalBalance = await this.getTotalBalance(userId, assetQuotes);
     const totalInvested = await this.getTotalInvested(userId);
     return totalBalance - totalInvested;
   }
 
-  async getPNLPercent(userId: number): Promise<number> {
-    const pnl = await this.getPNL(userId);
+  async getPNLPercent(userId: number, assetQuotes: CMCQuoteLatestData): Promise<number> {
+    const pnl = await this.getPNL(userId, assetQuotes);
     const totalInvested = await this.getTotalInvested(userId);
 
     if (totalInvested === 0) {
@@ -41,19 +44,19 @@ export class TransactionService {
     return (pnl / totalInvested) * 100;
   }
 
-  async getTotalBalance(userId: number): Promise<number> {
-    const assets = await this.assetService.getAll(userId);
+  async getTotalBalance(userId: number, assetQuotes: CMCQuoteLatestData): Promise<number> {
+    const assetIds = await this.getAllAssetId(userId);
     let totalBalance = 0;
 
-    for (const asset of assets) totalBalance += await this.getTotalBalanceAsset(userId, asset);
+    for (const assetId of assetIds) totalBalance += await this.getTotalBalanceAsset(userId, assetId, assetQuotes);
     return totalBalance;
   }
 
   async getTotalFees(userId: number): Promise<number> {
-    const assets = await this.assetService.getAll(userId);
+    const assetIds = await this.getAllAssetId(userId);
     let totalFees = 0;
 
-    for (const asset of assets) totalFees += await this.getTotalFeesAsset(userId, asset);
+    for (const assetId of assetIds) totalFees += await this.getTotalFeesAsset(userId, assetId);
     return totalFees;
   }
 
@@ -71,22 +74,22 @@ export class TransactionService {
     return totalInvested;
   }
 
-  async getTotalAmountAsset(userId: number, asset: Asset): Promise<number> {
-    const transactions = await this.TransactionRepo.getUserTransactionByAsset(userId, asset);
+  async getTotalAmountAsset(userId: number, assetId: number): Promise<number> {
+    const transactions = await this.TransactionRepo.getUserTransactionByAsset(userId, assetId);
     let totalAmount = 0;
 
     for (const transaction of transactions) {
-      if (transaction.from.asset.id === asset.id) {
+      if (transaction.from.assetId === assetId) {
         totalAmount -= transaction.from.amount;
-      } else if (transaction.to.asset.id === asset.id) {
+      } else if (transaction.to.assetId === assetId) {
         totalAmount += transaction.to.amount;
       }
     }
     return totalAmount;
   }
 
-  async getTotalFeesAsset(userId: number, asset: Asset): Promise<number> {
-    const transactions = await this.TransactionRepo.getUserTransactionByAsset(userId, asset);
+  async getTotalFeesAsset(userId: number, assetId: number): Promise<number> {
+    const transactions = await this.TransactionRepo.getUserTransactionByAsset(userId, assetId);
     let fees = 0;
 
     for (const transaction of transactions) {
@@ -95,15 +98,15 @@ export class TransactionService {
     return fees;
   }
 
-  async getPNLAsset(userId: number, asset: Asset): Promise<number> {
-    const totalBalance = await this.getTotalBalanceAsset(userId, asset);
-    const totalInvested = await this.getTotalInvestedAsset(userId, asset);
+  async getPNLAsset(userId: number, assetId: number, assetQuotes: CMCQuoteLatestData): Promise<number> {
+    const totalBalance = await this.getTotalBalanceAsset(userId, assetId, assetQuotes);
+    const totalInvested = await this.getTotalInvestedAsset(userId, assetId);
     return totalBalance - totalInvested;
   }
 
-  async getPNLPercentAsset(userId: number, asset: Asset): Promise<number> {
-    const pnl = await this.getPNLAsset(userId, asset);
-    const totalInvested = await this.getTotalInvestedAsset(userId, asset);
+  async getPNLPercentAsset(userId: number, assetId: number, assetQuotes: CMCQuoteLatestData): Promise<number> {
+    const pnl = await this.getPNLAsset(userId, assetId, assetQuotes);
+    const totalInvested = await this.getTotalInvestedAsset(userId, assetId);
 
     if (totalInvested === 0) {
       return 0;
@@ -111,13 +114,13 @@ export class TransactionService {
     return (pnl / totalInvested) * 100;
   }
 
-  async getTotalInvestedAsset(userId: number, asset: Asset): Promise<number> {
+  async getTotalInvestedAsset(userId: number, assetId: number): Promise<number> {
     return 1;
   }
 
-  async getTotalBalanceAsset(userId: number, asset: Asset): Promise<number> {
-    const totalAmount = await this.getTotalAmountAsset(userId, asset);
-    return totalAmount * ScrapeDataContainer.getInstance().getPrice(asset.name);
+  async getTotalBalanceAsset(userId: number, assetId: number, assetQuotes: CMCQuoteLatestData): Promise<number> {
+    const totalAmount = await this.getTotalAmountAsset(userId, assetId);
+    return totalAmount * assetQuotes[assetId].quote['USD'].price;
   }
 
   async getAll(userId: number): Promise<Transaction[]> {

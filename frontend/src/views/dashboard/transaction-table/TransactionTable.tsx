@@ -5,13 +5,16 @@ import { BsArrowBarRight } from 'react-icons/bs';
 import { MdDelete, MdEdit, MdInfo } from 'react-icons/md';
 import Table from '../../../components/table/Table';
 import { toSpecialPrecision } from '../../../utils/math';
+import { CMCCryptoBasicInfos } from '@shared/coinmarketcap';
 
 const TransactionTable = ({
   transactions,
+  cryptoInfos,
   handleDelete,
   handleEdit,
 }: {
   transactions: GetTransactionDto[];
+  cryptoInfos: CMCCryptoBasicInfos;
   handleDelete: (transactionID: number) => void;
   handleEdit: (transaction: GetTransactionDto) => void;
 }) => {
@@ -48,10 +51,11 @@ const TransactionTable = ({
           label={
             <VStack align='self-start'>
               <div>
-                1 {row.original.from.asset.name} = {toSpecialPrecision(row.original.from.price)} USD
+                1 {cryptoInfos[row.original.from.assetId]?.name || '??'} = {toSpecialPrecision(row.original.from.price)}{' '}
+                USD
               </div>
               <div>
-                1 {row.original.to.asset.name} = {toSpecialPrecision(row.original.to.price)} USD
+                1 {cryptoInfos[row.original.to.assetId]?.name || '??'} = {toSpecialPrecision(row.original.to.price)} USD
               </div>
             </VStack>
           }
@@ -59,11 +63,11 @@ const TransactionTable = ({
         >
           <Flex align='center' width='100px'>
             <span style={{ whiteSpace: 'nowrap', paddingRight: '8px' }}>
-              {toSpecialPrecision(row.original.from.amount)} {row.original.from.asset.name}
+              {toSpecialPrecision(row.original.from.amount)} {cryptoInfos[row.original.from.assetId]?.name || '??'}
             </span>
             <Icon w={5} h={5} as={BsArrowBarRight} />
             <span style={{ whiteSpace: 'nowrap', paddingLeft: '8px' }}>
-              {toSpecialPrecision(row.original.to.amount)} {row.original.to.asset.name}
+              {toSpecialPrecision(row.original.to.amount)} {cryptoInfos[row.original.to.assetId]?.name || '??'}
             </span>
           </Flex>
         </Tooltip>
@@ -75,7 +79,7 @@ const TransactionTable = ({
         <Flex>
           <Stat size='sm'>
             <StatNumber>
-              {toSpecialPrecision(row.original.feeAmount)} {row.original.feeAsset.name}
+              {toSpecialPrecision(row.original.feeAmount)} {cryptoInfos[row.original.feeAssetId]?.name || '??'}
             </StatNumber>
             <StatHelpText style={{ fontSize: '12px' }}>
               (={toSpecialPrecision(row.original.feeAmount * row.original.feePrice)} USD)

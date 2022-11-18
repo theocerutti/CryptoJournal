@@ -28,18 +28,17 @@ const AssetPNLTable = () => {
     const columns = [
       {
         Header: 'LOGO',
-        accessor: 'assetLogoURL',
-        Cell: ({ value }: { value: string }) => (value ? <Image src={value} /> : <Icon as={BsQuestionCircle} />),
+        accessor: 'logo',
+        Cell: ({ value }: { value: string }) =>
+          value ? <Image style={{ width: '32px', height: '32px' }} src={value} /> : <Icon as={BsQuestionCircle} />,
       },
       {
         Header: 'NAME',
-        accessor: 'asset.name',
+        accessor: 'name',
         Cell: ({ value, row }: { value: string; row: any }) => (
           <Flex alignItems='center' flexDirection='row'>
             <Stat>
-              <StatLabel>
-                <Link href={row.original.asset.priceTrackerUrl}>{value}</Link>
-              </StatLabel>
+              <StatLabel>{value}</StatLabel>
               <StatHelpText fontSize='12px'>{formatCurrency(row.original.price)}</StatHelpText>
             </Stat>
           </Flex>
@@ -69,7 +68,7 @@ const AssetPNLTable = () => {
         Header: 'HOLDINGS',
         accessor: 'amount',
         Cell: ({ value, row }: { value: number; row: { original: GlobalInfoAssetDto } }) =>
-          `${toSpecialPrecision(value)} ${row.original.asset.name}`,
+          `${toSpecialPrecision(value)} ${row.original.symbol}`,
       },
       {
         Header: 'FEES',
