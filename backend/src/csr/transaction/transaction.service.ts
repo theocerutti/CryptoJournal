@@ -123,8 +123,38 @@ export class TransactionService {
     return totalAmount * assetQuotes[assetId].quote['USD'].price;
   }
 
-  async getAll(userId: number): Promise<Transaction[]> {
-    return await this.TransactionRepo.getUserTransactions(userId);
+  async getAll(
+    userId: number,
+    portfolioFilter: number | number[] | null,
+    assetFilter: number | number[] | null
+  ): Promise<Transaction[]> {
+    const queryBuilder = this.TransactionRepo.createQueryBuilder('t')
+      .leftJoin('t.to', 'ti_to')
+      .leftJoin('t.from', 'ti_from')
+      .where('t.user = :userId', { userId });
+
+    if (portfolioFilter) {
+      if (Array.isArray(portfolioFilter)) {
+        queryBuilder.andWhere(
+          '(ti_to.portfolioId IN (:...portfolioFilter) OR ti_from.portfolioId IN (:...portfolioFilter))',
+          { portfolioFilter }
+        );
+      } else {
+        queryBuilder.andWhere('(ti_to.portfolioId = :portfolioFilter OR ti_from.portfolioId = :portfolioFilter)', {
+          portfolioFilter,
+        });
+      }
+    }
+    if (assetFilter) {
+      if (Array.isArray(assetFilter)) {
+        queryBuilder.andWhere('(ti_to.assetId IN (:...assetFilter) OR ti_from.assetId IN (:...assetFilter))', {
+          assetFilter,
+        });
+      } else {
+        queryBuilder.andWhere('(ti_to.assetId = :assetFilter OR ti_from.assetId = :assetFilter)', { assetFilter });
+      }
+    }
+    return queryBuilder.getMany();
   }
 
   async get(userId: number, transactionId: number): Promise<Transaction> {

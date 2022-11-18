@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
 import { CurrentUser } from 'csr/auth/current-user.decorator';
 import { User } from 'model/user.entity';
 import { TransactionService } from './transaction.service';
@@ -12,9 +12,33 @@ export class TransactionController {
   constructor(private transactionService: TransactionService) {}
 
   @Get()
-  public async getAll(@CurrentUser() user: User): Promise<GetTransactionDto[]> {
-    this.logger.log(`GetAll with userId=${user.id}`);
-    return await this.transactionService.getAll(user.id);
+  public async getAll(
+    @CurrentUser() user: User,
+    @Query('portfolio') portfolioFilter: string | null,
+    @Query('asset') assetFilter: string | null
+  ): Promise<GetTransactionDto[]> {
+    let portfolioId: number | number[] | null;
+
+    if (portfolioFilter) {
+      if (portfolioFilter.indexOf(',') > -1) {
+        portfolioId = portfolioFilter.split(',').map((id) => parseInt(id, 10));
+      } else {
+        portfolioId = parseInt(portfolioFilter);
+      }
+    }
+
+    let assetId: number | number[] | null;
+
+    if (assetFilter) {
+      if (assetFilter.indexOf(',') > -1) {
+        assetId = assetFilter.split(',').map((id) => parseInt(id, 10));
+      } else {
+        assetId = parseInt(assetFilter);
+      }
+    }
+
+    this.logger.log(`GetAll with userId=${user.id} assetId=${assetId} portfolioId=${portfolioId}`);
+    return await this.transactionService.getAll(user.id, portfolioId, assetId);
   }
 
   @Get(':transactionId')
