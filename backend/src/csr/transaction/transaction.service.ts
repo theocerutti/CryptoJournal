@@ -10,6 +10,7 @@ import { TransactionInfoRepository } from './transaction-info.repository';
 import { Portfolio } from '../../model/portfolio.entity';
 import { CoinMarketCapService } from '../coinmarketcap/coinmarketcap.service';
 import { CMCQuoteLatestData } from '../../shared/coinmarketcap';
+import { TransactionFilterParsed } from '../../utils/TransactionFilterTransformer';
 
 @Injectable()
 export class TransactionService {
@@ -125,8 +126,8 @@ export class TransactionService {
 
   async getAll(
     userId: number,
-    portfolioFilter: number | number[] | null,
-    assetFilter: number | number[] | null
+    portfolioFilter: TransactionFilterParsed,
+    assetFilter: TransactionFilterParsed
   ): Promise<Transaction[]> {
     const queryBuilder = this.TransactionRepo.createQueryBuilder('t')
       .leftJoin('t.to', 'ti_to')

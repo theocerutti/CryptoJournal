@@ -1,9 +1,27 @@
-import { Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Logger,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { CurrentUser } from 'csr/auth/current-user.decorator';
 import { User } from 'model/user.entity';
 import { TransactionService } from './transaction.service';
 import { CreateTransactionDto, GetTransactionDto, UpdateTransactionDto } from '../../shared/transaction';
 import { Transaction } from '../../model/transaction.entity';
+import HttpError from 'exceptions/http.error';
+import {
+  TransactionFilter,
+  TransactionFilterParsed,
+  TransactionFilterTransformer,
+} from 'utils/TransactionFilterTransformer';
 
 @Controller('transactions')
 export class TransactionController {
@@ -14,31 +32,14 @@ export class TransactionController {
   @Get()
   public async getAll(
     @CurrentUser() user: User,
-    @Query('portfolio') portfolioFilter: string | null,
-    @Query('asset') assetFilter: string | null
+    @Query('portfolio') portfolioFilter: TransactionFilter,
+    @Query('asset') assetFilter: TransactionFilter
   ): Promise<GetTransactionDto[]> {
-    let portfolioId: number | number[] | null;
+    const parsedPortfolioFilter: TransactionFilterParsed = TransactionFilterTransformer.tryParseFilter(portfolioFilter);
+    const parsedAssetFilter: TransactionFilterParsed = TransactionFilterTransformer.tryParseFilter(assetFilter);
 
-    if (portfolioFilter) {
-      if (portfolioFilter.indexOf(',') > -1) {
-        portfolioId = portfolioFilter.split(',').map((id) => parseInt(id, 10));
-      } else {
-        portfolioId = parseInt(portfolioFilter);
-      }
-    }
-
-    let assetId: number | number[] | null;
-
-    if (assetFilter) {
-      if (assetFilter.indexOf(',') > -1) {
-        assetId = assetFilter.split(',').map((id) => parseInt(id, 10));
-      } else {
-        assetId = parseInt(assetFilter);
-      }
-    }
-
-    this.logger.log(`GetAll with userId=${user.id} assetId=${assetId} portfolioId=${portfolioId}`);
-    return await this.transactionService.getAll(user.id, portfolioId, assetId);
+    this.logger.log(`GetAll with userId=${user.id} portfolioId=${parsedPortfolioFilter} assetId=${parsedAssetFilter}`);
+    return await this.transactionService.getAll(user.id, parsedPortfolioFilter, parsedAssetFilter);
   }
 
   @Get(':transactionId')
