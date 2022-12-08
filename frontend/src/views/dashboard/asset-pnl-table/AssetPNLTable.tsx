@@ -23,7 +23,8 @@ const AssetPNLTable = () => {
   if (isLoading) return <CenteredSpinner />;
 
   if (isSuccess) {
-    if (data.data?.globalInfoAssets.length === 0) return <NoDataTable>No Data</NoDataTable>;
+    if (!data.data?.globalInfoAssets || data.data?.globalInfoAssets.length === 0)
+      return <NoDataTable>No Asset History. Please add a transaction!</NoDataTable>;
 
     const columns = [
       {

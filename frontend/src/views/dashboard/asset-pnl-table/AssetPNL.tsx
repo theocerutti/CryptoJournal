@@ -9,7 +9,7 @@ const AssetPNL = () => {
     <>
       <Flex align={{ sm: 'flex-start', lg: 'center' }} justify='space-between' pb='20px' w='100%'>
         <Text color={textColor} fontSize='xl' fontWeight='600'>
-          Asset PNL History
+          PNL by Asset
         </Text>
       </Flex>
 

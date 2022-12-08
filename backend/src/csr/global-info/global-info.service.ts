@@ -16,6 +16,11 @@ export class GlobalInfoService {
   async buildInfo(userId: number): Promise<GlobalInfoDto> {
     const globalInfo = new GlobalInfoDto();
     const assetIds = await this.transactionService.getAllAssetId(userId);
+
+    if (assetIds.length === 0) {
+      return globalInfo;
+    }
+
     const assetQuotes = await this.coinMarketCapService.getCryptoQuotes(assetIds);
 
     globalInfo.pnl = await this.transactionService.getPNL(userId, assetQuotes);
