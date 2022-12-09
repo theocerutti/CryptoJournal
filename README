@@ -11,13 +11,10 @@ Features:
 * Avoir les gains/loss total par portfolios
 * Mettre les headers de horizon ui dans le code pour la légalité
 * Dans le frontend on doit pouvoir choisir sur quel currency on voit les prix
-* Passer en REM
-* Convertir certains Spinner en ChakraSkeleton Loader
 * ajouter un Redis (au lieu du axios-cache-adapter) pour le caching de CMC
 * Ajouter en DB les AssetInfo. Elles doivent se calculer de manière automatisé (à l'ajout des transaction)
 * Ajouter une option dans le portfolio pour se connecter à une addresse crypto / exchange. (création des transactions grâce à l'addresse -> fetch de solscan.io par ex pour solana / ou d'une API de binance par ex)
 * Pour l'instant on limite le fetch des cryptos à 1000. Il faudrait fetcher toutes les cryptos -> fetch au start de l'app TOUTE les cryptos et les mettres dans la db
-* Update FormikSelect pour supporter le dark mode.
 * Checker le calcul des transactions dans le backend
 
 Fix/Update:
