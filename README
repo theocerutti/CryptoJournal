@@ -21,6 +21,7 @@ Features:
 * Ajouter une option dans le portfolio pour se connecter à une addresse crypto / exchange. (création des transactions grâce à l'addresse -> fetch de solscan.io par ex pour solana / ou d'une API de binance par ex)
 * Pour l'instant on limite le fetch des cryptos à 1000. Il faudrait fetcher toutes les cryptos -> fetch au start de l'app TOUTE les cryptos et les mettres dans la db
 * Update FormikSelect pour supporter le dark mode.
+* Fetch transactions from Addresses (solana, binance, etc)
 
 Fix/Update:
 * Fix les TODOs
