@@ -9,6 +9,7 @@ import {
   Image,
   Text,
   Tooltip,
+  useColorModeValue,
   useToken,
 } from '@chakra-ui/react';
 import { getObjectValueFromDot } from '../../utils/object';
@@ -106,14 +107,20 @@ const FormikSelect = ({
   const value = getObjectValueFromDot(formik.values, valueKey);
   const error = getObjectValueFromDot(formik.errors, valueKey);
   const isError: boolean = !!error;
-  const [bg, bgFocused, border, bgHover] = useToken('colors', ['grey.200', 'whiteAlpha.100', 'brand.500', 'grey.400']);
-
-  console.log(options);
-  console.log(
-    value,
-    mapValue(value),
-    options.find((opt) => opt.value === mapValue(value))
+  const textColor = useColorModeValue('secondaryGrey.900', 'white');
+  const [bgLight, bgFocusedLight, borderLight, bgHoverLight, hoverOptionLight, bgOptionLight, selectedOptionLight] =
+    useToken('colors', ['grey.200', 'whiteAlpha.100', 'brand.500', 'grey.400', 'grey.400', 'grey.200', 'grey.500']);
+  const [bgDark, bgFocusedDark, borderDark, bgHoverDark, hoverOptionDark, bgOptionDark, selectedOptionDark] = useToken(
+    'colors',
+    ['navy.700', 'navy.800', 'brand.500', 'navy.800', 'navy.800', 'navy.700', 'navy.900']
   );
+  const bg = useColorModeValue(bgLight, bgDark);
+  const bgFocused = useColorModeValue(bgFocusedLight, bgFocusedDark);
+  const border = useColorModeValue(borderLight, '#63b3ed');
+  const bgHover = useColorModeValue(bgHoverLight, bgHoverDark);
+  const selectedOption = useColorModeValue(selectedOptionLight, selectedOptionDark);
+  const hoverOption = useColorModeValue(hoverOptionLight, hoverOptionDark);
+  const bgOption = useColorModeValue(bgOptionLight, bgOptionDark);
 
   const input = (
     <Select
@@ -142,7 +149,13 @@ const FormikSelect = ({
           width: '100%',
         }),
         indicatorSeparator: () => ({ display: 'none' }),
-        menu: (provided) => ({ ...provided, zIndex: 9999 }),
+        singleValue: (provided) => ({ ...provided, color: textColor }),
+        option: (provided, { isSelected }) => ({
+          ...provided,
+          backgroundColor: isSelected ? selectedOption : bgOption,
+          '&:hover': { backgroundColor: isSelected ? selectedOption : hoverOption },
+        }),
+        menu: (provided) => ({ ...provided, backgroundColor: bg, color: textColor, zIndex: 9999 }),
       }}
     />
   );
