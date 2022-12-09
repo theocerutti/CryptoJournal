@@ -1,4 +1,4 @@
-import { EntityRepository } from 'typeorm';
+import { EntityRepository, SelectQueryBuilder } from 'typeorm';
 import { BaseEntityRepository } from '../../utils/BaseEntityRepository';
 import { Transaction } from '../../model/transaction.entity';
 
@@ -28,14 +28,13 @@ export class TransactionRepository extends BaseEntityRepository<Transaction> {
       .getMany();
   }
 
-  async getUserTransactions(userId: number): Promise<Transaction[]> {
+  getUserTransactionsQuery(userId: number): SelectQueryBuilder<Transaction> {
     return this.createQueryBuilder('transaction')
       .leftJoinAndSelect('transaction.from', 'from')
       .leftJoinAndSelect('transaction.to', 'to')
       .leftJoinAndSelect('from.portfolio', 'fromPortfolio')
       .leftJoinAndSelect('to.portfolio', 'toPortfolio')
-      .where('transaction.user = :userId', { userId })
-      .getMany();
+      .where('transaction.user = :userId', { userId });
   }
 
   async getAllAssetId(userId: number): Promise<number[]> {

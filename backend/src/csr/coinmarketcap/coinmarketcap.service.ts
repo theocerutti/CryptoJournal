@@ -61,7 +61,6 @@ export class CoinMarketCapService {
         });
         fetchedCount += map.data.data.length;
       } catch (e) {
-        console.error(e);
         throw new HttpError("Can't get crypto infos", e, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       page++;

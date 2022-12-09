@@ -27,6 +27,8 @@ const TransactionTable = ({
     []
   );
 
+  console.log(transactions, cryptoInfos);
+
   const columns = [
     {
       Header: 'DATE',

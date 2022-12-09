@@ -129,10 +129,7 @@ export class TransactionService {
     portfolioFilter: TransactionFilterParsed,
     assetFilter: TransactionFilterParsed
   ): Promise<Transaction[]> {
-    const queryBuilder = this.TransactionRepo.createQueryBuilder('t')
-      .leftJoin('t.to', 'ti_to')
-      .leftJoin('t.from', 'ti_from')
-      .where('t.user = :userId', { userId });
+    const queryBuilder = await this.TransactionRepo.getUserTransactionsQuery(userId);
 
     if (portfolioFilter) {
       if (Array.isArray(portfolioFilter)) {
