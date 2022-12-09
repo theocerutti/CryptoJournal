@@ -28,7 +28,6 @@ export class TransactionService {
     return await this.TransactionRepo.getAllAssetId(userId);
   }
 
-  // TODO: Every get functions must be rethinked
   async getPNL(userId: number, assetQuotes: CMCQuoteLatestData): Promise<number> {
     const totalBalance = await this.getTotalBalance(userId, assetQuotes);
     const totalInvested = await this.getTotalInvested(userId);
@@ -66,7 +65,7 @@ export class TransactionService {
     let totalInvested = 0;
     for (const portfolio of bankPortfolios) {
       if (portfolio.isMyBank) {
-        const transactions = await this.TransactionRepo.getTransactionsFromPortfolio(portfolio.id);
+        const transactions = await this.TransactionRepo.getTransactionsFromPortfolio(portfolio.id); // TODO: use getAll and pass portfolio filter?
         for (const transaction of transactions) {
           totalInvested += transaction.from.amount * transaction.from.price;
         }
@@ -116,12 +115,13 @@ export class TransactionService {
   }
 
   async getTotalInvestedAsset(userId: number, assetId: number): Promise<number> {
-    return 1;
+    return 1; // TODO: we must have labelized transactions
   }
 
   async getTotalBalanceAsset(userId: number, assetId: number, assetQuotes: CMCQuoteLatestData): Promise<number> {
     const totalAmount = await this.getTotalAmountAsset(userId, assetId);
-    return totalAmount * assetQuotes[assetId].quote['USD'].price;
+    const totalFees = await this.getTotalFeesAsset(userId, assetId);
+    return totalAmount * assetQuotes[assetId].quote['USD'].price - totalFees;
   }
 
   async getAll(
@@ -134,22 +134,22 @@ export class TransactionService {
     if (portfolioFilter) {
       if (Array.isArray(portfolioFilter)) {
         queryBuilder.andWhere(
-          '(ti_to.portfolioId IN (:...portfolioFilter) OR ti_from.portfolioId IN (:...portfolioFilter))',
+          '(to.portfolioId IN (:...portfolioFilter) OR from.portfolioId IN (:...portfolioFilter))',
           { portfolioFilter }
         );
       } else {
-        queryBuilder.andWhere('(ti_to.portfolioId = :portfolioFilter OR ti_from.portfolioId = :portfolioFilter)', {
+        queryBuilder.andWhere('(to.portfolioId = :portfolioFilter OR from.portfolioId = :portfolioFilter)', {
           portfolioFilter,
         });
       }
     }
     if (assetFilter) {
       if (Array.isArray(assetFilter)) {
-        queryBuilder.andWhere('(ti_to.assetId IN (:...assetFilter) OR ti_from.assetId IN (:...assetFilter))', {
+        queryBuilder.andWhere('(to.assetId IN (:...assetFilter) OR from.assetId IN (:...assetFilter))', {
           assetFilter,
         });
       } else {
-        queryBuilder.andWhere('(ti_to.assetId = :assetFilter OR ti_from.assetId = :assetFilter)', { assetFilter });
+        queryBuilder.andWhere('(to.assetId = :assetFilter OR from.assetId = :assetFilter)', { assetFilter });
       }
     }
     return queryBuilder.getMany();
