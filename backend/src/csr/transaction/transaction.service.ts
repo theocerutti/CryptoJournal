@@ -10,6 +10,7 @@ import { TransactionInfoRepository } from './transaction-info.repository';
 import { Portfolio } from '../../model/portfolio.entity';
 import { CoinMarketCapService } from '../coinmarketcap/coinmarketcap.service';
 import { CMCQuoteLatestData } from '../../shared/coinmarketcap';
+import { TransactionFilterParsed } from '../../utils/TransactionFilterTransformer';
 
 @Injectable()
 export class TransactionService {
@@ -123,8 +124,38 @@ export class TransactionService {
     return totalAmount * assetQuotes[assetId].quote['USD'].price;
   }
 
-  async getAll(userId: number): Promise<Transaction[]> {
-    return await this.TransactionRepo.getUserTransactions(userId);
+  async getAll(
+    userId: number,
+    portfolioFilter: TransactionFilterParsed,
+    assetFilter: TransactionFilterParsed
+  ): Promise<Transaction[]> {
+    const queryBuilder = this.TransactionRepo.createQueryBuilder('t')
+      .leftJoin('t.to', 'ti_to')
+      .leftJoin('t.from', 'ti_from')
+      .where('t.user = :userId', { userId });
+
+    if (portfolioFilter) {
+      if (Array.isArray(portfolioFilter)) {
+        queryBuilder.andWhere(
+          '(ti_to.portfolioId IN (:...portfolioFilter) OR ti_from.portfolioId IN (:...portfolioFilter))',
+          { portfolioFilter }
+        );
+      } else {
+        queryBuilder.andWhere('(ti_to.portfolioId = :portfolioFilter OR ti_from.portfolioId = :portfolioFilter)', {
+          portfolioFilter,
+        });
+      }
+    }
+    if (assetFilter) {
+      if (Array.isArray(assetFilter)) {
+        queryBuilder.andWhere('(ti_to.assetId IN (:...assetFilter) OR ti_from.assetId IN (:...assetFilter))', {
+          assetFilter,
+        });
+      } else {
+        queryBuilder.andWhere('(ti_to.assetId = :assetFilter OR ti_from.assetId = :assetFilter)', { assetFilter });
+      }
+    }
+    return queryBuilder.getMany();
   }
 
   async get(userId: number, transactionId: number): Promise<Transaction> {
