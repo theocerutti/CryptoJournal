@@ -5,7 +5,7 @@ import { deleteTransactionMutation, getTransactionsQuery, TRANSACTION_QUERY_KEY 
 import { Alert, useToast } from '@chakra-ui/react';
 import { GetTransactionDto } from '@shared/transaction';
 import CenteredSpinner from '../../../components/CenteredSpinner';
-import TransactionTable from './TransactionTable';
+import TransactionsTable from './TransactionsTable';
 import { showToast } from '../../../utils/toast';
 import NoDataTable from '../../../components/NoDataTable';
 import { defaultQueryConfig } from '../../../queries/config';
@@ -61,7 +61,7 @@ const TransactionsContainer = () => {
       return <NoDataTable>You don't have any transactions yet. Add one to get started.</NoDataTable>;
 
     return (
-      <TransactionTable
+      <TransactionsTable
         transactions={dataTransactions.data}
         cryptoInfos={dataCryptoInfos.data}
         handleDelete={handleDelete}

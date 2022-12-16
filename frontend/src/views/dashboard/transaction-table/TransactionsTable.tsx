@@ -7,7 +7,7 @@ import Table from '../../../components/table/Table';
 import { toSpecialPrecision } from '../../../utils/math';
 import { CMCCryptoBasicInfos } from '@shared/coinmarketcap';
 
-const TransactionTable = ({
+const TransactionsTable = ({
   transactions,
   cryptoInfos,
   handleDelete,
@@ -121,4 +121,4 @@ const TransactionTable = ({
   );
 };
 
-export default TransactionTable;
+export default TransactionsTable;

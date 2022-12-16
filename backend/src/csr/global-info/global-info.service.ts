@@ -40,8 +40,6 @@ export class GlobalInfoService {
     assetInfo.id = assetId;
     assetInfo.amount = await this.transactionService.getTotalAmountAsset(userId, assetId);
     assetInfo.fees = await this.transactionService.getTotalFeesAsset(userId, assetId);
-    assetInfo.pnl = await this.transactionService.getPNLAsset(userId, assetId, assetQuotes);
-    assetInfo.pnlPercent = await this.transactionService.getPNLPercentAsset(userId, assetId, assetQuotes);
     assetInfo.totalBalance = await this.transactionService.getTotalBalanceAsset(userId, assetId, assetQuotes);
     assetInfo.name = assetQuotes[assetId].name;
     assetInfo.symbol = assetQuotes[assetId].symbol;

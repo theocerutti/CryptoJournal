@@ -98,26 +98,6 @@ export class TransactionService {
     return fees;
   }
 
-  async getPNLAsset(userId: number, assetId: number, assetQuotes: CMCQuoteLatestData): Promise<number> {
-    const totalBalance = await this.getTotalBalanceAsset(userId, assetId, assetQuotes);
-    const totalInvested = await this.getTotalInvestedAsset(userId, assetId);
-    return totalBalance - totalInvested;
-  }
-
-  async getPNLPercentAsset(userId: number, assetId: number, assetQuotes: CMCQuoteLatestData): Promise<number> {
-    const pnl = await this.getPNLAsset(userId, assetId, assetQuotes);
-    const totalInvested = await this.getTotalInvestedAsset(userId, assetId);
-
-    if (totalInvested === 0) {
-      return 0;
-    }
-    return (pnl / totalInvested) * 100;
-  }
-
-  async getTotalInvestedAsset(userId: number, assetId: number): Promise<number> {
-    return 1; // TODO: we must have labelized transactions
-  }
-
   async getTotalBalanceAsset(userId: number, assetId: number, assetQuotes: CMCQuoteLatestData): Promise<number> {
     const totalAmount = await this.getTotalAmountAsset(userId, assetId);
     const totalFees = await this.getTotalFeesAsset(userId, assetId);

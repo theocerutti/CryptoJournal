@@ -145,7 +145,7 @@ const TransactionForm = ({
                 formik={formik}
                 mapValueFormikOnChange={(v) => v?.id}
                 valueKey='from.assetId'
-                label='Asset'
+                label='Assets'
                 tooltip='Name of the asset'
                 options={mappedAssetsForSelect}
                 required
@@ -161,7 +161,7 @@ const TransactionForm = ({
               <FormikInput
                 formik={formik}
                 valueKey='from.price'
-                label='Asset Price'
+                label='Assets Price'
                 tooltip='Price of the asset when you converted it (in USD)'
                 type='number'
                 inputLeftElement='$'
@@ -190,7 +190,7 @@ const TransactionForm = ({
                 formik={formik}
                 mapValueFormikOnChange={(v) => v?.id}
                 valueKey='to.assetId'
-                label='Asset'
+                label='Assets'
                 tooltip='Name of the asset'
                 options={mappedAssetsForSelect}
                 required
@@ -206,7 +206,7 @@ const TransactionForm = ({
               <FormikInput
                 formik={formik}
                 valueKey='to.price'
-                label='Asset Price'
+                label='Assets Price'
                 tooltip='Price of the asset (in USD)'
                 type='number'
                 inputLeftElement='$'
@@ -229,8 +229,8 @@ const TransactionForm = ({
               formik={formik}
               mapValueFormikOnChange={(v) => v?.id}
               valueKey='feeAssetId'
-              label='Fee Asset Name'
-              tooltip='Asset in which you paid the fees'
+              label='Fee Assets Name'
+              tooltip='Assets in which you paid the fees'
               options={mappedAssetsForSelect}
               required
             />
@@ -238,7 +238,7 @@ const TransactionForm = ({
               formik={formik}
               valueKey='feePrice'
               label='Price of the fee asset'
-              tooltip='Price of the Asset in which you paid the fees (in USD)'
+              tooltip='Price of the Assets in which you paid the fees (in USD)'
               type='number'
               inputLeftElement='$'
               required

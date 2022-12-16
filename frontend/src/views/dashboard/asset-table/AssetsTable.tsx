@@ -1,19 +1,18 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { defaultQueryConfig } from '../../../queries/config';
-import { Alert, Flex, Link, Stat, StatHelpText, StatLabel, Text, Image, Icon } from '@chakra-ui/react';
+import { Alert, Flex, Icon, Image, Stat, StatHelpText, StatLabel } from '@chakra-ui/react';
 import CenteredSpinner from '../../../components/CenteredSpinner';
 import NoDataTable from '../../../components/NoDataTable';
 import { getGlobalInfoQuery, GLOBAL_INFO_QUERY_KEY } from '../../../queries/global-info';
 import { formatCurrency } from '../../../utils/format';
 import { MultiCheckBoxColumnFilter } from '../../../components/table/MultiCheckBoxColumnFilter';
-import { getGrowthColor } from '../../../utils/colors';
-import { getSign, toSpecialPrecision } from '../../../utils/math';
+import { toSpecialPrecision } from '../../../utils/math';
 import Table from '../../../components/table/Table';
 import { GlobalInfoAssetDto } from '@shared/global-info';
 import { BsQuestionCircle } from 'react-icons/bs';
 
-const AssetPNLTable = () => {
+const AssetsTable = () => {
   const { data, isError, isLoading, isSuccess } = useQuery([GLOBAL_INFO_QUERY_KEY], getGlobalInfoQuery, {
     ...defaultQueryConfig,
   });
@@ -54,18 +53,6 @@ const AssetPNLTable = () => {
         Cell: ({ value }: { value: number }) => formatCurrency(value),
       },
       {
-        Header: 'PNL',
-        accessor: 'pnl',
-        Cell: ({ value, row }: { value: number; row: any }) => (
-          <Flex align='center'>
-            <Text color={getGrowthColor(value)} fontSize='xs' fontWeight='700' me='5px'>
-              {getSign(value)}
-              {formatCurrency(Math.abs(value))} ({toSpecialPrecision(row.original.pnlPercent)}%)
-            </Text>
-          </Flex>
-        ),
-      },
-      {
         Header: 'HOLDINGS',
         accessor: 'amount',
         Cell: ({ value, row }: { value: number; row: { original: GlobalInfoAssetDto } }) =>
@@ -90,4 +77,4 @@ const AssetPNLTable = () => {
   }
 };
 
-export default AssetPNLTable;
+export default AssetsTable;

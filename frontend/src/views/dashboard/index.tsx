@@ -2,7 +2,7 @@ import { Box, SimpleGrid } from '@chakra-ui/react';
 import GlobalInfo from './GlobalInfo';
 import Card from '../../components/card/Card';
 import Transactions from './transaction-table/Transactions';
-import AssetPNL from './asset-pnl-table/AssetPNL';
+import Assets from './asset-table/Assets';
 
 export default function Dashboard() {
   return (
@@ -15,7 +15,7 @@ export default function Dashboard() {
 
       <SimpleGrid gap='20px' mb='20px'>
         <Card>
-          <AssetPNL />
+          <Assets />
         </Card>
       </SimpleGrid>
 

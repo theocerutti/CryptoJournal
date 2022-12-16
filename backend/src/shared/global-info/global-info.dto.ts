@@ -23,12 +23,6 @@ export class GlobalInfoAssetDto {
   fees: number;
 
   @IsNumber()
-  pnl: number;
-
-  @IsNumber()
-  pnlPercent: number;
-
-  @IsNumber()
   totalBalance: number;
 }
 
