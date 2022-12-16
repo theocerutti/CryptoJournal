@@ -20,7 +20,11 @@ const GlobalInfo = () => {
   }
 
   if (isError) {
-    return <Alert status='warning'>Can't load global information. Please contact an administrator.</Alert>;
+    return (
+      <Alert status='warning' mb='20px'>
+        Can't load global information. Please contact an administrator.
+      </Alert>
+    );
   }
 
   return (

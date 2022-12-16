@@ -11,36 +11,47 @@ import ChartTotalInvested from './ChartTotalInvested';
 import ChartFees from './ChartFees';
 
 const Charts = () => {
-  const { data, isError, isLoading, isSuccess } = useQuery([GLOBAL_INFO_QUERY_KEY], getGlobalInfoQuery, {
+  const { data, isError, isLoading } = useQuery([GLOBAL_INFO_QUERY_KEY], getGlobalInfoQuery, {
     ...defaultQueryConfig,
   });
 
-  if (isError) return <Alert status='error'>Can't fetch investments</Alert>;
+  if (isError) return <Alert status='error'>Can't load global information. Please contact an administrator.</Alert>;
   if (isLoading) return <CenteredSpinner />;
 
-  return (
-    <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
-      <SimpleGrid gap='20px' mb='20px' columns={5}>
-        <NumberChart
-          title='Total Balance'
-          value={formatCurrency(data.data.totalBalance)}
-          logo={MdAccountBalanceWallet}
-        />
-        <NumberChart title='Total Invested' value={formatCurrency(data.data.totalInvested)} logo={MdBarChart} />
-        <NumberChart title='Total Fees' value={formatCurrency(data.data.totalFees)} logo={MdAttachMoney} />
-        <NumberChart
-          title='Total Transactions'
-          value={data.data.transactionsCount.toString()}
-          logo={MdConfirmationNumber}
-        />
-        <NumberChart title='Total Asset' value={data.data.assetsCount.toString()} logo={MdWebAsset} />
-      </SimpleGrid>
-      <SimpleGrid gap='20px' mb='20px' columns={2}>
-        <ChartTotalInvested />
-        <ChartFees />
-      </SimpleGrid>
-    </Box>
-  );
+  const page = () => {
+    if (Object.keys(data.data).length === 0)
+      return (
+        <Alert status='warning'>
+          You don't have any transactions created. Please create one before accessing Charts page!
+        </Alert>
+      );
+
+    return (
+      <>
+        <SimpleGrid gap='20px' mb='20px' columns={5}>
+          <NumberChart
+            title='Total Balance'
+            value={formatCurrency(data.data.totalBalance)}
+            logo={MdAccountBalanceWallet}
+          />
+          <NumberChart title='Total Invested' value={formatCurrency(data.data.totalInvested)} logo={MdBarChart} />
+          <NumberChart title='Total Fees' value={formatCurrency(data.data.totalFees)} logo={MdAttachMoney} />
+          <NumberChart
+            title='Total Transactions'
+            value={data.data.transactionsCount.toString()}
+            logo={MdConfirmationNumber}
+          />
+          <NumberChart title='Total Asset' value={data.data.assetsCount.toString()} logo={MdWebAsset} />
+        </SimpleGrid>
+        <SimpleGrid gap='20px' mb='20px' columns={2}>
+          <ChartTotalInvested />
+          <ChartFees />
+        </SimpleGrid>
+      </>
+    );
+  };
+
+  return <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>{page()}</Box>;
 };
 
 export default Charts;

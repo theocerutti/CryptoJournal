@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Box, Button, HStack } from '@chakra-ui/react';
+import { Alert, Box, Button, HStack } from '@chakra-ui/react';
 import { BsArrowLeft } from 'react-icons/bs';
 import Card from '../../components/card/Card';
 import TransactionForm from './TransactionForm';
@@ -9,6 +9,7 @@ import { useQueries } from '@tanstack/react-query';
 import { GetTransactionDto } from '@shared/transaction';
 import { getPortfoliosQuery, PORTFOLIO_QUERY_KEY } from '../../queries/portfolio';
 import { CMC_CRYPTO_BASIC_INFOS, getCryptoBasicsInfos } from '../../queries/coinmarketcap';
+import CenteredSpinner from '../../components/CenteredSpinner';
 
 const TransactionFormPage = () => {
   const queries = useQueries({
@@ -48,8 +49,8 @@ const TransactionFormPage = () => {
           portfolios={dataPortfolios.data}
         />
       );
-    if (isError) return <div>Error</div>;
-    if (isLoading) return <div>Loading...</div>;
+    if (isError) return <Alert status='error'>Can't fetch currencies informations.</Alert>;
+    if (isLoading) return <CenteredSpinner />;
   };
 
   return (
