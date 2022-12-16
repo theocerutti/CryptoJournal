@@ -1,3 +1,20 @@
+# Crypto Journal
+
+Crypto Journal has been created to track your cryptos oriented portfolios.
+It is a simple and easy to use tool to track your crypto investments.
+This doesn't provides automatic transactions fetching (from exchanges for example) because this technique doesn't work if you use multiple wallets, multiples exchanges, DEX...
+That's why this tool is fully manual.
+
+## Screens
+
+![image](https://user-images.githubusercontent.com/44285344/208106805-b666b50a-1764-47f3-a94a-d377e34ff7ad.png)
+![image](https://user-images.githubusercontent.com/44285344/208106652-65d0b4cc-31e7-487f-94ad-d87bb5bad898.png)
+![image](https://user-images.githubusercontent.com/44285344/208106704-05ca4d53-8a50-41e2-b6ba-cbc281dd02f3.png)
+
+----
+
+# TODOS:
+
 Features:
 * Avoir la liste des transactions (FROM OU TO) par portfolios (?portfolios=Binance,Bybit) (?portfolio=Binance,Bybit&asset=BTC,ETH)
 * Avoir la liste des transactions (FROM OU TO) par asset (?asset=BTC,ETH)
