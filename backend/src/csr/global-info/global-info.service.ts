@@ -28,6 +28,8 @@ export class GlobalInfoService {
     globalInfo.totalBalance = await this.transactionService.getTotalBalance(userId, assetQuotes);
     globalInfo.totalFees = await this.transactionService.getTotalFees(userId);
     globalInfo.totalInvested = await this.transactionService.getTotalInvested(userId);
+    globalInfo.assetsCount = await this.transactionService.getAssetCount(userId);
+    globalInfo.transactionsCount = await this.transactionService.getTransactionsCount(userId);
     globalInfo.globalInfoAssets = [];
 
     for (const assetId of assetIds)

@@ -17,6 +17,7 @@ Features:
 * Pour l'instant on limite le fetch des cryptos à 1000. Il faudrait fetcher toutes les cryptos -> fetch au start de l'app TOUTE les cryptos et les mettres dans la db
 * Checker le calcul des transactions dans le backend
 * PNL Assets doesn't work -> we MUST labelized the asset total invested
+* Transactions Seeder is wrong.
 
 Fix/Update:
 * Fix les TODOs

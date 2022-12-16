@@ -165,4 +165,13 @@ export class TransactionService {
       .orWhere('transaction_info.id = transaction.to')
       .getMany();
   }
+
+  async getTransactionsCount(userId: number): Promise<number> {
+    return await this.TransactionRepo.count({ where: { user: { id: userId } } });
+  }
+
+  async getAssetCount(userId: number): Promise<number> {
+    const assetIds = await this.getAllAssetId(userId);
+    return assetIds.length;
+  }
 }

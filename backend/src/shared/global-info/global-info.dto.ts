@@ -42,6 +42,12 @@ export class GlobalInfoDto {
   @IsNumber()
   totalFees: number;
 
+  @IsNumber()
+  assetsCount: number;
+
+  @IsNumber()
+  transactionsCount: number;
+
   @IsObject()
   globalInfoAssets: GlobalInfoAssetDto[];
 }

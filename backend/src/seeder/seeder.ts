@@ -115,9 +115,9 @@ export class Seeder {
     }
   }
 
-  async getRandomPortfolio(user: User, expectPortfolioId: number = -1) {
+  async getRandomPortfolio(user: User, expectPortfolioId: number = -1, includeIsMyBank: boolean = false) {
     const portfolios = await this.portfolioRepo.find({
-      where: { user: { id: user.id }, id: Not(expectPortfolioId) },
+      where: { user: { id: user.id }, id: Not(expectPortfolioId), ...(includeIsMyBank ? {} : { isMyBank: false }) },
     });
     return faker.random.arrayElement(portfolios);
   }
@@ -126,9 +126,46 @@ export class Seeder {
     return faker.random.arrayElement(assetInfos.filter((asset) => asset.id !== expectAssetId));
   }
 
+  createTransaction(
+    fromAsset: any,
+    toAsset: any,
+    feeAsset: any,
+    fromPortfolio: Portfolio,
+    toPortfolio: Portfolio,
+    user: User
+  ) {
+    const transactionInfoFrom = new TransactionInfo();
+    transactionInfoFrom.price = faker.datatype.float({ min: 0.1, max: 2 }) * fromAsset.averagePrice;
+    transactionInfoFrom.portfolio = fromPortfolio;
+    transactionInfoFrom.assetId = fromAsset.id;
+    transactionInfoFrom.amount = faker.datatype.float({ min: 0.1, max: 2 });
+
+    const transactionInfoTo = new TransactionInfo();
+    transactionInfoTo.price = faker.datatype.float({ min: 0.1, max: 2 }) * toAsset.averagePrice;
+    transactionInfoTo.portfolio = toPortfolio;
+    transactionInfoTo.assetId = toAsset.id;
+    transactionInfoTo.amount = faker.datatype.float({
+      min: 0,
+      max: 30,
+    });
+
+    const transaction = new Transaction();
+    transaction.to = transactionInfoTo;
+    transaction.from = transactionInfoFrom;
+    transaction.note = faker.lorem.lines(3);
+    transaction.user = user;
+    transaction.date = faker.date.past();
+    transaction.feePrice = feeAsset.averagePrice;
+    transaction.feeAmount = faker.datatype.float({
+      min: 0,
+      max: 30,
+    });
+    transaction.feeAssetId = feeAsset.id;
+    return transaction;
+  }
+
   async seedTransactions(users: User[]) {
     this.logger.log('Seed transactions...');
-
     for (const user of users) {
       for (let i = 0; i < SEED_TRANSACTIONS_BY_USER; i++) {
         const fromPortfolio = await this.getRandomPortfolio(user);
@@ -136,35 +173,9 @@ export class Seeder {
         const fromAsset = this.getRandomAsset(user);
         const toAsset = this.getRandomAsset(user, fromAsset.id);
         const feeAsset = this.getRandomAsset(user);
-
-        const transactionInfoFrom = new TransactionInfo();
-        transactionInfoFrom.price = faker.datatype.float({ min: 0.1, max: 2 }) * fromAsset.averagePrice;
-        transactionInfoFrom.portfolio = fromPortfolio;
-        transactionInfoFrom.assetId = fromAsset.id;
-        transactionInfoFrom.amount = faker.datatype.float({ min: 0.1, max: 2 });
-
-        const transactionInfoTo = new TransactionInfo();
-        transactionInfoTo.price = faker.datatype.float({ min: 0.1, max: 2 }) * toAsset.averagePrice;
-        transactionInfoTo.portfolio = toPortfolio;
-        transactionInfoTo.assetId = toAsset.id;
-        transactionInfoTo.amount = faker.datatype.float({
-          min: 0,
-          max: 30,
-        });
-
-        const transaction = new Transaction();
-        transaction.to = transactionInfoTo;
-        transaction.from = transactionInfoFrom;
-        transaction.note = faker.lorem.lines(3);
-        transaction.user = user;
-        transaction.date = faker.date.past();
-        transaction.feePrice = feeAsset.averagePrice;
-        transaction.feeAmount = faker.datatype.float({
-          min: 0,
-          max: 30,
-        });
-        transaction.feeAssetId = feeAsset.id;
-        await this.transactionRepo.save(transaction);
+        await this.transactionRepo.save(
+          this.createTransaction(fromAsset, toAsset, feeAsset, fromPortfolio, toPortfolio, user)
+        );
       }
     }
   }
