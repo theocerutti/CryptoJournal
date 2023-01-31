@@ -1,5 +1,7 @@
 # Crypto Journal
 
+https://crypto-journal.light.ovh/auth/sign-in
+
 Crypto Journal has been created to track your cryptos oriented portfolios.
 It is a simple and easy to use tool to track your crypto investments.
 This doesn't provides automatic transactions fetching (from exchanges for example) because this technique doesn't work if you use multiple wallets, multiples exchanges, DEX...
